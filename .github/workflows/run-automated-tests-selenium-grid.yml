@@ -6,7 +6,6 @@ env:
   ENVIRONMENT: staging
   suiteXmlFile: regression.xml
   browser: remote-chrome
-  browserVersion: ${{ needs.workflow_dispatch.inputs.chromeVersion.default }}
   headlessBrowser: false
   useSeleniumGrid: true
   testsThreadCount: 2
@@ -108,6 +107,7 @@ jobs:
       - name: Run the test suite
         env:
           org.slf4j.simpleLogger.defaultLogLevel: ${{ needs.workflow_dispatch.inputs.logLevel.default }}
+          browserVersion: ${{ needs.workflow_dispatch.inputs.chromeVersion.default }}
         run: >-
           mvn test -P Staging -f pom.xml
           --batch-mode --update-snapshots -Dorg.slf4j.simpleLogger.defaultLogLevel=$org.slf4j.simpleLogger.defaultLogLevel
