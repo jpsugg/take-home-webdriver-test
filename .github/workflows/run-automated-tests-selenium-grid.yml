@@ -46,7 +46,6 @@ jobs:
           - 7080:5000
         options: >-
           --rm
-          --network dotdash --name website
       selenium-hub:
         image: selenium/hub:latest
         ports:
@@ -56,14 +55,13 @@ jobs:
         options: >-
           --rm
           -v /dev/shm:/dev/shm
-          --network dotdash --name selenium-hub
         env:
           SE_VNC_NO_PASSWORD: 1
           SE_SESSION_RETRY_INTERVAL: 1
       chrome-node1:
         image: selenium/node-chrome:latest
         options: >-
-          -v /home/runner/work/take-home-webdriver-test/take-home-webdriver-test/target:/home/seluser/Downloads --network dotdash --name chrome-node1
+          -v /home/runner/work/take-home-webdriver-test/take-home-webdriver-test/target:/home/seluser/Downloads
         env:
           SE_EVENT_BUS_HOST: selenium-hub
           SE_EVENT_BUS_PUBLISH_PORT: 4442
@@ -73,8 +71,6 @@ jobs:
           SE_NODE_MAX_SESSIONS: 2
           SE_NODE_SESSION_TIMEOUT: 10
     steps:
-      - name: Create Docker Network
-        run: docker network create doshdat
       - name: Get test-runner IP
         run: message=$(curl https://api.ipify.org) && message=$(echo $message | tr '\n' ' ') && message=$(echo $message | xargs) && echo "ip=$message" >> $GITHUB_OUTPUT
         id: testRunnerAddress
