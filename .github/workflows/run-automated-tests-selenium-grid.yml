@@ -4,6 +4,15 @@ name: Run automated tests suite - Selenium Grid
 env:
   LOG_LEVEL: info
   ENVIRONMENT: staging
+  suiteXmlFile: regression.xml
+  browser: remote-chrome
+  browserVersion: ${{ needs.workflow_dispatch.inputs.chromeVersion.default }}
+  headlessBrowser: false
+  useSeleniumGrid: true
+  testsThreadCount: 2
+  testRunnerAddress: "http://localhost:7080"
+  webAppAddress: "http://website:7080"
+  seleniumGridAddress: "http://selenium-hub:4444/wd/hub"
 on:
   workflow_dispatch:
     inputs:
@@ -74,8 +83,17 @@ jobs:
       - name: Get test-runner IP
         run: message=$(curl https://api.ipify.org) && message=$(echo $message | tr '\n' ' ') && message=$(echo $message | xargs) && echo "ip=$message" >> $GITHUB_OUTPUT
         id: testRunnerAddress
-      - name: Host address
+      - name: Runner IP address
         run: echo "Host IP address ${{steps.testRunnerAddress.outputs.ip}}"
+      - name: Trying $testRunnerAddress (self)
+        run: |
+          message=$(curl $testRunnerAddress) && message=$(echo $message | tr '\n' ' ') && message=$(echo $message | xargs) && echo "response=$message" >> $GITHUB_OUTPUT
+      - name: Trying $webAppAddress
+        run: |
+          message=$(curl $webAppAddress) && message=$(echo $message | tr '\n' ' ') && message=$(echo $message | xargs) && echo "response=$message" >> $GITHUB_OUTPUT
+      - name: Trying $seleniumGridAddress
+        run: |
+          message=$(curl $seleniumGridAddress) && message=$(echo $message | tr '\n' ' ') && message=$(echo $message | xargs) && echo "response=$message" >> $GITHUB_OUTPUT
       - name: Checkout repo code
         uses: actions/checkout@v3
       - name: Set up JDK 19
@@ -84,26 +102,17 @@ jobs:
           java-version: '19'
           distribution: 'corretto'
       - name: Clean
-        run: mvn clean -f pom.xml --batch-mode --update-snapshots
+        run: mvn clean -P Staging -f pom.xml --batch-mode --update-snapshots
       - name: Build
-        run: mvn compile -f pom.xml --batch-mode --update-snapshots
-      - name: Install
-        run: mvn install -f pom.xml -DskipTests --batch-mode --update-snapshots
+        run: mvn compile -P Staging -f pom.xml --batch-mode --update-snapshots
       - name: Run the test suite
         env:
-          suiteXmlFile: regression.xml
-          browser: remote-chrome
-          browserVersion: ${{ needs.workflow_dispatch.inputs.chromeVersion.default }}
-          headlessBrowser: false
-          useSeleniumGrid: true
-          testsThreadCount: 2
-          testRunnerAddress: "http://localhost:7080"
-          webAppAddress: "http://website:7080"
-          seleniumGridAddress: "http://selenium-hub:4444/wd/hub"
           org.slf4j.simpleLogger.defaultLogLevel: ${{ needs.workflow_dispatch.inputs.logLevel.default }}
         run: >-
           mvn test -P Staging -f pom.xml
-          --batch-mode --update-snapshots
+          --batch-mode --update-snapshots -Dorg.slf4j.simpleLogger.defaultLogLevel=$org.slf4j.simpleLogger.defaultLogLevel
+      - name: Install
+        run: mvn install -P Staging -f pom.xml -DskipTests --batch-mode --update-snapshots
       - uses: actions/upload-artifact@v3
         if: always()
         with:
