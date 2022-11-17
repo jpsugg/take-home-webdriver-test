@@ -1,0 +1,123 @@
+# Workflow to run automated tests on code pushed to master branch
+
+name: Run automated tests suite - Selenium Grid
+env:
+  LOG_LEVEL: info
+  ENVIRONMENT: staging
+  suiteXmlFile: regression.xml
+  browser: remote-chrome
+  headlessBrowser: false
+  useSeleniumGrid: true
+  testsThreadCount: 2
+  testRunnerAddress: "http://localhost:7080"
+  webAppAddress: "http://website:7080"
+  seleniumGridAddress: "http://selenium-hub:4444/wd/hub"
+on:
+  workflow_dispatch:
+    inputs:
+      logLevel:
+        description: 'Log level'
+        required: true
+        default: info
+        type: choice
+        options:
+          - info
+          - warning
+          - debug
+      tags:
+        description: 'Test scenario tags'
+        required: false
+        type: boolean
+      environment:
+        description: 'Environment to run tests against'
+        type: environment
+        required: true
+        default: staging
+      chromeVersion:
+        description: 'Chrome Version'
+        required: true
+        default: '106.0.5249.119'
+        type: choice
+        options:
+          - "latest"
+          - "106.0.5249.119"
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+    concurrency:
+      group: ${{ github.workflow }}-${{ github.ref }}
+      cancel-in-progress: true
+    services:
+      website:
+        image: gprestes/the-internet:latest
+        ports:
+          - 7080:5000
+        options: >-
+          --rm
+      selenium-hub:
+        image: selenium/hub:latest
+        ports:
+          - 4442:4442
+          - 4443:4443
+          - 4444:4444
+        options: >-
+          --rm
+          -v /dev/shm:/dev/shm
+        env:
+          SE_VNC_NO_PASSWORD: 1
+          SE_SESSION_RETRY_INTERVAL: 1
+      chrome-node1:
+        image: selenium/node-chrome:latest
+        options: >-
+          -v /home/runner/work/take-home-webdriver-test/take-home-webdriver-test/target:/home/seluser/Downloads
+        env:
+          SE_EVENT_BUS_HOST: selenium-hub
+          SE_EVENT_BUS_PUBLISH_PORT: 4442
+          SE_EVENT_BUS_SUBSCRIBE_PORT: 4443
+          SE_SESSION_RETRY_INTERVAL: 1
+          SE_NODE_MAX_INSTANCES: 4
+          SE_NODE_MAX_SESSIONS: 2
+          SE_NODE_SESSION_TIMEOUT: 10
+    steps:
+      - name: Get test-runner IP
+        run: message=$(curl https://api.ipify.org) && message=$(echo $message | tr '\n' ' ') && message=$(echo $message | xargs) && echo "ip=$message" >> $GITHUB_OUTPUT
+        id: testRunnerAddress
+      - name: Runner IP address
+        run: echo "Host IP address ${{steps.testRunnerAddress.outputs.ip}}"
+      - name: Trying $testRunnerAddress (self)
+        run: |
+          message=$(curl $testRunnerAddress) && message=$(echo $message | tr '\n' ' ') && message=$(echo $message | xargs) && echo "response=$message" >> $GITHUB_OUTPUT
+      - name: Trying $webAppAddress
+        run: |
+          message=$(curl $webAppAddress) && message=$(echo $message | tr '\n' ' ') && message=$(echo $message | xargs) && echo "response=$message" >> $GITHUB_OUTPUT
+      - name: Trying $seleniumGridAddress
+        run: |
+          message=$(curl $seleniumGridAddress) && message=$(echo $message | tr '\n' ' ') && message=$(echo $message | xargs) && echo "response=$message" >> $GITHUB_OUTPUT
+      - name: Checkout repo code
+        uses: actions/checkout@v3
+      - name: Set up JDK 19
+        uses: actions/setup-java@v3
+        with:
+          java-version: '19'
+          distribution: 'corretto'
+      - name: Clean
+        run: mvn clean -P Staging -f pom.xml --batch-mode --update-snapshots
+      - name: Build
+        run: mvn compile -P Staging -f pom.xml --batch-mode --update-snapshots
+      - name: Run the test suite
+        env:
+          org.slf4j.simpleLogger.defaultLogLevel: ${{ needs.workflow_dispatch.inputs.logLevel.default }}
+          browserVersion: ${{ needs.workflow_dispatch.inputs.chromeVersion.default }}
+        run: >-
+          mvn test -P Staging -f pom.xml
+          --batch-mode --update-snapshots -Dorg.slf4j.simpleLogger.defaultLogLevel=$org.slf4j.simpleLogger.defaultLogLevel
+      - name: Install
+        run: mvn install -P Staging -f pom.xml -DskipTests --batch-mode --update-snapshots
+      - uses: actions/upload-artifact@v3
+        if: always()
+        with:
+          name: Test run report
+          path: target/surefire-reports/
+      - name: Display structure of uploaded files
+        run: ls -R
+        working-directory: target/surefire-reports/
