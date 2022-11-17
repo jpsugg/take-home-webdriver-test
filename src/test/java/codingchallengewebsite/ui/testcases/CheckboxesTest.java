@@ -4,7 +4,6 @@ import codingchallengewebsite.ui.UITest;
 import codingchallengewebsite.ui.pageobjects.CheckboxesPage;
 import org.testng.Assert;
 import org.testng.annotations.Test;
-
 import java.util.stream.IntStream;
 
 public class CheckboxesTest extends UITest {

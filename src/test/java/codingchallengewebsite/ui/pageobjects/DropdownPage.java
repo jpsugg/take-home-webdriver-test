@@ -43,7 +43,5 @@ public class DropdownPage {
         this.dropdwn.selectByVisibleText(option);
     }
 
-    public Boolean isDropdownOptionSelected(String option) {
-        return this.dropdwn.getFirstSelectedOption().getText().equals(option);
-    }
+    public Boolean isDropdownOptionSelected(String option) { return this.dropdwn.getFirstSelectedOption().getText().equals(option); }
 }
