@@ -1,4 +1,4 @@
-# The-Internet app.
+# The-Internet app testing
 # TAF: Java/Selenium/TestNG/Maven/Log4j2/surfire-report
 
 ## Prerequisites
