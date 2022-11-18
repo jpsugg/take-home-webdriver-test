@@ -1,6 +1,4 @@
-# The-Internet app testing.
-<br>
-Framework: Java/Selenium/TestNG/Maven/Log4j2
+# The-Internet app testing. Framework: Java/Selenium/TestNG/Maven/Log4j2/surfire-report
 
 ## Prerequisites
 - Docker  [:link:](https://www.docker.com/products/docker-desktop/)
