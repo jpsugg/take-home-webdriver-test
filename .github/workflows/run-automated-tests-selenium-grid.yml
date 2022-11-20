@@ -89,15 +89,6 @@ jobs:
         id: testRunnerAddress
       - name: Runner IP address
         run: echo "Host IP address ${{steps.testRunnerAddress.outputs.ip}}"
-      - name: Trying $testRunnerAddress (self)
-        run: |
-          message=$(curl $testRunnerAddress) && message=$(echo $message | tr '\n' ' ') && message=$(echo $message | xargs) && echo "response=$message" >> $GITHUB_OUTPUT
-      - name: Trying $webAppAddress
-        run: |
-          message=$(curl $webAppAddress) && message=$(echo $message | tr '\n' ' ') && message=$(echo $message | xargs) && echo "response=$message" >> $GITHUB_OUTPUT
-      - name: Trying $seleniumGridAddress
-        run: |
-          message=$(curl $seleniumGridAddress) && message=$(echo $message | tr '\n' ' ') && message=$(echo $message | xargs) && echo "response=$message" >> $GITHUB_OUTPUT
       - name: Checkout repo code
         uses: actions/checkout@v3
       - name: Set up JDK 19
