@@ -9,6 +9,8 @@ env:
   headlessBrowser: false
   useSeleniumGrid: true
   testsThreadCount: 2
+  working-directory: ./java-framework
+  report-directory: ./java-framework/target/surefire-reports/
 on:
   workflow_dispatch:
     inputs:
@@ -91,6 +93,9 @@ jobs:
         run: echo "Host IP address ${{steps.testRunnerAddress.outputs.ip}}"
       - name: Checkout repo code
         uses: actions/checkout@v3
+        with:
+          ref: staging
+          fetch-depth: 0
       - name: Set up JDK 19
         uses: actions/setup-java@v3
         with:
@@ -98,8 +103,10 @@ jobs:
           distribution: 'corretto'
       - name: Clean
         run: mvn clean -P Staging -f pom.xml --batch-mode --update-snapshots
+        working-directory: ${{env.working-directory}}
       - name: Build
         run: mvn compile -P Staging -f pom.xml --batch-mode --update-snapshots
+        working-directory: ${{env.working-directory}}
       - name: Run the test suite
         env:
           org.slf4j.simpleLogger.defaultLogLevel: ${{ needs.workflow_dispatch.inputs.logLevel.default }}
@@ -107,6 +114,7 @@ jobs:
         run: >-
           mvn test -P Staging -f pom.xml
           --batch-mode --update-snapshots -Dorg.slf4j.simpleLogger.defaultLogLevel=$org.slf4j.simpleLogger.defaultLogLevel
+        working-directory: ${{env.working-directory}}
       - uses: actions/upload-artifact@v3
         if: always()
         with:
@@ -114,6 +122,7 @@ jobs:
           path: target/surefire-reports/
       - name: Install
         run: mvn install -P Staging -f pom.xml -DskipTests --batch-mode --update-snapshots
+        working-directory: ${{env.working-directory}}
       - name: Display structure of uploaded files
         run: ls -R
-        working-directory: target/surefire-reports/
+        working-directory: ${{env.report-directory}}
