@@ -1,5 +1,5 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="take-home-webdriver-test - LocalExecution Profile" type="MavenRunConfiguration" factoryName="Maven">
+  <configuration default="false" name="the-internet-tests - LocalExecution Profile" type="MavenRunConfiguration" factoryName="Maven">
     <MavenSettings>
       <option name="myGeneralSettings" />
       <option name="myRunnerSettings" />
