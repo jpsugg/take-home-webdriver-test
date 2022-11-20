@@ -114,7 +114,7 @@ jobs:
           browserVersion: ${{ needs.workflow_dispatch.inputs.chromeVersion.default }}
         run: >-
           mvn test -P Staging -f pom.xml
-          --batch-mode --update-snapshots -Dorg.slf4j.simpleLogger.defaultLogLevel=$org.slf4j.simpleLogger.defaultLogLevel
+          --batch-mode --update-snapshots -Dorg.slf4j.simpleLogger.defaultLogLevel=${{ env.org.slf4j.simpleLogger.defaultLogLevel }}
         working-directory: ${{env.working-directory}}
       - uses: actions/upload-artifact@v3
         if: always()
