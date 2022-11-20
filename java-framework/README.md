@@ -1,5 +1,5 @@
 # The-Internet app testing
-# TAF: Java/Selenium/TestNG/Maven/Log4j2/surfire-report
+# TAF: Java/Selenium/TestNG/Maven/Log4j2/surefire-report
 
 ## Prerequisites
 - Docker  [:link:](https://www.docker.com/products/docker-desktop/)
