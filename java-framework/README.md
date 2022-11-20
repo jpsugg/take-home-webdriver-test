@@ -20,7 +20,8 @@ For help on using the run command, please refer to the _run_ command help
 ## Installing
 After installing and configuring the above pre-requisites, type the following:
 ```
-git clone https://github.com/jpsugg/take-home-webdriver-test.git
+git clone https://github.com/jpsugg/the-internet-tests.git
+cd java-framework
 chmod +x run
 ./run
 ```
@@ -39,7 +40,7 @@ _Note: the __run__ command pulls the docker images and configures the docker net
 * Tests locally; spawns 4 threads in parallel,
 
         ./run -T 4
-* Tests against a remote Selenium Grid; spawns 3 chrome-nodes in parallel with 3 max. concurrent sessions each,
+* Tests against a remote Selenium Grid; spawns 2 chrome-nodes in parallel with 3 max. concurrent sessions each,
 
         ./run -r -T 2
 
