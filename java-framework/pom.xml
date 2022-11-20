@@ -4,7 +4,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.dotdash</groupId>
-    <artifactId>java-framework</artifactId>
+    <artifactId>the-internet-tests</artifactId>
     <version>1.0-SNAPSHOT</version>
     <properties>
         <maven.compiler.source>19</maven.compiler.source>
@@ -17,7 +17,7 @@
             <groupId>org.testng</groupId>
             <artifactId>testng</artifactId>
             <version>7.6.1</version>
-        <scope>test</scope>
+            <scope>test</scope>
         </dependency>
         <!-- Selenium -->
         <dependency>
@@ -97,8 +97,8 @@
                             <parallel>tests</parallel>
                             <threadCount>${env.testsThreadCount}</threadCount>
                             <systemPropertyVariables>
-                                <codingChallengeWebsite.baseUrl>${env.webAppAddress}</codingChallengeWebsite.baseUrl>
-                                <codingChallengeWebsite.baseUrlSG>${env.testRunnerAddress}</codingChallengeWebsite.baseUrlSG>
+                                <codingChallengeWebsite.baseUrl>${env.testRunnerAppAddress}</codingChallengeWebsite.baseUrl>
+                                <codingChallengeWebsite.baseUrlSG>${env.webAppAddress}</codingChallengeWebsite.baseUrlSG>
                                 <codingChallengeWebsite.seleniumGridUrl>${env.seleniumGridAddress}</codingChallengeWebsite.seleniumGridUrl>
                                 <codingChallengeWebsite.useSeleniumGrid>${env.useSeleniumGrid}</codingChallengeWebsite.useSeleniumGrid>>
                                 <codingChallengeWebsite.headlessBrowser>${env.headlessBrowser}</codingChallengeWebsite.headlessBrowser>
