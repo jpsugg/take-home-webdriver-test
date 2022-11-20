@@ -73,7 +73,7 @@ jobs:
       chrome-node1:
         image: selenium/node-chrome:latest
         options: >-
-          -v /home/runner/work/take-home-webdriver-test/take-home-webdriver-test/target:/home/seluser/Downloads
+          -v /home/runner/work/the-internet-tests/java-framework/target:/home/seluser/Downloads
         env:
           SE_EVENT_BUS_HOST: selenium-hub
           SE_EVENT_BUS_PUBLISH_PORT: 4442
@@ -107,13 +107,13 @@ jobs:
         run: >-
           mvn test -P Staging -f pom.xml
           --batch-mode --update-snapshots -Dorg.slf4j.simpleLogger.defaultLogLevel=$org.slf4j.simpleLogger.defaultLogLevel
-      - name: Install
-        run: mvn install -P Staging -f pom.xml -DskipTests --batch-mode --update-snapshots
       - uses: actions/upload-artifact@v3
         if: always()
         with:
           name: Test run report
           path: target/surefire-reports/
+      - name: Install
+        run: mvn install -P Staging -f pom.xml -DskipTests --batch-mode --update-snapshots
       - name: Display structure of uploaded files
         run: ls -R
         working-directory: target/surefire-reports/
