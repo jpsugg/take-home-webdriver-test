@@ -17,7 +17,6 @@ on:
       logLevel:
         description: 'Log level'
         required: true
-        default: info
         type: choice
         options:
           - info
@@ -111,7 +110,7 @@ jobs:
         working-directory: ${{env.working-directory}}
       - name: Run the test suite
         env:
-          org.slf4j.simpleLogger.defaultLogLevel: ${{ needs.workflow_dispatch.inputs.logLevel.default }}
+          org.slf4j.simpleLogger.defaultLogLevel: ${{ needs.workflow_dispatch.inputs.logLevel.choice }}
           browserVersion: ${{ needs.workflow_dispatch.inputs.chromeVersion.default }}
         run: >-
           mvn test -P Staging -f pom.xml
