@@ -9,9 +9,6 @@ env:
   headlessBrowser: false
   useSeleniumGrid: true
   testsThreadCount: 2
-  testRunnerAddress: "http://localhost:7080"
-  webAppAddress: "http://website:7080"
-  seleniumGridAddress: "http://selenium-hub:4444/wd/hub"
 on:
   workflow_dispatch:
     inputs:
@@ -47,6 +44,13 @@ jobs:
     concurrency:
       group: ${{ github.workflow }}-${{ github.ref }}
       cancel-in-progress: true
+      
+    env:
+      testRunnerAddress: "http://localhost:7080"
+      webAppAddress: "http://website:7080"
+      seleniumGridAddress: "http://selenium-hub:4444/wd/hub"
+        
+      
     services:
       website:
         image: gprestes/the-internet:latest
@@ -78,6 +82,7 @@ jobs:
           SE_NODE_MAX_INSTANCES: 4
           SE_NODE_MAX_SESSIONS: 2
           SE_NODE_SESSION_TIMEOUT: 10
+          
     steps:
       - name: Get test-runner IP
         run: message=$(curl https://api.ipify.org) && message=$(echo $message | tr '\n' ' ') && message=$(echo $message | xargs) && echo "ip=$message" >> $GITHUB_OUTPUT
