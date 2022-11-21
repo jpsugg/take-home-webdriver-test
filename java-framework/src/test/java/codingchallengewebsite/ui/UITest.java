@@ -92,6 +92,8 @@ public class UITest {
         capabilities.setCapability(ChromeOptions.CAPABILITY, chromeOptions);
         capabilities.setCapability(CapabilityType.SUPPORTS_NETWORK_CONNECTION, true);
         capabilities.setCapability("se:recordVideo", true);
+        capabilities.setCapability("se:timeZone", "US/Pacific");
+        capabilities.setCapability("se:screenResolution", "1920x1080");
 
         WebDriverManager.chromedriver().browserVersionDetectionCommand(" ");
         WebDriverManager.chromedriver().forceDownload();
