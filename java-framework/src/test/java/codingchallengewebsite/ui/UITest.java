@@ -27,6 +27,7 @@ public class UITest {
     public static final String DEFAULT_BROWSER = "chrome";
     public static final String DEFAULT_BROWSER_HEADLESS = "false";
     public static final String downloadsFolder = Paths.get("target/").toAbsolutePath().toString();
+    private String currentBrowser;
     private RemoteWebDriver driver;
     private String baseUrl;
     private static final String pageFooterXpath = "//*[@id='page-footer']";
@@ -38,6 +39,7 @@ public class UITest {
         public void setUp(@Optional(DEFAULT_BROWSER) String browser, @Optional("") String browserVersion, @Optional(DEFAULT_BROWSER_HEADLESS) String headless, @Optional("") String baseUrl, @Optional("") String baseUrlSG, @Optional("") String remoteUrl, @Optional("") @NotNull String useSeleniumGrid) {
         if (useSeleniumGrid.equals("true")) { this.setBaseUrl(baseUrlSG); } else { this.setBaseUrl(baseUrl); }
         browser = browser.toLowerCase();
+        this.setCurrentBrowser(browser);
 
         switch (browser) {
             case "chrome", "remote-chrome" ->
@@ -215,5 +217,13 @@ public class UITest {
     public final void pageFactoryInitWait(WebElement pageTitle) {
         WebDriverWait pageFactoryInitWait = new WebDriverWait(this.getDriver(), Duration.ofSeconds(10), Duration.ofSeconds(5));
         pageFactoryInitWait.until(ExpectedConditions.and(visibilityOf(pageTitle), visibilityOf(this.getPageFooter())));
+    }
+
+    public String getCurrentBrowser() {
+        return currentBrowser;
+    }
+
+    public void setCurrentBrowser(String currentBrowser) {
+        this.currentBrowser = currentBrowser;
     }
 }

@@ -3,6 +3,7 @@ package codingchallengewebsite.ui.testcases;
 import codingchallengewebsite.ui.UITest;
 import codingchallengewebsite.ui.pageobjects.DownloadPage;
 import org.testng.Assert;
+import org.testng.SkipException;
 import org.testng.annotations.Test;
 
 public class DownloadTest extends UITest {
@@ -11,6 +12,8 @@ public class DownloadTest extends UITest {
 
     @Test(description = "Downloads a file and compares it with what's expected")
     public void fileDownload() {
+        if (this.getCurrentBrowser().equals("remote-chrome")) {
+            throw new SkipException("Skipping this test case; Github Actions doesn't support it yet"); }
         // Validate page loaded
         DownloadPage downloadPage = new DownloadPage(this);
         Assert.assertTrue(downloadPage.isPageOpen(), "Page not open");

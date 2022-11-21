@@ -3,6 +3,7 @@ package codingchallengewebsite.ui.testcases;
 import codingchallengewebsite.ui.UITest;
 import codingchallengewebsite.ui.pageobjects.ContextMenuPage;
 import org.testng.Assert;
+import org.testng.SkipException;
 import org.testng.annotations.Test;
 
 public class ContextMenuTest extends UITest {
@@ -11,6 +12,10 @@ public class ContextMenuTest extends UITest {
 
     @Test(description="Expected alert popup opens on right click over box")
     public void triggerPopupOnContextClick() {
+
+        if (this.getCurrentBrowser().equals("remote-chrome")) {
+            throw new SkipException("Skipping this test case; Github Actions doesn't support it yet"); }
+
         String expectedPopupText = "You selected a context menu";
         ContextMenuPage contextMenuPage = new ContextMenuPage(this);
 
