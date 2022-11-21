@@ -91,6 +91,7 @@ public class UITest {
         DesiredCapabilities capabilities = new DesiredCapabilities();
         capabilities.setCapability(ChromeOptions.CAPABILITY, chromeOptions);
         capabilities.setCapability(CapabilityType.SUPPORTS_NETWORK_CONNECTION, true);
+        capabilities.setCapability("se:recordVideo", true);
 
         WebDriverManager.chromedriver().browserVersionDetectionCommand(" ");
         WebDriverManager.chromedriver().forceDownload();
