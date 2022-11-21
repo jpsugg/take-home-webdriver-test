@@ -53,11 +53,6 @@ jobs:
       group: ${{ github.workflow }}-${{ github.ref }}
       cancel-in-progress: true
       
-    env:
-      testRunnerAppAddress: "http://localhost:7080"
-      webAppAddress: "http://localhost:7080"
-      seleniumGridAddress: "http://localhost:4444/wd/hub"
-      
     services:
       website:
         image: gprestes/the-internet:latest
@@ -116,6 +111,9 @@ jobs:
         env:
           org.slf4j.simpleLogger.defaultLogLevel: ${{ needs.workflow_dispatch.inputs.logLevel.choice }}
           browserVersion: ${{ env.chrome-version }}
+          testRunnerAppAddress: "http://localhost:7080"
+          webAppAddress: "http://website:7080"
+          seleniumGridAddress: "http://selenium-hub:4444/wd/hub"
         run: >-
           mvn test -P Staging -f pom.xml
           --batch-mode --update-snapshots -Dorg.slf4j.simpleLogger.defaultLogLevel=${{ env.LOG_LEVEL }}
