@@ -1,6 +1,6 @@
 # Workflow to run automated tests on code pushed to master branch
 
-name: Run automated tests suite - Selenium Grid
+name: Run automated test suite with Selenium Grid
 env:
   LOG_LEVEL: debug
   ENVIRONMENT: staging
