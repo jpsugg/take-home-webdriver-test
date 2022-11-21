@@ -11,7 +11,7 @@ env:
   useSeleniumGrid: true
   testsThreadCount: 10
   working-directory: ./java-framework
-  report-directory: ./java-framework/target/surefire-reports/
+  report-directory: ./java-framework/target/surefire-reports
   
 on:
   workflow_dispatch:
@@ -79,6 +79,7 @@ jobs:
         image: selenium/video:latest
         options: >-
           -v /home/runner/work/the-internet-tests/java-framework/target:/home/seluser/Downloads
+          -v ${{ report-directory }}/videos:/videos
         env:
           SE_EVENT_BUS_HOST: selenium-hub
           SE_EVENT_BUS_PUBLISH_PORT: 4442
@@ -86,9 +87,9 @@ jobs:
           SE_SESSION_RETRY_INTERVAL: 1
           SE_NODE_MAX_INSTANCES: 10
           SE_NODE_MAX_SESSIONS: 1
-          SE_NODE_SESSION_TIMEOUT: 10
+          SE_NODE_SESSION_TIMEOUT: 500
           SE_START_XVFB: true
-      chrome-node1:
+      chrome-node:
         image: selenium/node-chrome:latest
         options: >-
           -v /home/runner/work/the-internet-tests/java-framework/target:/home/seluser/Downloads
@@ -99,8 +100,10 @@ jobs:
           SE_SESSION_RETRY_INTERVAL: 1
           SE_NODE_MAX_INSTANCES: 10
           SE_NODE_MAX_SESSIONS: 1
-          SE_NODE_SESSION_TIMEOUT: 10
+          SE_NODE_SESSION_TIMEOUT: 500
           SE_START_XVFB: true
+          DISPLAY_CONTAINER_NAME: chrome-node
+          FILE_NAME: chrome_video.mp4
           
     steps:
       - name: Get test-runner IP
