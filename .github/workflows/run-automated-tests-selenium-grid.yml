@@ -9,7 +9,7 @@ env:
   browser-version: '106.0.5249.119'
   headlessBrowser: false
   useSeleniumGrid: true
-  testsThreadCount: 2
+  testsThreadCount: 10
   working-directory: ./java-framework
   report-directory: ./java-framework/target/surefire-reports/
   
