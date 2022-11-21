@@ -77,6 +77,8 @@ jobs:
           SE_NODE_MAX_SESSIONS: 1
           SE_NODE_SESSION_TIMEOUT: 500
           SE_START_XVFB: true
+          DISPLAY_CONTAINER_NAME: chrome-node
+          FILE_NAME: chrome_video.mp4
       chrome-node:
         image: selenium/node-chrome:latest
         options: >-
@@ -87,11 +89,9 @@ jobs:
           SE_EVENT_BUS_SUBSCRIBE_PORT: 4443
           SE_SESSION_RETRY_INTERVAL: 1
           SE_NODE_MAX_INSTANCES: 20
-          SE_NODE_MAX_SESSIONS: 1
+          SE_NODE_MAX_SESSIONS: 4
           SE_NODE_SESSION_TIMEOUT: 500
           SE_START_XVFB: true
-          DISPLAY_CONTAINER_NAME: chrome-node
-          FILE_NAME: chrome_video.mp4
           
     steps:
       - name: Get test-runner IP
