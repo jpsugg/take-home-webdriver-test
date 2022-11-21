@@ -69,7 +69,6 @@ jobs:
         options: >-
           --rm
           -v /dev/shm:/dev/shm
-          --docker-video-image selenium/video:latest
         env:
           SE_VNC_NO_PASSWORD: 1
           SE_SESSION_RETRY_INTERVAL: 1
