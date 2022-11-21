@@ -16,18 +16,6 @@ env:
 on:
   workflow_dispatch:
     inputs:
-      logLevel:
-        description: 'Log level'
-        required: true
-        type: choice
-        options:
-          - info
-          - warning
-          - debug
-      tags:
-        description: 'Test scenario tags'
-        required: false
-        type: boolean
       environment:
         description: 'Environment to run tests against'
         type: environment
@@ -79,13 +67,13 @@ jobs:
         image: selenium/video:latest
         options: >-
           -v /home/runner/work/the-internet-tests/java-framework/target:/home/seluser/Downloads
-          -v /home/runner/work/the-internet-tests/java-framework/target/surefire-reports/videos:/videos
+          -v /home/runner/work/the-internet-tests/java-framework/target/surefire-reports:/videos
         env:
           SE_EVENT_BUS_HOST: selenium-hub
           SE_EVENT_BUS_PUBLISH_PORT: 4442
           SE_EVENT_BUS_SUBSCRIBE_PORT: 4443
           SE_SESSION_RETRY_INTERVAL: 1
-          SE_NODE_MAX_INSTANCES: 10
+          SE_NODE_MAX_INSTANCES: 20
           SE_NODE_MAX_SESSIONS: 1
           SE_NODE_SESSION_TIMEOUT: 500
           SE_START_XVFB: true
@@ -98,7 +86,7 @@ jobs:
           SE_EVENT_BUS_PUBLISH_PORT: 4442
           SE_EVENT_BUS_SUBSCRIBE_PORT: 4443
           SE_SESSION_RETRY_INTERVAL: 1
-          SE_NODE_MAX_INSTANCES: 10
+          SE_NODE_MAX_INSTANCES: 20
           SE_NODE_MAX_SESSIONS: 1
           SE_NODE_SESSION_TIMEOUT: 500
           SE_START_XVFB: true
@@ -129,7 +117,6 @@ jobs:
         working-directory: ${{env.working-directory}}
       - name: Run the test suite
         env:
-          org.slf4j.simpleLogger.defaultLogLevel: ${{ needs.workflow_dispatch.inputs.logLevel.choice }}
           browserVersion: ${{ env.browser-version }}
           headlessBrowser: false
           testRunnerAppAddress: "http://172.17.0.1:7080"
