@@ -75,7 +75,7 @@ jobs:
           SE_START_XVFB: true
           SE_SCREEN_WIDTH: 1920
           SE_SCREEN_HEIGHT: 1080
-      chrome-node1:
+      chrome-node-video:
         image: selenium/video:latest
         options: >-
           -v /home/runner/work/the-internet-tests/java-framework/target:/home/seluser/Downloads
@@ -84,8 +84,21 @@ jobs:
           SE_EVENT_BUS_PUBLISH_PORT: 4442
           SE_EVENT_BUS_SUBSCRIBE_PORT: 4443
           SE_SESSION_RETRY_INTERVAL: 1
-          SE_NODE_MAX_INSTANCES: 4
-          SE_NODE_MAX_SESSIONS: 2
+          SE_NODE_MAX_INSTANCES: 10
+          SE_NODE_MAX_SESSIONS: 1
+          SE_NODE_SESSION_TIMEOUT: 10
+          SE_START_XVFB: true
+      chrome-node1:
+        image: selenium/node-chrome:latest
+        options: >-
+          -v /home/runner/work/the-internet-tests/java-framework/target:/home/seluser/Downloads
+        env:
+          SE_EVENT_BUS_HOST: selenium-hub
+          SE_EVENT_BUS_PUBLISH_PORT: 4442
+          SE_EVENT_BUS_SUBSCRIBE_PORT: 4443
+          SE_SESSION_RETRY_INTERVAL: 1
+          SE_NODE_MAX_INSTANCES: 10
+          SE_NODE_MAX_SESSIONS: 1
           SE_NODE_SESSION_TIMEOUT: 10
           SE_START_XVFB: true
           
