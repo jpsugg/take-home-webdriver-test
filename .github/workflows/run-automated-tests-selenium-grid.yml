@@ -6,11 +6,13 @@ env:
   ENVIRONMENT: staging
   suiteXmlFile: regression.xml
   browser: remote-chrome
+  browser-version: '106.0.5249.119'
   headlessBrowser: false
   useSeleniumGrid: true
   testsThreadCount: 2
   working-directory: ./java-framework
   report-directory: ./java-framework/target/surefire-reports/
+  
 on:
   workflow_dispatch:
     inputs:
@@ -53,8 +55,8 @@ jobs:
       
     env:
       testRunnerAppAddress: "http://localhost:7080"
-      webAppAddress: "http://website:7080"
-      seleniumGridAddress: "http://selenium-hub:4444/wd/hub"
+      webAppAddress: "http://localhost:7080"
+      seleniumGridAddress: "http://localhost:4444/wd/hub"
       
     services:
       website:
@@ -113,11 +115,11 @@ jobs:
       - name: Run the test suite
         env:
           org.slf4j.simpleLogger.defaultLogLevel: ${{ needs.workflow_dispatch.inputs.logLevel.choice }}
-          browserVersion: ${{ needs.workflow_dispatch.inputs.chromeVersion.choice }}
+          browserVersion: ${{ env.chrome-version }}
         run: >-
           mvn test -P Staging -f pom.xml
-          --batch-mode --update-snapshots -Dorg.slf4j.simpleLogger.defaultLogLevel=${{ env.org.slf4j.simpleLogger.defaultLogLevel }}
-        working-directory: ${{env.working-directory}}
+          --batch-mode --update-snapshots -Dorg.slf4j.simpleLogger.defaultLogLevel=${{ env.LOG_LEVEL }}
+        working-directory: ${{ env.working-directory }}
       - uses: actions/upload-artifact@v3
         if: always()
         with:
