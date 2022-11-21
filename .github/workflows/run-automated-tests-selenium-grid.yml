@@ -84,6 +84,7 @@ jobs:
           SE_NODE_MAX_INSTANCES: 4
           SE_NODE_MAX_SESSIONS: 2
           SE_NODE_SESSION_TIMEOUT: 10
+          SE_START_XVFB: true
           
     steps:
       - name: Get test-runner IP
