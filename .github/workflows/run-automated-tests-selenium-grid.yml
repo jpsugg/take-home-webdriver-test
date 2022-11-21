@@ -79,7 +79,7 @@ jobs:
         image: selenium/video:latest
         options: >-
           -v /home/runner/work/the-internet-tests/java-framework/target:/home/seluser/Downloads
-          -v ${{ env.report-directory }}/videos:/videos
+          -v /home/runner/work/the-internet-tests/java-framework/target/surefire-reports/videos:/videos
         env:
           SE_EVENT_BUS_HOST: selenium-hub
           SE_EVENT_BUS_PUBLISH_PORT: 4442
