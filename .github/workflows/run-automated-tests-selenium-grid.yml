@@ -111,9 +111,9 @@ jobs:
         env:
           org.slf4j.simpleLogger.defaultLogLevel: ${{ needs.workflow_dispatch.inputs.logLevel.choice }}
           browserVersion: ${{ env.chrome-version }}
-          testRunnerAppAddress: "http://0.0.0.0:7080"
-          webAppAddress: "http://0.0.0.0:7080"
-          seleniumGridAddress: "http://0.0.0.0:4444/wd/hub"
+          testRunnerAppAddress: "http://172.17.0.1:7080"
+          webAppAddress: "http://172.17.0.1:7080"
+          seleniumGridAddress: "http://172.17.0.1:4444/wd/hub"
         run: >-
           mvn test -P Staging -f pom.xml
           --batch-mode --update-snapshots -Dorg.slf4j.simpleLogger.defaultLogLevel=${{ env.LOG_LEVEL }}
