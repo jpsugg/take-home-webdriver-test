@@ -7,7 +7,7 @@ import org.testng.annotations.Test;
 import java.util.stream.IntStream;
 
 public class CheckboxesTest extends UITest {
-    private int index;
+    //private int index;
     public CheckboxesTest() { }
     @Test(description="Checkboxes can be checked and unchecked")
     public void checkboxChecking() {
