@@ -206,7 +206,7 @@ public class UITest {
     }
 
     public final @NotNull Boolean isPageOpen(String pageUrl, WebElement pageTitle) {
-        WebDriverWait genericWait = new WebDriverWait(this.getDriver(), Duration.ofSeconds(10));;
+        WebDriverWait genericWait = new WebDriverWait(this.getDriver(), Duration.ofSeconds(10));
         genericWait.until(ExpectedConditions.visibilityOf(pageTitle));
         return this.getDriver().getCurrentUrl().equals(pageUrl) && pageTitle.isDisplayed();
     }
