@@ -135,7 +135,7 @@ public class UITest {
 
     public void dragAndDropJS(WebElement source, WebElement destination)
     {
-        JavascriptExecutor js = (JavascriptExecutor) this.getDriver();
+        JavascriptExecutor js = this.getDriver();
         js.executeScript("""
                 function createEvent(typeOfEvent) {
                 var event = document.createEvent('CustomEvent');
