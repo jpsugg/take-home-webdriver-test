@@ -6,7 +6,7 @@ on:
       - completed
     workflows:
       # List all required workflow names here.
-      - 'Continuous Integration'
+      - 'On Push to develop, Merge to staging after successful testing'
 
 jobs:
   merge-me:
