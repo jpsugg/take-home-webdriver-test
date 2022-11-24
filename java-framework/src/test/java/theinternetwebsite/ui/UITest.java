@@ -106,7 +106,7 @@ public class UITest {
         // Remote driver session
         if (useSeleniumGrid.equals("true") || browser.equals("remote-chrome")) {
             //WebDriverManager.chromedriver().useBetaVersions();
-            WebDriverManager.chromedriver().dockerNetwork("dotdash");
+            WebDriverManager.chromedriver().dockerNetwork("theinternet");
 
             try {
                 this.driver = (RemoteWebDriver) WebDriverManager.chromedriver().remoteAddress(new URL(remoteUrl)).capabilities(chromeOptions).create();
