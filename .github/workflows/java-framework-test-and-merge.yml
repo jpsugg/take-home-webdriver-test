@@ -33,5 +33,4 @@ jobs:
           PULL_REQUEST_TITLE: "Post-test automatic PR"
       - name: Exit Create PR process
         run: echo "Exit Create PR process"
-        if: ${{ success() }}
-        
+        if: ${{ success() }}      
