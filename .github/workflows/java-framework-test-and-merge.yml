@@ -3,6 +3,8 @@ on:
   push:
     branches:
     - develop
+    paths:
+    - java-framework/**
 
 jobs:
   build-and-test:
