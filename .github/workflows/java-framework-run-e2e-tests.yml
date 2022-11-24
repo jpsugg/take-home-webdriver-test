@@ -113,6 +113,13 @@ jobs:
       - name: Clean
         run: mvn clean -P Staging -f pom.xml --batch-mode --update-snapshots
         working-directory: ${{env.working-directory}}
+      - name: Cache
+        uses: actions/cache@v3.0.11
+        with:
+          # A list of files, directories, and wildcard patterns to cache and restore
+          path: /home/runner/work/the-internet-tests/
+          # An explicit key for restoring and saving the cache
+          key: build-project-cache  
       - name: Build
         run: mvn compile -P Staging -f pom.xml --batch-mode --update-snapshots
         working-directory: ${{env.working-directory}}
