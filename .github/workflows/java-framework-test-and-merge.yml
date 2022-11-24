@@ -8,13 +8,11 @@ on:
 
 jobs:
   build-and-test:
-    runs-on: ubuntu-latest
-    steps:
-    - uses: jpsugg/the-internet-tests/.github/workflows/java-framework-run-e2e-tests.yml@develop
-      with:
-        repo-token: ${{ secrets.token }}
-        envPAT: ${{ secrets.token }}
-        target-environment: ${{ inputs.target-environment }}
+    uses: jpsugg/the-internet-tests/.github/workflows/java-framework-run-e2e-tests.yml@develop
+    with:
+      repo-token: ${{ secrets.token }}
+      envPAT: ${{ secrets.token }}
+      target-environment: ${{ inputs.target-environment }}
   
   create-pr-to-staging:
     name: Create a Pull Request to Merge develop into staging
