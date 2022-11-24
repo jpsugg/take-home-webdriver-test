@@ -33,7 +33,7 @@ public class LoginTest extends UITest {
 
     @Parameters({"username", "password"})
     @Test(description="Login form - Using invalid Username", groups={ "loginForm" })
-    public void invalidUsername(@Optional(DEFAULT_USERNAME) String username, @Optional(DEFAULT_PASSWORD) String password) {
+    public void invalidUsername(@Optional(DEFAULT_USERNAME) String ignoredUsername, @Optional(DEFAULT_PASSWORD) String password) {
         String expectedUserErrorMessage = "Your username is invalid!";
         LoginFormPage loginFormPage = this.login("invalidUsername", password);
 
@@ -47,7 +47,7 @@ public class LoginTest extends UITest {
 
     @Parameters({"username", "password"})
     @Test(description="Login form - Using invalid Password", groups={ "loginForm" })
-    public void invalidPassword(@Optional(DEFAULT_USERNAME) String username, @Optional(DEFAULT_PASSWORD) String password) {
+    public void invalidPassword(@Optional(DEFAULT_USERNAME) String username, @Optional(DEFAULT_PASSWORD) String ignoredPassword) {
         String expectedPasswordErrorMessage = "Your password is invalid!";
         LoginFormPage loginFormPage = this.login(username, "invalidPassword");
 
