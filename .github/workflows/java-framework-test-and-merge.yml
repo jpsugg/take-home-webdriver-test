@@ -17,7 +17,7 @@ jobs:
   
   create-pr:
     if: ${{ success() }}
-    needs: build-and-test
+    needs: build-and-test-project
     name: Create a Pull Request to Merge develop into staging
     runs-on: ubuntu-latest
     steps:
