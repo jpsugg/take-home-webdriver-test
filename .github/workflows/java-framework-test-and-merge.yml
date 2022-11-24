@@ -29,3 +29,7 @@ jobs:
           PULL_REQUEST_BRANCH: "staging"
           PULL_REQUEST_FROM_BRANCH: "develop"
           PULL_REQUEST_TITLE: "Post-test automatic PR"
+      - name: Exit Create PR process
+        run: echo "Exit Create PR process"
+        if: ${{ success() }}
+        
