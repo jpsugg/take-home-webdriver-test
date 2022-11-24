@@ -3,7 +3,7 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
-    <groupId>org.dotdash</groupId>
+    <groupId>org.theinternet</groupId>
     <artifactId>the-internet-tests</artifactId>
     <version>1.0-SNAPSHOT</version>
     <properties>
@@ -97,13 +97,13 @@
                             <parallel>tests</parallel>
                             <threadCount>${env.testsThreadCount}</threadCount>
                             <systemPropertyVariables>
-                                <codingChallengeWebsite.baseUrl>${env.testRunnerAppAddress}</codingChallengeWebsite.baseUrl>
-                                <codingChallengeWebsite.baseUrlSG>${env.webAppAddress}</codingChallengeWebsite.baseUrlSG>
-                                <codingChallengeWebsite.seleniumGridUrl>${env.seleniumGridAddress}</codingChallengeWebsite.seleniumGridUrl>
-                                <codingChallengeWebsite.useSeleniumGrid>${env.useSeleniumGrid}</codingChallengeWebsite.useSeleniumGrid>>
-                                <codingChallengeWebsite.headlessBrowser>${env.headlessBrowser}</codingChallengeWebsite.headlessBrowser>
-                                <codingChallengeWebsite.browser>${env.browser}</codingChallengeWebsite.browser>
-                                <codingChallengeWebsite.browserVersion>${env.browserVersion}</codingChallengeWebsite.browserVersion>
+                                <theInternetWebsite.baseUrl>${env.testRunnerAppAddress}</theInternetWebsite.baseUrl>
+                                <theInternetWebsite.baseUrlSG>${env.webAppAddress}</theInternetWebsite.baseUrlSG>
+                                <theInternetWebsite.seleniumGridUrl>${env.seleniumGridAddress}</theInternetWebsite.seleniumGridUrl>
+                                <theInternetWebsite.useSeleniumGrid>${env.useSeleniumGrid}</theInternetWebsite.useSeleniumGrid>>
+                                <theInternetWebsite.headlessBrowser>${env.headlessBrowser}</theInternetWebsite.headlessBrowser>
+                                <theInternetWebsite.browser>${env.browser}</theInternetWebsite.browser>
+                                <theInternetWebsite.browserVersion>${env.browserVersion}</theInternetWebsite.browserVersion>
                             </systemPropertyVariables>
                         </configuration>
                     </plugin>
@@ -147,13 +147,13 @@
                             <parallel>tests</parallel>
                             <threadCount>${testsThreadCount}</threadCount>
                             <systemPropertyVariables>
-                                <codingChallengeWebsite.baseUrl>${webAppAddress}</codingChallengeWebsite.baseUrl>
-                                <codingChallengeWebsite.baseUrlSG>${testRunnerAddress}</codingChallengeWebsite.baseUrlSG>
-                                <codingChallengeWebsite.seleniumGridUrl>${seleniumGridAddress}</codingChallengeWebsite.seleniumGridUrl>
-                                <codingChallengeWebsite.useSeleniumGrid>${useSeleniumGrid}</codingChallengeWebsite.useSeleniumGrid>>
-                                <codingChallengeWebsite.headlessBrowser>${headlessBrowser}</codingChallengeWebsite.headlessBrowser>
-                                <codingChallengeWebsite.browser>${browser}</codingChallengeWebsite.browser>
-                                <codingChallengeWebsite.browserVersion>${browserVersion}</codingChallengeWebsite.browserVersion>
+                                <theInternetWebsite.baseUrl>${webAppAddress}</theInternetWebsite.baseUrl>
+                                <theInternetWebsite.baseUrlSG>${testRunnerAddress}</theInternetWebsite.baseUrlSG>
+                                <theInternetWebsite.seleniumGridUrl>${seleniumGridAddress}</theInternetWebsite.seleniumGridUrl>
+                                <theInternetWebsite.useSeleniumGrid>${useSeleniumGrid}</theInternetWebsite.useSeleniumGrid>>
+                                <theInternetWebsite.headlessBrowser>${headlessBrowser}</theInternetWebsite.headlessBrowser>
+                                <theInternetWebsite.browser>${browser}</theInternetWebsite.browser>
+                                <theInternetWebsite.browserVersion>${browserVersion}</theInternetWebsite.browserVersion>
                             </systemPropertyVariables>
                         </configuration>
                     </plugin>
@@ -200,13 +200,13 @@
                             <parallel>tests</parallel>
                             <threadCount>4</threadCount>
                             <systemPropertyVariables>
-                                <codingChallengeWebsite.baseUrl>http://0.0.0.0:7080</codingChallengeWebsite.baseUrl>
-                                <codingChallengeWebsite.baseUrlSG>http://192.168.65.2:7080</codingChallengeWebsite.baseUrlSG>
-                                <codingChallengeWebsite.seleniumGridUrl>http://0.0.0.0:4444/wd/hub</codingChallengeWebsite.seleniumGridUrl>
-                                <codingChallengeWebsite.useSeleniumGrid>false</codingChallengeWebsite.useSeleniumGrid>>
-                                <codingChallengeWebsite.headlessBrowser>true</codingChallengeWebsite.headlessBrowser>
-                                <codingChallengeWebsite.browser>chrome</codingChallengeWebsite.browser>
-                                <codingChallengeWebsite.browserVersion>''</codingChallengeWebsite.browserVersion>
+                                <theInternetWebsite.baseUrl>http://0.0.0.0:7080</theInternetWebsite.baseUrl>
+                                <theInternetWebsite.baseUrlSG>http://192.168.65.2:7080</theInternetWebsite.baseUrlSG>
+                                <theInternetWebsite.seleniumGridUrl>http://0.0.0.0:4444/wd/hub</theInternetWebsite.seleniumGridUrl>
+                                <theInternetWebsite.useSeleniumGrid>false</theInternetWebsite.useSeleniumGrid>>
+                                <theInternetWebsite.headlessBrowser>true</theInternetWebsite.headlessBrowser>
+                                <theInternetWebsite.browser>chrome</theInternetWebsite.browser>
+                                <theInternetWebsite.browserVersion>''</theInternetWebsite.browserVersion>
                             </systemPropertyVariables>
                         </configuration>
                     </plugin>
@@ -250,13 +250,13 @@
                             <parallel>tests</parallel>
                             <threadCount>4</threadCount>
                             <systemPropertyVariables>
-                                <codingChallengeWebsite.baseUrl>http://0.0.0.0:7080</codingChallengeWebsite.baseUrl>
-                                <codingChallengeWebsite.baseUrlSG>http://192.168.65.2:7080</codingChallengeWebsite.baseUrlSG>
-                                <codingChallengeWebsite.seleniumGridUrl>http://0.0.0.0:4444/wd/hub</codingChallengeWebsite.seleniumGridUrl>
-                                <codingChallengeWebsite.useSeleniumGrid>true</codingChallengeWebsite.useSeleniumGrid>>
-                                <codingChallengeWebsite.headlessBrowser>false</codingChallengeWebsite.headlessBrowser>
-                                <codingChallengeWebsite.browser>chrome</codingChallengeWebsite.browser>
-                                <codingChallengeWebsite.browserVersion>''</codingChallengeWebsite.browserVersion>
+                                <theInternetWebsite.baseUrl>http://0.0.0.0:7080</theInternetWebsite.baseUrl>
+                                <theInternetWebsite.baseUrlSG>http://192.168.65.2:7080</theInternetWebsite.baseUrlSG>
+                                <theInternetWebsite.seleniumGridUrl>http://0.0.0.0:4444/wd/hub</theInternetWebsite.seleniumGridUrl>
+                                <theInternetWebsite.useSeleniumGrid>true</theInternetWebsite.useSeleniumGrid>>
+                                <theInternetWebsite.headlessBrowser>false</theInternetWebsite.headlessBrowser>
+                                <theInternetWebsite.browser>chrome</theInternetWebsite.browser>
+                                <theInternetWebsite.browserVersion>''</theInternetWebsite.browserVersion>
                             </systemPropertyVariables>
                         </configuration>
                     </plugin>
