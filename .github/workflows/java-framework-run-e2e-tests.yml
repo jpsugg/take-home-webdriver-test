@@ -1,6 +1,7 @@
 # Workflow to run automated tests on java-framework code pushed to the repository
 
 name: E2E java-framework UI tests
+
 env:
   LOG_LEVEL: debug
   ENVIRONMENT: staging
@@ -21,15 +22,14 @@ on:
           default: staging
           required: true
           type: string
-      config-path:
-        required: false
-        type: string
-    secrets:
-      envPAT:
-        required: true
-      repo-token:
-        required: true
-    paths: java-framework/**
+        config-path:
+          required: false
+          type: string
+      secrets:
+        envPAT:
+          required: true
+        repo-token:
+          required: true
 
 jobs:
   build-and-test:
