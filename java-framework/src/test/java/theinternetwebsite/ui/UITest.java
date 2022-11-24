@@ -7,7 +7,6 @@ import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
-import org.openqa.selenium.remote.CapabilityType;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.remote.RemoteWebDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -92,7 +91,7 @@ public class UITest {
         chromeOptions.addArguments("--no-sandbox"); //
         DesiredCapabilities capabilities = new DesiredCapabilities();
         capabilities.setCapability(ChromeOptions.CAPABILITY, chromeOptions);
-        capabilities.setCapability(CapabilityType.SUPPORTS_NETWORK_CONNECTION, true);
+        //capabilities.setCapability(CapabilityType.SUPPORTS_NETWORK_CONNECTION, true);
         capabilities.setCapability("se:recordVideo", true);
         capabilities.setCapability("se:timeZone", "US/Pacific");
         capabilities.setCapability("se:screenResolution", "1920x1080");
@@ -135,7 +134,7 @@ public class UITest {
 
     public void dragAndDropJS(WebElement source, WebElement destination)
     {
-        JavascriptExecutor js = (JavascriptExecutor) this.getDriver();
+        JavascriptExecutor js = this.getDriver();
         js.executeScript("""
                 function createEvent(typeOfEvent) {
                 var event = document.createEvent('CustomEvent');
@@ -206,7 +205,7 @@ public class UITest {
     }
 
     public final @NotNull Boolean isPageOpen(String pageUrl, WebElement pageTitle) {
-        WebDriverWait genericWait = new WebDriverWait(this.getDriver(), Duration.ofSeconds(10));;
+        WebDriverWait genericWait = new WebDriverWait(this.getDriver(), Duration.ofSeconds(10));
         genericWait.until(ExpectedConditions.visibilityOf(pageTitle));
         return this.getDriver().getCurrentUrl().equals(pageUrl) && pageTitle.isDisplayed();
     }
