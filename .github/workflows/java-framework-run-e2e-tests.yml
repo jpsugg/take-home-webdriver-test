@@ -125,6 +125,8 @@ jobs:
         run: ls -R
         working-directory: ${{env.report-directory}}
       - name: The job has succeeded
-        if: ${{ success() }}
+        run: echo "The job has succeeded"
       - name: Finished build and test phase
+        run: echo "Finished build and test phase"
+        if: ${{ success() }}
         
