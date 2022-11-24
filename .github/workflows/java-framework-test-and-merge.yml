@@ -12,6 +12,8 @@ jobs:
     with:
       target-environment: ${{ inputs.target-environment }}
     secrets: inherit
+    if: ${{ success() }}
+    name: Finished build and test phase
   
   create-pr-to-staging:
     if: ${{ success() }}
