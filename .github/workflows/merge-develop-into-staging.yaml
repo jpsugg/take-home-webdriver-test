@@ -6,7 +6,7 @@ on:
       - completed
     workflows:
       # List all required workflow names here.
-      - 'On Push to develop, Merge to staging after successful testing'
+      - 'On Push to develop, test and create PR'
 
 jobs:
   merge-me:
