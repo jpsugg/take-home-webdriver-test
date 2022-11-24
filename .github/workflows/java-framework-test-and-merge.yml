@@ -1,4 +1,4 @@
-name: On Push to develop, test and create PR
+name: Test project`s code and create PR
 on:
   push:
     branches:
@@ -7,7 +7,7 @@ on:
     - java-framework/**
 
 jobs:
-  build-and-test:
+  build-and-test-project:
     uses: jpsugg/the-internet-tests/.github/workflows/java-framework-run-e2e-tests.yml@develop
     with:
       target-environment: ${{ inputs.target-environment }}
@@ -15,7 +15,7 @@ jobs:
     if: ${{ success() }}
     name: Finished build and test phase
   
-  create-pr-to-staging:
+  create-pr:
     if: ${{ success() }}
     needs: build-and-test
     name: Create a Pull Request to Merge develop into staging
