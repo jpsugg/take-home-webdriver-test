@@ -14,6 +14,7 @@ jobs:
     secrets: inherit
   
   create-pr-to-staging:
+    needs: build-and-test
     name: Create a Pull Request to Merge develop into staging
     runs-on: ubuntu-latest
     steps:
