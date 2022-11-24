@@ -1,6 +1,6 @@
-# Workflow to run automated tests on code pushed to master branch
+# Workflow to run automated tests on java-framework code pushed to the repository
 
-name: Run automated test suite with Selenium Grid
+name: E2E java-framework UI tests
 env:
   LOG_LEVEL: debug
   ENVIRONMENT: staging
@@ -32,6 +32,7 @@ on:
   push:
     branches:
       - staging
+      - master
     paths: java-framework/**
 
 jobs:
