@@ -17,8 +17,9 @@ import java.net.URL;
 import java.nio.file.Paths;
 import org.openqa.selenium.remote.LocalFileDetector;
 import java.time.Duration;
-import java.util.HashMap;
 import java.util.Map;
+import java.util.HashMap;
+
 import static org.openqa.selenium.support.ui.ExpectedConditions.visibilityOf;
 import static io.github.bonigarcia.wdm.WebDriverManager.chromedriver;
 
