@@ -4,7 +4,7 @@ import theinternetwebsite.ui.UITest;
 import theinternetwebsite.ui.pageobjects.HoversPage;
 import org.testng.Assert;
 import org.testng.annotations.Test;
-
+//import java.util.HashMap;
 import java.util.Map;
 
 public class HoversTest extends UITest {
@@ -14,13 +14,15 @@ public class HoversTest extends UITest {
     @Test(description = "Validates behaviour on mouse over")
     public void validateHoverAndUserDetails() {
         HoversPage hoversPage = new HoversPage(this);
-        Map.Entry<String, String> firstEntry;
+        Map.Entry<String, String> firstEntry = null;
         Boolean hoverValidation;
 
         // Validate page loaded
         Assert.assertTrue(hoversPage.isPageOpen(), "Page not open");
         // Select user from page
-        firstEntry = hoversPage.getUsersDetails().entrySet().stream().findFirst().get();
+        if (hoversPage.getUsersDetails().entrySet().stream().findFirst().isPresent())
+            firstEntry = hoversPage.getUsersDetails().entrySet().stream().findFirst().get();
+        assert firstEntry != null;
         String username = firstEntry.getKey();
         String profilePhoto = firstEntry.getValue();
         // Hover over user
