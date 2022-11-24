@@ -42,6 +42,7 @@ public class FloatingMenuPage {
         WebDriverWait wait = new WebDriverWait(caller.getDriver(), Duration.ofSeconds(30));
         pageBody.sendKeys(Keys.END, Keys.CONTROL);
         pageBody.sendKeys(Keys.END, Keys.CONTROL);
+        pageBody.sendKeys(Keys.END, Keys.CONTROL);
         wait.until(ExpectedConditions.visibilityOf(elementalSeleniumLink));
     }
 
