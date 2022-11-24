@@ -14,7 +14,7 @@ public class HoversTest extends UITest {
     @Test(description = "Validates behaviour on mouse over")
     public void validateHoverAndUserDetails() {
         HoversPage hoversPage = new HoversPage(this);
-        Map.Entry<String, String> firstEntry = null;
+        Map.Entry<String, String> firstEntry;
         Boolean hoverValidation;
 
         // Validate page loaded
