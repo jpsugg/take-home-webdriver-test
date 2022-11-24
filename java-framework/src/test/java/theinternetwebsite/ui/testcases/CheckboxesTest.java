@@ -18,7 +18,7 @@ public class CheckboxesTest extends UITest {
         // All checkboxes toggled back and forth
         IntStream.range(0, checkboxesPage.getCheckboxElements().size()).forEach(index-> {
             Boolean prevStatus, currentStatus, expectedStatus;
-            // Toggle/untoggle the checkbox
+            // Toggle/ untoggle the checkbox
             prevStatus = checkboxesPage.clickOnCheckbox(index);
             currentStatus = checkboxesPage.getCheckboxCurrentValue(index);
             Assert.assertNotEquals(prevStatus, currentStatus);
