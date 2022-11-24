@@ -10,8 +10,6 @@ jobs:
   build-and-test:
     uses: jpsugg/the-internet-tests/.github/workflows/java-framework-run-e2e-tests.yml@develop
     with:
-      repo-token: ${{ secrets.token }}
-      envPAT: ${{ secrets.token }}
       target-environment: ${{ inputs.target-environment }}
     secrets: inherit
   
