@@ -8,6 +8,8 @@ on:
 
 jobs:
   build-and-test-project:
+    strategy:
+      max-parallel: 1
     uses: jpsugg/the-internet-tests/.github/workflows/java-framework-run-e2e-tests.yml@develop
     with:
       target-environment: ${{ inputs.target-environment }}
@@ -31,5 +33,4 @@ jobs:
           PULL_REQUEST_TITLE: "Post-test automatic PR"
       - name: Exit Create PR process
         run: echo "Exit Create PR process"
-        if: ${{ success() }}
-        
+        if: ${{ success() }}      

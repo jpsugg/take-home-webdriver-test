@@ -1,4 +1,4 @@
-name: Merge me!
+name: Merge code after successful testing
 
 on:
   workflow_run:
@@ -6,12 +6,12 @@ on:
       - completed
     workflows:
       # List all required workflow names here.
-      - 'On Push to develop, test and create PR'
+      - 'Test project`s code and create PR'
       
 
 jobs:
   merge-me:
-    name: Merge me!
+    name: Merge develop branch into staging
     runs-on: ubuntu-latest
     steps:
       - # It is often a desired behavior to merge only when a workflow execution
