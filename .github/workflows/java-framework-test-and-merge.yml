@@ -1,0 +1,28 @@
+name: On Push to develop, test and create PR
+on:
+  push:
+    branches:
+    - develop
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: jpsugg/the-internet-tests/.github/workflows/java-framework-run-e2e-tests.yml@develop
+      with:
+        repo-token: ${{ secrets.token }}
+        envPAT: ${{ secrets.token }}
+        target-environment: ${{ inputs.target-environment }}
+  
+  create-pr-to-staging:
+    name: Create a Pull Request to Merge develop into staging
+    runs-on: ubuntu-latest
+    steps:
+      - name: pull-request-action
+        uses: vsoch/pull-request-action@staging
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          BRANCH_PREFIX: ""
+          PULL_REQUEST_BRANCH: "staging"
+          PULL_REQUEST_FROM_BRANCH: "develop"
+          PULL_REQUEST_TITLE: "Post-test automatic PR"
