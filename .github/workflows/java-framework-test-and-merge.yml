@@ -13,6 +13,7 @@ jobs:
       repo-token: ${{ secrets.token }}
       envPAT: ${{ secrets.token }}
       target-environment: ${{ inputs.target-environment }}
+    secrets: inherit
   
   create-pr-to-staging:
     name: Create a Pull Request to Merge develop into staging
