@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
 <suite name="Coding Challenge Website UI Regression Suite">
-    <parameter name="browser" value="${codingChallengeWebsite.browser}"/>
-    <parameter name="browserVersion" value="${codingChallengeWebsite.browserVersion}"/>
-    <parameter name="headlessBrowser" value="${codingChallengeWebsite.headlessBrowser}"/>
-    <parameter name="useSeleniumGrid" value="${codingChallengeWebsite.useSeleniumGrid}"/>
-    <parameter name="seleniumGridUrl" value="${codingChallengeWebsite.seleniumGridUrl}"/>
-    <parameter name="baseUrlSG" value="${codingChallengeWebsite.baseUrlSG}"/>
-    <parameter name="baseUrl" value="${codingChallengeWebsite.baseUrl}"/>
+    <parameter name="browser" value="${theInternetWebsite.browser}"/>
+    <parameter name="browserVersion" value="${theInternetWebsite.browserVersion}"/>
+    <parameter name="headlessBrowser" value="${theInternetWebsite.headlessBrowser}"/>
+    <parameter name="useSeleniumGrid" value="${theInternetWebsite.useSeleniumGrid}"/>
+    <parameter name="seleniumGridUrl" value="${theInternetWebsite.seleniumGridUrl}"/>
+    <parameter name="baseUrlSG" value="${theInternetWebsite.baseUrlSG}"/>
+    <parameter name="baseUrl" value="${theInternetWebsite.baseUrl}"/>
     <test name = "Login Tests - Success">
         <parameter name="username" value="tomsmith"/>
         <parameter name="password" value="SuperSecretPassword!"/>
         <classes>
-            <class name="codingchallengewebsite.ui.testcases.LoginTest">
+            <class name="theinternetwebsite.ui.testcases.LoginTest">
                 <methods><include name="successfulLogin"/></methods>
             </class>
         </classes>
@@ -21,7 +21,7 @@
         <parameter name="username" value="Invalid username"/>
         <parameter name="password" value="SuperSecretPassword!"/>
         <classes>
-            <class name="codingchallengewebsite.ui.testcases.LoginTest">
+            <class name="theinternetwebsite.ui.testcases.LoginTest">
                 <methods><include name="invalidUsername"/></methods>
             </class>
         </classes>
@@ -30,89 +30,89 @@
         <parameter name="username" value="tomsmith"/>
         <parameter name="password" value="Invalid password"/>
         <classes>
-            <class name="codingchallengewebsite.ui.testcases.LoginTest">
+            <class name="theinternetwebsite.ui.testcases.LoginTest">
                 <methods><include name="invalidPassword"/></methods>
             </class>
         </classes>
     </test>
     <test name = "HoversTest">
         <classes>
-            <class name="codingchallengewebsite.ui.testcases.HoversTest"/>
+            <class name="theinternetwebsite.ui.testcases.HoversTest"/>
         </classes>
     </test>
     <test name = "ContextMenuTest">
         <classes>
-            <class name="codingchallengewebsite.ui.testcases.ContextMenuTest"/>
+            <class name="theinternetwebsite.ui.testcases.ContextMenuTest"/>
         </classes>
     </test>
     <test name = "CheckboxesTest">
         <classes>
-            <class name="codingchallengewebsite.ui.testcases.CheckboxesTest"/>
+            <class name="theinternetwebsite.ui.testcases.CheckboxesTest"/>
         </classes>
     </test>
     <test name = "DragAndDropTest">
         <classes>
-            <class name="codingchallengewebsite.ui.testcases.DragAndDropTest"/>
+            <class name="theinternetwebsite.ui.testcases.DragAndDropTest"/>
         </classes>
     </test>
     <test name = "DropdownTest">
         <classes>
-            <class name="codingchallengewebsite.ui.testcases.DropdownTest"/>
+            <class name="theinternetwebsite.ui.testcases.DropdownTest"/>
         </classes>
     </test>
     <test name = "DynamicContentTest">
         <classes>
-            <class name="codingchallengewebsite.ui.testcases.DynamicContentTest"/>
+            <class name="theinternetwebsite.ui.testcases.DynamicContentTest"/>
         </classes>
     </test>
     <test name = "DynamicControlsTest">
         <classes>
-            <class name="codingchallengewebsite.ui.testcases.DynamicControlsTest"/>
+            <class name="theinternetwebsite.ui.testcases.DynamicControlsTest"/>
         </classes>
     </test>
     <test name = "DynamicLoadingTest">
         <classes>
-            <class name="codingchallengewebsite.ui.testcases.DynamicLoadingTest"/>
+            <class name="theinternetwebsite.ui.testcases.DynamicLoadingTest"/>
         </classes>
     </test>
     <test name = "Upload Test">
         <classes>
-            <class name="codingchallengewebsite.ui.testcases.UploadTest"/>
+            <class name="theinternetwebsite.ui.testcases.UploadTest"/>
         </classes>
     </test>
     <test name = "Download Test">
         <classes>
-            <class name="codingchallengewebsite.ui.testcases.DownloadTest"/>
+            <class name="theinternetwebsite.ui.testcases.DownloadTest"/>
         </classes>
     </test>
     <test name = "FloatingMenuTest">
         <classes>
-            <class name="codingchallengewebsite.ui.testcases.FloatingMenuTest"/>
+            <class name="theinternetwebsite.ui.testcases.FloatingMenuTest"/>
         </classes>
     </test>
     <test name = "IFrameTest">
         <classes>
-            <class name="codingchallengewebsite.ui.testcases.IFrameTest"/>
+            <class name="theinternetwebsite.ui.testcases.IFrameTest"/>
         </classes>
     </test>
     <test name = "JavascriptAlertTests">
         <classes>
-            <class name="codingchallengewebsite.ui.testcases.JavascriptAlertsTest"/>
+            <class name="theinternetwebsite.ui.testcases.JavascriptAlertsTest"/>
         </classes>
     </test>
     <test name = "JavascriptErrorTest">
         <classes>
-            <class name="codingchallengewebsite.ui.testcases.JavascriptErrorTest"/>
+            <class name="theinternetwebsite.ui.testcases.JavascriptErrorTest"/>
         </classes>
     </test>
     <test name = "WindowsTest">
         <classes>
-            <class name="codingchallengewebsite.ui.testcases.WindowsTest"/>
+            <class name="theinternetwebsite.ui.testcases.WindowsTest"/>
         </classes>
     </test>
     <test name = "NotificationMessageRenderedTest">
         <classes>
-            <class name="codingchallengewebsite.ui.testcases.NotificationMessageRenderedTest"/>
+            <class name="theinternetwebsite.ui.testcases.NotificationMessageRenderedTest"/>
         </classes>
     </test>
 </suite>
