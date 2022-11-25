@@ -5,6 +5,12 @@ on:
     - develop
     paths:
     - java-framework/**
+  pull_request_target:
+    branches:
+      - staging
+    types:
+      - opened
+      - synchronize
 
 jobs:
   build-and-test-project:
