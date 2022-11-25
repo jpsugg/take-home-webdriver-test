@@ -1,4 +1,4 @@
-name: Test project`s code and create PR
+name: Test develop code and create PR to staging
 on:
   push:
     branches:
@@ -13,7 +13,8 @@ jobs:
       max-parallel: 1
     uses: jpsugg/the-internet-tests/.github/workflows/java-framework-run-e2e-tests.yml@develop
     with:
-      target-environment: ${{ inputs.target-environment }}
+      target-environment: staging
+      source-branch: develop
     secrets: inherit
   
   create-pr:
