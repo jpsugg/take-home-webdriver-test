@@ -16,9 +16,9 @@ import org.openqa.selenium.chrome.ChromeOptions;
 import io.github.bonigarcia.wdm.WebDriverManager;
 import org.openqa.selenium.remote.RemoteWebDriver;
 import org.openqa.selenium.support.ui.WebDriverWait;
+import org.openqa.selenium.remote.LocalFileDetector;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.remote.LocalFileDetector;
 
 import static org.openqa.selenium.support.ui.ExpectedConditions.visibilityOf;
 import static io.github.bonigarcia.wdm.WebDriverManager.chromedriver;
