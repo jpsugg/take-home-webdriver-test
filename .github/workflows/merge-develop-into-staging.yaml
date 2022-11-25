@@ -6,8 +6,7 @@ on:
       - completed
     workflows:
       # List all required workflow names here.
-      - 'Test project`s code and create PR'
-      
+      - 'Test develop code and create PR to staging'
 
 jobs:
   merge-me:
