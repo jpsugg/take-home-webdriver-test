@@ -1,6 +1,7 @@
 package theinternetwebsite.ui;
 
 import java.net.URL;
+import java.nio.file.Paths;
 import org.openqa.selenium.By;
 import org.testng.annotations.*;
 import org.openqa.selenium.WebElement;
@@ -14,7 +15,6 @@ import org.openqa.selenium.remote.RemoteWebDriver;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.support.ui.ExpectedConditions;
-import java.nio.file.Paths;
 import org.openqa.selenium.remote.LocalFileDetector;
 import java.time.Duration;
 import java.util.Map;
