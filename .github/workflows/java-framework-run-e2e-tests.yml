@@ -155,4 +155,3 @@ jobs:
         run: echo "The job has succeeded"
       - name: Finished build and test phase
         run: echo "Finished build and test phase"
-        if: ${{ success() }}
