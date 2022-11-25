@@ -20,8 +20,8 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 
-import static org.openqa.selenium.support.ui.ExpectedConditions.visibilityOf;
 import static io.github.bonigarcia.wdm.WebDriverManager.chromedriver;
+import static org.openqa.selenium.support.ui.ExpectedConditions.visibilityOf;
 
 public class UITest {
     public static final String DEFAULT_BROWSER = "chrome";
