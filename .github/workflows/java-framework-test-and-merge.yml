@@ -20,7 +20,7 @@ jobs:
     strategy:
       max-parallel: 1
     needs: build-and-test-project
-    if: need.build-and-test-project.result == 'success'
+    if: needs.build-and-test-project.result == 'success'
     name: Create a Pull Request to Merge develop into staging
     runs-on: ubuntu-latest
     steps:
