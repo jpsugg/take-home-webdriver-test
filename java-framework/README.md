@@ -63,7 +63,7 @@ target/surefire-reports/index.html
 <br>
 
 ## TestSuite structure
-1. Use ChromeDriver to write Tests for the following scenarios in Java:
+1. Using ChromeDriver to write Tests for the following scenarios:
     * Login Success: http://localhost:7080/login credentials: tomsmith/SuperSecretPassword!
     + Login Failure: http://localhost:7080/login Login fail invalid creadentials
     - CheckBoxes: http://localhost:7080/checkboxes Check and uncheck boxes
