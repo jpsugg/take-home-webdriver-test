@@ -8,18 +8,19 @@ on:
 
 jobs:
   build-and-test-project:
+    name: Build and test phase
     strategy:
       max-parallel: 1
     uses: jpsugg/the-internet-tests/.github/workflows/java-framework-run-e2e-tests.yml@develop
     with:
       target-environment: ${{ inputs.target-environment }}
     secrets: inherit
-    if: ${{ success() }}
-    name: Finished build and test phase
   
   create-pr:
-    if: ${{ success() }}
+    strategy:
+      max-parallel: 1
     needs: build-and-test-project
+    if: need.build-and-test-project.result == 'success'
     name: Create a Pull Request to Merge develop into staging
     runs-on: ubuntu-latest
     steps:
