@@ -17,6 +17,11 @@ jobs:
     name: Merge develop branch into staging
     runs-on: ubuntu-latest
     environment: ${{ inputs.environment }}
+    uses: ridedott/merge-me-action@v2
+    with:
+      GITHUB_TOKEN: ${{ secrets.WORKFLOW_TOKEN }}
+      timeout-minutes: 1
+
   # if: ${{ github.event.workflow_run.conclusion == 'success' }}
   # steps:
   #  - # It is often a desired behavior to merge only when a workflow execution
