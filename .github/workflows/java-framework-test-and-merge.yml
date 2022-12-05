@@ -44,11 +44,10 @@ jobs:
     needs: create-pr
     if: needs.create-pr.result == 'success'
     runs-on: ubuntu-latest
-    steps:
-      - uses: jpsugg/the-internet-tests/.github/workflows/merge-develop-into-staging.yaml@develop
-        with:
-          environment: staging
-        secrets: inherit
+    uses: jpsugg/the-internet-tests/.github/workflows/merge-develop-into-staging.yaml@develop
+    with:
+      environment: staging
+      secrets: inherit
 
     dont-merge-pr:
       name: Do not merge develop into staging - something failed
