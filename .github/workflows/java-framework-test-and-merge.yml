@@ -44,7 +44,6 @@ jobs:
       max-parallel: 1
     needs: create-pr
     if: needs.create-pr.result == 'success'
-    runs-on: ubuntu-latest
     uses: jpsugg/the-internet-tests/.github/workflows/merge-develop-into-staging.yaml@develop
     with:
       environment: staging
