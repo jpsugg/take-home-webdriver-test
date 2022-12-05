@@ -33,7 +33,7 @@ jobs:
           # GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GITHUB_TOKEN: ${{ secrets.WORKFLOW_TOKEN }}
   dont-merge:
-   runs-on: ubuntu-latest
+    runs-on: ubuntu-latest
     if: ${{ github.event.workflow_run.conclusion == 'failure' }}
     steps:
       - run: echo 'The triggering workflow failed'
