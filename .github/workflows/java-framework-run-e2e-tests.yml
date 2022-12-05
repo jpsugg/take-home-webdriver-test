@@ -140,7 +140,7 @@ jobs:
           mvn test -P Staging -f pom.xml
           --batch-mode --update-snapshots -Dorg.slf4j.simpleLogger.defaultLogLevel=${{ env.LOG_LEVEL }}
         working-directory: ${{ env.working-directory }}
-      - uses: actions/upload-artifact@v3x
+      - uses: actions/upload-artifact@v3
         if: always()
         with:
           name: Test run report
