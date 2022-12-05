@@ -6,12 +6,13 @@ on:
       - completed
     workflows:
       # List all required workflow names here.
-      - 'Test develop code and create PR to staging'
+      - 'Test develop code and create PR to staging-'
 
 jobs:
   merge-me:
     name: Merge develop branch into staging
     runs-on: ubuntu-latest
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
     steps:
       - # It is often a desired behavior to merge only when a workflow execution
         # succeeds. This can be changed as needed.
@@ -31,3 +32,8 @@ jobs:
           # to protected branches.
           # GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GITHUB_TOKEN: ${{ secrets.WORKFLOW_TOKEN }}
+  dont-merge:
+   runs-on: ubuntu-latest
+    if: ${{ github.event.workflow_run.conclusion == 'failure' }}
+    steps:
+      - run: echo 'The triggering workflow failed'
