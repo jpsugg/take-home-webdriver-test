@@ -38,7 +38,7 @@ public class FloatingMenuPage {
 
     public void scrollToBottom() {
         WebDriverWait wait = new WebDriverWait(caller.getDriver(), Duration.ofSeconds(30));
-        for (int i=10; i>0; i++) { pageBody.sendKeys(Keys.END, Keys.CONTROL); }
+        for (int i=10; i>0; i--) { pageBody.sendKeys(Keys.END, Keys.CONTROL); }
         wait.until(ExpectedConditions.visibilityOf(elementalSeleniumLink));
     }
 
