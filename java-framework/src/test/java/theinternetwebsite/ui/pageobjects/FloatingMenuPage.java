@@ -18,8 +18,6 @@ public class FloatingMenuPage {
     public WebElement menu;
     @FindBy(how = How.XPATH, using = "//body")
     public WebElement pageBody;
-    @FindBy(how = How.XPATH, using = "//img[@alt='Fork me on GitHub']")
-    public WebElement gitHubLogo;
     @FindBy(how = How.XPATH, using = "//*[@id='page-footer']/div/div/a")
     public WebElement elementalSeleniumLink;
     private final UITest caller;
@@ -40,9 +38,7 @@ public class FloatingMenuPage {
 
     public void scrollToBottom() {
         WebDriverWait wait = new WebDriverWait(caller.getDriver(), Duration.ofSeconds(30));
-        pageBody.sendKeys(Keys.END, Keys.CONTROL);
-        pageBody.sendKeys(Keys.END, Keys.CONTROL);
-        pageBody.sendKeys(Keys.END, Keys.CONTROL);
+        for (int i=10; i>0; i--) { pageBody.sendKeys(Keys.END, Keys.CONTROL); }
         wait.until(ExpectedConditions.visibilityOf(elementalSeleniumLink));
     }
 
