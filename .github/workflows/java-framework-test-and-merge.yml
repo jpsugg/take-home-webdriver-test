@@ -44,11 +44,8 @@ jobs:
       max-parallel: 1
     needs: create-pr
     if: needs.create-pr.result == 'success'
-    steps:
-    - name: merge action
-      uses: jpsugg/the-internet-tests/.github/workflows/merge-develop-into-staging.yaml@develop
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      with:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        environment: staging
+    uses: jpsugg/the-internet-tests/.github/workflows/merge-develop-into-staging.yaml@develop
+    with:
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      environment: staging
+    secrets: inherit
