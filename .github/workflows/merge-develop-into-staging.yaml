@@ -6,7 +6,7 @@ on:
       environment:
         required: true
         type: string
-      GITHUB_TOKEN:
+      github-token:
         required: true
         type: string
   # types:
@@ -22,5 +22,5 @@ jobs:
     environment: ${{ inputs.environment }}
     uses: ridedott/merge-me-action@v2
     with:
-      GITHUB_TOKEN: ${{ inputs.GITHUB_TOKEN }}
+      github-token: ${{ inputs.github-token }}
     timeout-minutes: 5
