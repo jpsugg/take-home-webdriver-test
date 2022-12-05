@@ -47,12 +47,12 @@ jobs:
     uses: jpsugg/the-internet-tests/.github/workflows/merge-develop-into-staging.yaml@develop
     with:
       environment: staging
-      secrets: inherit
+    secrets: inherit
 
     dont-merge-pr:
       name: Do not merge develop into staging - something failed
       strategy:
-      max-parallel: 1
+        max-parallel: 1
       needs: create-pr
       if: needs.create-pr.result == 'failure'
       runs-on: ubuntu-latest
