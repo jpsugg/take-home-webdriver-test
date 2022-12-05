@@ -1,8 +1,8 @@
 package theinternetwebsite.ui.testcases;
 
+import org.testng.Assert;
 import theinternetwebsite.ui.UITest;
 import theinternetwebsite.ui.pageobjects.DownloadPage;
-import org.testng.Assert;
 import org.testng.SkipException;
 import org.testng.annotations.Test;
 
