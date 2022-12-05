@@ -19,8 +19,8 @@ jobs:
   merge-me:
     name: Merge develop into staging
     runs-on: ubuntu-latest
-    environment: ${{ inputs.environment }}
+    environment: ${{ secrets.environment }}
     uses: ridedott/merge-me-action@v2
     with:
-      GITHUB_TOKEN: ${{ inputs.GITHUB_TOKEN }}
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     timeout-minutes: 5

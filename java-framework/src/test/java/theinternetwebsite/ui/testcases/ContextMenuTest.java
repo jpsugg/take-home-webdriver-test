@@ -1,7 +1,7 @@
 package theinternetwebsite.ui.testcases;
 
-import org.testng.SkipException;
 import org.testng.Assert;
+import org.testng.SkipException;
 import theinternetwebsite.ui.UITest;
 import theinternetwebsite.ui.pageobjects.ContextMenuPage;
 import org.testng.annotations.Test;
