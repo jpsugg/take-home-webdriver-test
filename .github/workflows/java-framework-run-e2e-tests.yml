@@ -1,5 +1,4 @@
 # Workflow to run automated tests on java-framework code pushed to the repository
-
 name: E2E java-framework UI tests
 
 env:
