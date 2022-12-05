@@ -1,9 +1,9 @@
 package theinternetwebsite.ui.testcases;
 
 import org.testng.Assert;
+import org.testng.annotations.Test;
 import theinternetwebsite.ui.UITest;
 import theinternetwebsite.ui.pageobjects.CheckboxesPage;
-import org.testng.annotations.Test;
 import java.util.stream.IntStream;
 
 public class CheckboxesTest extends UITest {

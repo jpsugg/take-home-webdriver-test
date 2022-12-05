@@ -48,4 +48,3 @@ jobs:
     with:
       environment: staging
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-    secrets: inherit
