@@ -20,5 +20,6 @@ jobs:
     steps:
     - uses: ridedott/merge-me-action@v2
       with:
-        GITHUB_TOKEN: ${{ secrets.WORKFLOW_TOKEN }}
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     timeout-minutes: 5
+    secrets: inherit
