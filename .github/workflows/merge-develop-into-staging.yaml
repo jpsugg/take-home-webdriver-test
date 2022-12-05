@@ -6,6 +6,9 @@ on:
       environment:
         required: true
         type: string
+      GITHUB_TOKEN:
+        required: true
+        type: string
   # types:
   #   - completed
   # workflows:
@@ -20,6 +23,6 @@ jobs:
     steps:
     - uses: ridedott/merge-me-action@v2
       with:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        GITHUB_TOKEN: ${{ inputs.GITHUB_TOKEN }}
     timeout-minutes: 5
     secrets: inherit
