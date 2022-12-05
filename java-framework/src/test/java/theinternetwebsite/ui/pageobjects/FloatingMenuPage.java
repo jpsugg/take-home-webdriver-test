@@ -1,5 +1,6 @@
 package theinternetwebsite.ui.pageobjects;
 
+import org.openqa.selenium.TimeoutException;
 import theinternetwebsite.ui.UITest;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebElement;
@@ -38,10 +39,20 @@ public class FloatingMenuPage {
 
     public void scrollToBottom() {
         WebDriverWait wait = new WebDriverWait(caller.getDriver(), Duration.ofSeconds(30));
-        for (int i=10; i>0; i--) { pageBody.sendKeys(Keys.END, Keys.CONTROL); }
-        wait.until(ExpectedConditions.visibilityOf(elementalSeleniumLink));
+        final WebElement until = wait.until(ExpectedConditions.visibilityOf(elementalSeleniumLink));
+        for (int i = 3; i>0; i--) {
+            pageBody.sendKeys(Keys.END, Keys.CONTROL);
+            try {
+                until;
+            } catch (TimeoutException ignored) { }
+        }
+        // Try one last time
+        pageBody.sendKeys(Keys.END, Keys.CONTROL);
+        until;
     }
 
     public Boolean validateMenuVisibility() {
+        WebDriverWait wait = new WebDriverWait(caller.getDriver(), Duration.ofSeconds(30));
+        wait.until(ExpectedConditions.visibilityOf(menu));
         return menu.isDisplayed(); }
 }

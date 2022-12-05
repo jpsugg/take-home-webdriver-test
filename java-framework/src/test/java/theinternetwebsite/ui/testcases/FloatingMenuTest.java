@@ -22,7 +22,7 @@ public class FloatingMenuTest extends UITest {
         String finalPosition = floatingMenuPage.getMenuPosition();
 
         // Validate menu behaviour
+        Assert.assertTrue(floatingMenuPage.validateMenuVisibility(), "Menu is not visible");
         Assert.assertNotEquals(initialPosition, finalPosition, "Menu position didn't change");
-        Assert.assertTrue(floatingMenuPage.validateMenuVisibility(), "Menu not showing");
     }
 }
