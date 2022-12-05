@@ -49,15 +49,15 @@ jobs:
       environment: staging
     secrets: inherit
 
-    dont-merge-pr:
-      name: Do not merge develop into staging - something failed
-      strategy:
-        max-parallel: 1
-      needs: create-pr
-      if: needs.create-pr.result == 'failure'
-      runs-on: ubuntu-latest
-      steps:
-        - run: echo 'Not merging. The workflow failed'
+  dont-merge-pr:
+    name: Do not merge develop into staging - something failed
+    strategy:
+      max-parallel: 1
+    needs: create-pr
+    if: needs.create-pr.result == 'failure'
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo 'Not merging. The workflow failed'
   # steps:
   # - name: Merge me!
   #   uses: ridedott/merge-me-action@v2

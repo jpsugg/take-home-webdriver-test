@@ -1,13 +1,13 @@
 package theinternetwebsite.ui.testcases;
 
 import java.util.Map;
+import java.util.HashMap;
 import theinternetwebsite.ui.UITest;
 import theinternetwebsite.ui.pageobjects.DynamicContentPage;
 import com.google.common.collect.MapDifference;
 import com.google.common.collect.Maps;
 import org.testng.Assert;
 import org.testng.annotations.Test;
-import java.util.HashMap;
 
 public class DynamicContentTest extends UITest {
 
