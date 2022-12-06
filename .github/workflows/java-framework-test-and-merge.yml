@@ -51,17 +51,19 @@ jobs:
     strategy:
       max-parallel: 1
       fail-fast: true
-    needs: [create-pr]
+    needs: create-pr
     if: needs.create-pr.result == 'success'
     uses: jpsugg/the-internet-tests/.github/workflows/merge-develop-into-staging.yaml@develop
     with:
       target-environment: staging
     secrets:
       github-token: ${{ secrets.GITHUB_TOKEN }}
+    outputs:
+      workflow-status
 
   merge-pr-validation:
     name: Validate deploy success
-    needs: [merge-pr]
+    needs: merge-pr
     runs-on: ubuntu-latest
     steps:
       - name: Automated PR merge success

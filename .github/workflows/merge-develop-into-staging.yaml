@@ -7,7 +7,8 @@ on:
         required: true
         type: string
     outputs:
-      workflow-status: ${{ jobs.merge-me.outputs.job-status }}
+      workflow-status:
+        name: ${{ jobs.merge-me.outputs.job-status }}
     secrets:
       github-token:
         required: true
