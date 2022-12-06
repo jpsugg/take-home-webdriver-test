@@ -46,20 +46,6 @@ jobs:
           echo Failed to create the PR
           exit 1
 
-#  env-setup:
-#    name: Setup Dynamic Environment Variables
-#    runs-on: ubuntu-latest
-#    needs: [build-and-test-project]
-#    if: needs.build-and-test-project.result == 'success'
-#    outputs:
-#      github-token: ${{ steps.set-output-defaults.outputs.github-token }}
-#    steps:
-#      - name: set outputs with default values
-#        id: set-output-defaults
-#        run: |
-#          # If workflow_dispatch, use inputs (left), if other trigger, use default env (right)
-#          echo "::set-output name=github-token::${{ secrets.GITHUB_TOKEN }}"
-
   merge-pr:
     name: Deploy to staging
     strategy:
