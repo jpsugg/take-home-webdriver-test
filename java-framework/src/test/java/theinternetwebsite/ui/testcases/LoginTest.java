@@ -1,9 +1,9 @@
 package theinternetwebsite.ui.testcases;
 
+import org.testng.Assert;
 import theinternetwebsite.ui.UITest;
 import theinternetwebsite.ui.pageobjects.LoginFormPage;
 import org.jetbrains.annotations.NotNull;
-import org.testng.Assert;
 import org.testng.annotations.Optional;
 import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
