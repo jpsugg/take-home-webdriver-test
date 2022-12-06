@@ -48,7 +48,7 @@ jobs:
         id: set-output-defaults
         run: |
           # If workflow_dispatch, use inputs (left), if other trigger, use default env (right)
-          echo "::set-output name=github-token::${{ secrets.GITHUB_TOKEN || 'true' }}"
+          echo "::set-output name=github-token::${{ secrets.GITHUB_TOKEN }}"
     secrets: inherit
 
   merge-pr:
@@ -57,7 +57,9 @@ jobs:
       max-parallel: 1
     needs: [create-pr, env-setup]
     if: needs.create-pr.result == 'success'
-    uses: ./.github/workflows/merge-develop-into-staging.yaml@develop
+    uses: jpsugg/the-internet-tests/.github/workflows/merge-develop-into-staging.yaml@develop
     with:
-      github-token: ${{ needs.env-setup.outputs.github-token }}
+      github-token: "${{ needs.env-setup.outputs.github-token }}"
       target-environment: staging
+    secrets:
+      github-token: "${{ secrets.GITHUB_TOKEN }}"
