@@ -4,8 +4,8 @@ import org.testng.Assert;
 import org.testng.annotations.Test;
 import theinternetwebsite.ui.UITest;
 import org.testng.annotations.Optional;
-import theinternetwebsite.ui.pageobjects.LoginFormPage;
 import org.jetbrains.annotations.NotNull;
+import theinternetwebsite.ui.pageobjects.LoginFormPage;
 import org.testng.annotations.Parameters;
 
 public class LoginTest extends UITest {
