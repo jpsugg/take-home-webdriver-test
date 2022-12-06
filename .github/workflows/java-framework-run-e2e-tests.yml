@@ -47,6 +47,7 @@ jobs:
           - 7080:5000
         options: >-
           --rm
+
       selenium-hub:
         image: selenium/hub:latest
         ports:
@@ -62,6 +63,7 @@ jobs:
           SE_START_XVFB: true
           SE_SCREEN_WIDTH: 1920
           SE_SCREEN_HEIGHT: 1080
+
       chrome-node-video:
         image: selenium/video:latest
         options: >-
@@ -78,6 +80,7 @@ jobs:
           SE_START_XVFB: true
           DISPLAY_CONTAINER_NAME: chrome-node
           FILE_NAME: chrome_video.mp4
+
       chrome-node:
         image: selenium/node-chrome:latest
         options: >-
@@ -91,7 +94,7 @@ jobs:
           SE_NODE_MAX_SESSIONS: 4
           SE_NODE_SESSION_TIMEOUT: 500
           SE_START_XVFB: true
-          
+
     steps:
       - name: Cache
         uses: actions/cache@v3.0.11
