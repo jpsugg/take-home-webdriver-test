@@ -33,6 +33,8 @@ on:
 jobs:
   build-and-test:
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: true
     concurrency:
       group: ${{ github.workflow }}-${{ github.ref }}
       cancel-in-progress: true
@@ -154,3 +156,6 @@ jobs:
         run: echo "The job has succeeded"
       - name: Finished build and test phase
         run: echo "Finished build and test phase"
+      - if: ${{ env.WORKFLOW_CONCLUSION == 'failure' }}
+        name: Workflow failed
+        run: exit 1
