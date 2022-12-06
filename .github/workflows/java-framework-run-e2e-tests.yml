@@ -135,14 +135,11 @@ jobs:
         run: |
           MAVEN_PATH=$(mvn --version | grep usr | ${{ env.awk }}) >> $GITHUB_ENV
           echo $MAVEN_PATH
-#          sudo chown -R `whoami`:admin /usr/share
-#          sudo chown -R `whoami`:admin ${{ env.MAVEN_PATH }}/lib/
       - name: Cache
         uses: actions/cache@v3.0.11
         with:
           path: |
             /home/runner/work/.m2/**
-# ${{ steps.maven-home.env.MAVEN_PATH }}/lib/
             $MAVEN_PATH/lib/**
           key: clean-project-dependencies-{hash}
           restore-keys: clean-project-dependencies-
