@@ -83,15 +83,15 @@ jobs:
           echo Deployment phase failed
           exit 1
 
-  if_error_or_failure:
-    runs-on: ubuntu-latest
-    if: >-
-      github.event.state == 'error' ||
-      github.event.state == 'failure'
-    steps:
-      - env:
-          DESCRIPTION: ${{ github.event.description }}
-        run: |
-          echo The status is error or failed: $DESCRIPTION
-          echo Workflow failed
-          exit 1
+#  if_error_or_failure:
+#    runs-on: ubuntu-latest
+#    if: >-
+#      github.event.state == 'error' ||
+#      github.event.state == 'failure'
+#    steps:
+#      - env:
+#          DESCRIPTION: ${{ github.event.description }}
+#        run: |
+#          echo The status is error or failed: $DESCRIPTION
+#          echo Workflow failed
+#          exit 1
