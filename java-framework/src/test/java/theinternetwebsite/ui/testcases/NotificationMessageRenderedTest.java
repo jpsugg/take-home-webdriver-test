@@ -1,8 +1,8 @@
 package theinternetwebsite.ui.testcases;
 
+import org.testng.Assert;
 import theinternetwebsite.ui.UITest;
 import theinternetwebsite.ui.pageobjects.NotificationMessageRenderedPage;
-import org.testng.Assert;
 import org.testng.annotations.Test;
 
 public class NotificationMessageRenderedTest extends UITest {
