@@ -7,12 +7,14 @@ on:
         required: true
         type: string
     secrets:
-      GITHUB_TOKEN:
+      github-token:
         required: true
 
 jobs:
   merge-me:
     name: Merge develop into staging
+    strategy:
+      fail-fast: true
     runs-on: ubuntu-latest
     environment: ${{ inputs.target-environment }}
     steps:
@@ -20,5 +22,5 @@ jobs:
         name: "Post-testing automated PR merge"
         uses: ridedott/merge-me-action@v2
         with:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.github-token }}
     timeout-minutes: 5
