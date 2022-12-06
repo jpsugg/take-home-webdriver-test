@@ -28,7 +28,10 @@ on:
           description: 'The branch to be tested'
           default: develop
           required: true
-          type: string          
+          type: string
+      outputs:
+        workflow-status:
+          value: ${{ jobs.build-and-test.outputs.job-status }}
 
 jobs:
   build-and-test:
@@ -39,7 +42,9 @@ jobs:
     concurrency:
       group: ${{ github.workflow }}-${{ github.ref }}
       cancel-in-progress: true
-      
+    outputs:
+      job-status: ${{ steps.save-status.outputs.job-status }}
+
     services:
       website:
         image: gprestes/the-internet:latest
@@ -156,6 +161,7 @@ jobs:
         run: mvn compile -P Staging -f pom.xml --batch-mode --update-snapshots
         working-directory: ${{env.working-directory}}
       - name: Run the test suite
+        id: tests-run
         env:
           browserVersion: ${{ env.browser-version }}
           headlessBrowser: false
@@ -166,6 +172,11 @@ jobs:
           mvn test -P Staging -f pom.xml
           --batch-mode --update-snapshots -Dorg.slf4j.simpleLogger.defaultLogLevel=${{ env.LOG_LEVEL }}
         working-directory: ${{ env.working-directory }}
+      - id: save-status
+        run: echo "job-status=${{ steps.tests-run.conclusion }}" >> $GITHUB_OUTPUT
+      - if: github.event.workflow_call.conclusion == 'failure' || github.event.workflow_call.conclusion == 'error'
+        name: Build-and-test job failed
+        run: exit 1
       - uses: actions/upload-artifact@v3
         if: always()
         with:
@@ -177,8 +188,5 @@ jobs:
       - name: Report Folder
         run: ls -R
         working-directory: ${{env.report-directory}}
-      - if: ${{ env.WORKFLOW_CONCLUSION == 'failure' }}
-        name: E2E testing workflow failed
-        run: exit 1
       - name: Finished build and test phase
         run: echo "Finished build and test phase"
