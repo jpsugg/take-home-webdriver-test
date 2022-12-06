@@ -6,6 +6,9 @@ on:
     - develop
     paths:
     - java-framework/**
+    - .github/workflows/
+  event:
+    - state
 
 jobs:
   build-and-test-project:
@@ -36,12 +39,14 @@ jobs:
           PULL_REQUEST_BRANCH: "staging"
           PULL_REQUEST_FROM_BRANCH: "develop"
           PULL_REQUEST_TITLE: "Post-testing automated PR"
-      - name: Exit Create PR process
-        run: echo "Exit Create PR process"
+      - name: Finish PR creation
+        run: echo "PR created successfully"
         if: ${{ success() }}
       - if: ${{ env.WORKFLOW_CONCLUSION == 'failure' }}
-        name: E2E testing workflow failed
-        run: exit 1
+        name:
+        run: |
+          echo Failed to create the PR
+          exit 1
 
 #  env-setup:
 #    name: Setup Dynamic Environment Variables
@@ -69,4 +74,27 @@ jobs:
       target-environment: staging
     secrets:
       github-token: ${{ secrets.GITHUB_TOKEN }}
-                   #${{ needs.env-setup.outputs.github-token }}
+
+  merge-pr-validation:
+    name: Validate deploy success
+    needs: [merge-pr]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Automated PR merge success
+        if: ${{ needs.merge-pr.outputs.workflow-status != 'success' }}
+        run: |
+          echo Deployment phase failed
+          exit 1
+
+  if_error_or_failure:
+    runs-on: ubuntu-latest
+    if: >-
+      github.event.state == 'error' ||
+      github.event.state == 'failure'
+    steps:
+      - env:
+          DESCRIPTION: ${{ github.event.description }}
+        run: |
+          echo The status is error or failed: $DESCRIPTION
+          echo Workflow failed
+          exit 1

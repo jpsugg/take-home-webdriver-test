@@ -6,6 +6,9 @@ on:
       target-environment:
         required: true
         type: string
+    outputs:
+      workflow-status: "The workflow's status at the end of the execution"
+      value: ${{ jobs.merge-me.outputs.job-status }}
     secrets:
       github-token:
         required: true
@@ -13,16 +16,22 @@ on:
 jobs:
   merge-me:
     name: Merge develop into staging
+    id: merge-branch
     strategy:
       fail-fast: true
     runs-on: ubuntu-latest
+    outputs:
+      job-status: ${{ steps.save-status.outputs.job-status }}
     environment: ${{ inputs.target-environment }}
     steps:
       - if: ${{ github.event.workflow_call.conclusion == 'success' }}
         name: Post-testing automated PR merge
+        id: merge-action
         uses: ridedott/merge-me-action@v2
         with:
           GITHUB_TOKEN: ${{ secrets.github-token }}
+      - id: save-status
+        run: echo "job-status=${{ steps.merge-action.conclusion }}" >> $GITHUB_OUTPUT
       - if: >-
           ${{ github.event.workflow_call.conclusion != 'failure' }} ||
           ${{ github.event.workflow_call.conclusion != 'error' }}
