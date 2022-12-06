@@ -157,5 +157,5 @@ jobs:
       - name: Finished build and test phase
         run: echo "Finished build and test phase"
       - if: ${{ env.WORKFLOW_CONCLUSION == 'failure' }}
-        name: Workflow failed
+        name: E2E testing workflow failed
         run: exit 1

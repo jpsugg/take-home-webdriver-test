@@ -1,10 +1,10 @@
 package theinternetwebsite.ui.testcases;
 
 import org.testng.Assert;
-import theinternetwebsite.ui.UITest;
-import theinternetwebsite.ui.pageobjects.IFramePage;
-import org.openqa.selenium.remote.RemoteWebDriver;
 import org.testng.annotations.Test;
+import theinternetwebsite.ui.UITest;
+import org.openqa.selenium.remote.RemoteWebDriver;
+import theinternetwebsite.ui.pageobjects.IFramePage;
 
 public class IFrameTest extends UITest {
 

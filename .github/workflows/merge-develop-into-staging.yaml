@@ -23,7 +23,9 @@ jobs:
         uses: ridedott/merge-me-action@v2
         with:
           GITHUB_TOKEN: ${{ secrets.github-token }}
-      - if: ${{ github.event.workflow_call.conclusion != ('failure' || 'error') }}
-        name: Won't merge, main workflow failed
+      - if: >-
+          ${{ github.event.workflow_call.conclusion != 'failure' }} ||
+          ${{ github.event.workflow_call.conclusion != 'error' }}
+        name: Won't merge, Main workflow failed
         run: exit 1
     timeout-minutes: 5
