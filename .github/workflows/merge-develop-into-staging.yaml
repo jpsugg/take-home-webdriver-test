@@ -3,7 +3,7 @@ name: Merge code after successful testing
 on:
   workflow_call:
     inputs:
-      environment:
+      target-environment:
         required: true
         type: string
       github-token:
@@ -14,7 +14,7 @@ jobs:
   merge-me:
     name: Merge develop into staging
     runs-on: ubuntu-latest
-    environment: ${{ inputs.environment }}
+    environment: ${{ inputs.target-environment }}
     uses: ridedott/merge-me-action@v2
     with:
       github-token: ${{ inputs.github-token }}

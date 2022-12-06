@@ -57,7 +57,7 @@ jobs:
       max-parallel: 1
     needs: [create-pr, env-setup]
     if: needs.create-pr.result == 'success'
-    uses: merge-develop-into-staging.yaml@develop
+    uses: .github/workflows/merge-develop-into-staging.yaml@develop
     with:
       github-token: ${{ needs.env-setup.outputs.github-token }}
-      environment: staging
+      target-environment: staging
