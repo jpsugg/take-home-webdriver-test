@@ -38,14 +38,27 @@ jobs:
         run: echo "Exit Create PR process"
         if: ${{ success() }}
 
+  env-setup:
+    name: Setup Dynamic Environment Variables
+    runs-on: ubuntu-latest
+    outputs:
+      github-token: ${{ steps.set-output-defaults.outputs.github-token }}
+    steps:
+      - name: set outputs with default values
+        id: set-output-defaults
+        run: |
+          # If workflow_dispatch, use inputs (left), if other trigger, use default env (right)
+          echo "::set-output name=github-token::${{ secrets.GITHUB_TOKEN || 'true' }}"
   merge-pr:
     name: Deploy to staging
     strategy:
       max-parallel: 1
-    needs: create-pr
+    needs: [create-pr, env-setup]
     if: needs.create-pr.result == 'success'
     uses: jpsugg/the-internet-tests/.github/workflows/merge-develop-into-staging.yaml@develop
     with:
-      github-token: ${{ secrets.GITHUB_TOKEN }}
+      github-token: ${{ needs.env-setup.outputs.github-token }}
       environment: staging
-    secrets: inherit
+    secrets:
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      WORKFLOW_TOKEN: ${{ secrets.WORKFLOW_TOKEN }}

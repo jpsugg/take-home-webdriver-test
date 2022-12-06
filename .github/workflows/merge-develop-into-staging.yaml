@@ -9,11 +9,6 @@ on:
       github-token:
         required: true
         type: string
-  # types:
-  #   - completed
-  # workflows:
-      # List all required workflow names here.
-  #   - 'Test develop code and create PR to staging'
 
 jobs:
   merge-me:
