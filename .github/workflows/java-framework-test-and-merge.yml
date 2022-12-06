@@ -12,6 +12,7 @@ jobs:
     name: Build and test phase
     strategy:
       max-parallel: 1
+      fail-fast: true
     uses: jpsugg/the-internet-tests/.github/workflows/java-framework-run-e2e-tests.yml@develop
     with:
       target-environment: staging
@@ -21,6 +22,7 @@ jobs:
   create-pr:
     strategy:
       max-parallel: 1
+      fail-fast: true
     needs: build-and-test-project
     if: needs.build-and-test-project.result == 'success'
     name: Create Pull Request
@@ -33,34 +35,35 @@ jobs:
           BRANCH_PREFIX: ""
           PULL_REQUEST_BRANCH: "staging"
           PULL_REQUEST_FROM_BRANCH: "develop"
-          PULL_REQUEST_TITLE: "Post-test automatic PR"
+          PULL_REQUEST_TITLE: "Post-testing automated PR"
       - name: Exit Create PR process
         run: echo "Exit Create PR process"
         if: ${{ success() }}
 
-  env-setup:
-    name: Setup Dynamic Environment Variables
-    runs-on: ubuntu-latest
-    needs: [build-and-test-project]
-    if: needs.build-and-test-project.result == 'success'
-    outputs:
-      github-token: ${{ steps.set-output-defaults.outputs.github-token }}
-    steps:
-      - name: set outputs with default values
-        id: set-output-defaults
-        run: |
-          # If workflow_dispatch, use inputs (left), if other trigger, use default env (right)
-          echo "::set-output name=github-token::${{ secrets.GITHUB_TOKEN }}"
+#  env-setup:
+#    name: Setup Dynamic Environment Variables
+#    runs-on: ubuntu-latest
+#    needs: [build-and-test-project]
+#    if: needs.build-and-test-project.result == 'success'
+#    outputs:
+#      github-token: ${{ steps.set-output-defaults.outputs.github-token }}
+#    steps:
+#      - name: set outputs with default values
+#        id: set-output-defaults
+#        run: |
+#          # If workflow_dispatch, use inputs (left), if other trigger, use default env (right)
+#          echo "::set-output name=github-token::${{ secrets.GITHUB_TOKEN }}"
 
   merge-pr:
     name: Deploy to staging
     strategy:
       max-parallel: 1
-    needs: [create-pr, env-setup]
+      fail-fast: true
+    needs: [create-pr]
     if: needs.create-pr.result == 'success'
     uses: jpsugg/the-internet-tests/.github/workflows/merge-develop-into-staging.yaml@develop
     with:
       target-environment: staging
     secrets:
-      github-token: ${{ secrets.GITHUB_TOKEN }}
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
                    #${{ needs.env-setup.outputs.github-token }}

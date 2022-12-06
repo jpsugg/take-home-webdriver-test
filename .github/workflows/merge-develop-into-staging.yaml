@@ -7,7 +7,7 @@ on:
         required: true
         type: string
     secrets:
-      github-token:
+      GITHUB_TOKEN:
         required: true
 
 jobs:
@@ -17,7 +17,8 @@ jobs:
     environment: ${{ inputs.target-environment }}
     steps:
       - if: ${{ github.event.workflow_call.conclusion == 'success' }}
+        name: "Post-testing automated PR merge"
         uses: ridedott/merge-me-action@v2
         with:
-          GITHUB_TOKEN: ${{ secrets.github-token }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     timeout-minutes: 5
