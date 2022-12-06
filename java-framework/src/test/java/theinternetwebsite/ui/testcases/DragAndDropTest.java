@@ -1,9 +1,9 @@
 package theinternetwebsite.ui.testcases;
 
-import theinternetwebsite.ui.UITest;
-import theinternetwebsite.ui.pageobjects.DragAndDropPage;
 import org.testng.Assert;
 import org.testng.annotations.Test;
+import theinternetwebsite.ui.UITest;
+import theinternetwebsite.ui.pageobjects.DragAndDropPage;
 
 public class DragAndDropTest extends UITest {
 

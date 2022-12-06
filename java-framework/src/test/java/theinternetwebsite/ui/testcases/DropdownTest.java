@@ -1,10 +1,10 @@
 package theinternetwebsite.ui.testcases;
 
-import theinternetwebsite.ui.UITest;
-import theinternetwebsite.ui.pageobjects.DropdownPage;
+import java.util.List;
 import org.testng.Assert;
 import org.testng.annotations.Test;
-import java.util.List;
+import theinternetwebsite.ui.UITest;
+import theinternetwebsite.ui.pageobjects.DropdownPage;
 
 public class DropdownTest extends UITest {
 

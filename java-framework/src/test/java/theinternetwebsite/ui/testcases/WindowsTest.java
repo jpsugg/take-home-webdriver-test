@@ -1,9 +1,9 @@
 package theinternetwebsite.ui.testcases;
 
-import theinternetwebsite.ui.UITest;
-import theinternetwebsite.ui.pageobjects.WindowsPage;
 import org.testng.Assert;
 import org.testng.annotations.Test;
+import theinternetwebsite.ui.UITest;
+import theinternetwebsite.ui.pageobjects.WindowsPage;
 
 public class WindowsTest extends UITest {
 

@@ -1,7 +1,10 @@
 package theinternetwebsite.ui.pageobjects;
 
-import theinternetwebsite.ui.UITest;
+import org.jetbrains.annotations.NotNull;
 import org.openqa.selenium.Keys;
+import org.openqa.selenium.TimeoutException;
+import org.openqa.selenium.WebDriver;
+import theinternetwebsite.ui.UITest;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.How;
@@ -20,15 +23,17 @@ public class FloatingMenuPage {
     public WebElement pageBody;
     @FindBy(how = How.XPATH, using = "//*[@id='page-footer']/div/div/a")
     public WebElement elementalSeleniumLink;
-    private final UITest caller;
     private final String pageUrl;
+    private final UITest caller;
+    private final WebDriverWait genericWait;
 
-    public FloatingMenuPage(UITest caller) {
+    public FloatingMenuPage(@NotNull UITest caller) {
         this.caller = caller;
         this.pageUrl = this.caller.getBaseUrl() + "/floating_menu";
         this.caller.getDriver().get(this.pageUrl);
         PageFactory.initElements(this.caller.getDriver(), this);
         this.caller.pageFactoryInitWait(pageTitle);
+        this.genericWait = new WebDriverWait(caller.getDriver(), Duration.ofSeconds(30));
     }
 
     public Boolean isPageOpen() { return this.caller.isPageOpen(this.pageUrl, this.pageTitle); }
@@ -37,11 +42,20 @@ public class FloatingMenuPage {
         return menu.getAttribute("style"); }
 
     public void scrollToBottom() {
-        WebDriverWait wait = new WebDriverWait(caller.getDriver(), Duration.ofSeconds(30));
-        for (int i=10; i>0; i--) { pageBody.sendKeys(Keys.END, Keys.CONTROL); }
-        wait.until(ExpectedConditions.visibilityOf(elementalSeleniumLink));
+        this.genericWait.until(ExpectedConditions.visibilityOf(elementalSeleniumLink));
+        for(int i=3; i>0; i--) {
+            pageBody.sendKeys(Keys.END, Keys.CONTROL);
+            try {
+                this.genericWait.until(ExpectedConditions.visibilityOf(elementalSeleniumLink));
+            } catch (TimeoutException ignored) { }
+        }
+        // Try one last time
+        pageBody.sendKeys(Keys.END, Keys.CONTROL);
+        this.genericWait.until(ExpectedConditions.visibilityOf(elementalSeleniumLink));
     }
 
     public Boolean validateMenuVisibility() {
+        WebDriverWait wait = new WebDriverWait(caller.getDriver(), Duration.ofSeconds(30));
+        wait.until(ExpectedConditions.visibilityOf(menu));
         return menu.isDisplayed(); }
 }

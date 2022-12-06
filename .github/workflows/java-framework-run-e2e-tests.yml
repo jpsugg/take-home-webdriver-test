@@ -1,5 +1,4 @@
 # Workflow to run automated tests on java-framework code pushed to the repository
-
 name: E2E java-framework UI tests
 
 env:
@@ -27,13 +26,15 @@ on:
           type: string
         source-branch:
           description: 'The branch to be tested'
-          default: staging
+          default: develop
           required: true
           type: string          
 
 jobs:
   build-and-test:
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: true
     concurrency:
       group: ${{ github.workflow }}-${{ github.ref }}
       cancel-in-progress: true
@@ -151,7 +152,9 @@ jobs:
       - name: Report Folder
         run: ls -R
         working-directory: ${{env.report-directory}}
-      - name: The job has succeeded
-        run: echo "The job has succeeded"
+      - if: ${{ env.WORKFLOW_CONCLUSION == 'failure' }}
+        name: E2E testing workflow failed
+        run: exit 1
       - name: Finished build and test phase
         run: echo "Finished build and test phase"
+

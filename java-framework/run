@@ -38,9 +38,9 @@ USAGE=$BGREEN"\nUsage:$NO_COLOR $(basename "$0")\n \
       $(basename "$0") [-G stop]\n \
        \n  h : print this help message \
        \n  r : runs the test suite against a remote Chrome Selenium node\n \
-       \n  g start          : use \`start\' to start a Selenium Node \
-       \n  g start -T nodes : use \`nodes\' to specify the amount of Chrome Selenium nodes to create \
-       \n  g stop           : use \`stop\' to stop the current Selenium Grid \
+       \n  G start          : use \`start\' to start a Selenium Node \
+       \n  G start -T nodes : use \`nodes\' to specify the amount of Chrome Selenium nodes to create \
+       \n  G stop           : use \`stop\' to stop the current Selenium Grid \
        \n  r -T threads     : use \`threads\' to specify the amount of Chrome Selenium nodes used to run the test suite in parallel  \
        \n  T threads        : use \`threads\' to specify the amount of threads used to run the test suite in parallel\n";
 
@@ -231,13 +231,14 @@ missing_chrome_nodes() {
 
 missing_docker_network_config() {
   printf "Bridge network configuration \r"
-  var=$(docker network inspect theinternet | grep "$NET_NAME" | wc -l)
+  var=$(docker network ls | grep $NET_NAME)
   if [ ! "$var" ]; then
     printf "\r\033[KBridge network configuration missing. Creating theinternet docker network\n";
-    func_result="docker network create -o com.docker.network.bridge.bridge theinternet";
+    func_result="docker network create -o com.docker.network.bridge.bridge $NET_NAME";
   else
-    func_result=""
+    func_result="";
   fi;
+  printf "\r"
 }
 
 ##############
@@ -245,7 +246,7 @@ missing_docker_network_config() {
 setup_where_necessary() {
   printf "\n[""$BGREEN""Checking dependencies""$NO_COLOR""]\n";
   missing_docker_network_config
-  if [ ! "$(eval "$func_result")" ]; then printf "[OK] Bridge network configuration\n"; fi
+  if [ ! "$(eval "$func_result")" ]; then printf "\r[OK] Bridge network configuration\n"; fi
   missing_the_internet_app
   if [ ! "$(eval "$func_result")" ]; then printf "[OK] The-internet App image\n"; fi
   missing_selenium_grid
