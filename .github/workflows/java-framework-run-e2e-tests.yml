@@ -117,6 +117,21 @@ jobs:
         with:
           java-version: '19'
           distribution: 'corretto'
+      - name: Java Home
+        run: echo $JAVA_HOME
+      - name: Maven Home
+        run: >-
+        echo "MAVEN_PATH=$(mvn --version | grep usr | awk -F\': \' \'{print $2}\')" >> $MAVEN_HOME
+      - name: Cache
+        uses: actions/cache@v3.0.11
+        with:
+          # A list of files, directories, and wildcard patterns to cache and restore
+          path: |
+            /home/runner/work/.m2/**
+            ${{ env.MAVEN_HOME }}/lib/
+          # An explicit key for restoring and saving the cache
+          key: clean-project-dependencies
+          restore-keys: clean-project-dependencies
       - name: Clean
         run: mvn clean -P Staging -f pom.xml --batch-mode --update-snapshots
         working-directory: ${{env.working-directory}}
@@ -124,9 +139,12 @@ jobs:
         uses: actions/cache@v3.0.11
         with:
           # A list of files, directories, and wildcard patterns to cache and restore
-          path: /home/runner/.m2/
+          path: |
+            /home/runner/.m2/**
+            ${{ env.MAVEN_HOME }}/lib/
           # An explicit key for restoring and saving the cache
-          key: build-project-cache
+          key: build-project-dependencies
+          restore-keys: build-project-dependencies
       - name: Build
         run: mvn compile -P Staging -f pom.xml --batch-mode --update-snapshots
         working-directory: ${{env.working-directory}}
@@ -157,4 +175,3 @@ jobs:
         run: exit 1
       - name: Finished build and test phase
         run: echo "Finished build and test phase"
-
