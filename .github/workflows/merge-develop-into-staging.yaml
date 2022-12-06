@@ -15,7 +15,9 @@ jobs:
     name: Merge develop into staging
     runs-on: ubuntu-latest
     environment: ${{ inputs.target-environment }}
-    uses: ridedott/merge-me-action@v2
-    with:
-      github-token: ${{ inputs.github-token }}
+    steps:
+      - if: ${{ github.event.workflow_call.conclusion == 'success' }}
+        uses: ridedott/merge-me-action@v2
+        with:
+          GITHUB_TOKEN: ${{ inputs.github-token }}
     timeout-minutes: 5
