@@ -121,8 +121,11 @@ jobs:
       - name: Java Home
         run: echo $JAVA_HOME
       - name: Maven Home
+        env:
+          #awk: "awk -F%27%3A %27 %27{print $2}%27"
+          awk: "awk -F': ' '{print $2}'"
         run: |
-          MAVEN_PATH=$(mvn --version | grep usr | awk -F%27%3A %27 %27{print $2}%27) >> $MAVEN_HOME
+          MAVEN_PATH=$(mvn --version | grep usr | ${{ env.awk }}) >> $MAVEN_HOME
       - name: Cache
         uses: actions/cache@v3.0.11
         with:
