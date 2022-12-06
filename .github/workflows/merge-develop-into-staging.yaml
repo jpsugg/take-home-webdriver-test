@@ -9,7 +9,6 @@ on:
     secrets:
       github-token:
         required: true
-        type: string
 
 jobs:
   merge-me:

@@ -41,6 +41,8 @@ jobs:
   env-setup:
     name: Setup Dynamic Environment Variables
     runs-on: ubuntu-latest
+    needs: [build-and-test-project]
+    if: needs.build-and-test-project.result == 'success'
     outputs:
       github-token: ${{ steps.set-output-defaults.outputs.github-token }}
     steps:
@@ -58,7 +60,7 @@ jobs:
     if: needs.create-pr.result == 'success'
     uses: jpsugg/the-internet-tests/.github/workflows/merge-develop-into-staging.yaml@develop
     with:
-      github-token: "${{ needs.env-setup.outputs.github-token }}"
       target-environment: staging
     secrets:
       github-token: ${{ secrets.GITHUB_TOKEN }}
+                   #${{ needs.env-setup.outputs.github-token }}
