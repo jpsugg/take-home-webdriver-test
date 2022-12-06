@@ -16,7 +16,6 @@ on:
 jobs:
   merge-me:
     name: Merge develop into staging
-    id: merge-branch
     strategy:
       fail-fast: true
     runs-on: ubuntu-latest
