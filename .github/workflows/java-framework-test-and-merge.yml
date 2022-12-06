@@ -49,6 +49,8 @@ jobs:
         run: |
           # If workflow_dispatch, use inputs (left), if other trigger, use default env (right)
           echo "::set-output name=github-token::${{ secrets.GITHUB_TOKEN || 'true' }}"
+    secrets: inherit
+
   merge-pr:
     name: Deploy to staging
     strategy:
@@ -59,6 +61,3 @@ jobs:
     with:
       github-token: ${{ needs.env-setup.outputs.github-token }}
       environment: staging
-    secrets:
-      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      WORKFLOW_TOKEN: ${{ secrets.WORKFLOW_TOKEN }}
