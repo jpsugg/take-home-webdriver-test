@@ -188,5 +188,9 @@ jobs:
       - name: Report Folder
         run: ls -R
         working-directory: ${{env.report-directory}}
+      - if: ${{ env.WORKFLOW_CONCLUSION == 'failure' }}
+        name: E2E testing workflow failed
+        run: exit 1
       - name: Finished build and test phase
         run: echo "Finished build and test phase"
+
