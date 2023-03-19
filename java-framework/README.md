@@ -63,7 +63,7 @@ target/surefire-reports/index.html
 <br>
 
 ## TestSuite structure
-1. Use ChromeDriver to write Tests for the following scenarios in Java:
+1. Using ChromeDriver to write Tests for the following scenarios:
     * Login Success: http://localhost:7080/login credentials: tomsmith/SuperSecretPassword!
     + Login Failure: http://localhost:7080/login Login fail invalid creadentials
     - CheckBoxes: http://localhost:7080/checkboxes Check and uncheck boxes
@@ -82,8 +82,3 @@ target/surefire-reports/index.html
     * JavaScript Error: http://localhost:7080/javascript_error Test JS error.
     + Open in New Tab: http://localhost:7080/windows Test Link Opens in new tab.
     - Notification Message: http://localhost:7080/notification_message_rendered Test notification Message.
-
-### General Requirements
-- [X] All tests contain @Test annotation.
-- [X] All tests provide a setup and tear down mechanism that closes the browser.
-- [X] All tests run successfully from IDE. A way to run tests on unix based OS is provided.
