@@ -1,31 +1,50 @@
 name: Test develop code and create PR to staging
+
 on:
   push:
     branches:
     - develop
     paths:
     - java-framework/**
-  pull_request_target:
-    branches:
-      - staging
-    types:
-      - opened
-      - synchronize
+    - .github/workflows/
 
 jobs:
+  load-docker-cache:
+    name: Set up the docker layers cache
+    uses: satackey/action-docker-layer-caching@v0.0.11
+    continue-on-error: true
+    with:
+      key: services-docker-cache-{hash}
+      restore-keys: |
+        foo-docker-cache-
+
   build-and-test-project:
     name: Build and test phase
+    needs: load-docker-cache
     strategy:
       max-parallel: 1
+      fail-fast: true
     uses: jpsugg/the-internet-tests/.github/workflows/java-framework-run-e2e-tests.yml@develop
     with:
       target-environment: staging
       source-branch: develop
     secrets: inherit
+
+  build-and-test-project-validation:
+    name: Validate build and test success
+    needs: build-and-test-project
+    runs-on: ubuntu-latest
+    steps:
+      - name: Build and test success
+        if: ${{ needs.build-and-test-project.outputs.workflow-status != 'success' }}
+        run: |
+          echo Build and test phase failed
+          exit 1
   
   create-pr:
     strategy:
       max-parallel: 1
+      fail-fast: true
     needs: build-and-test-project
     if: needs.build-and-test-project.result == 'success'
     name: Create Pull Request
@@ -38,31 +57,74 @@ jobs:
           BRANCH_PREFIX: ""
           PULL_REQUEST_BRANCH: "staging"
           PULL_REQUEST_FROM_BRANCH: "develop"
-          PULL_REQUEST_TITLE: "Post-test automatic PR"
-      - name: Exit Create PR process
-        run: echo "Exit Create PR process"
+          PULL_REQUEST_TITLE: "Post-testing automated PR"
+      - name: Finish PR creation
+        run: echo "PR created successfully"
         if: ${{ success() }}
+      - if: ${{ env.WORKFLOW_CONCLUSION == 'failure' }}
+        name:
+        run: |
+          echo Failed to create the PR
+          exit 1
 
   merge-pr:
-    name: Merge develop into staging
+    name: Deploy to staging
     strategy:
       max-parallel: 1
+      fail-fast: true
     needs: create-pr
+    needs: [create-pr]
     if: needs.create-pr.result == 'success'
+    uses: jpsugg/the-internet-tests/.github/workflows/merge-develop-into-staging.yaml@develop
+    with:
+      target-environment: staging
+    secrets:
+      github-token: ${{ secrets.GITHUB_TOKEN }}
+    outputs:
+      workflow-status
+
+  merge-pr-validation:
+    name: Validate deploy success
+    needs: merge-pr
+
+  merge-pr-validation:
+    name: Validate deploy success
+    needs: [merge-pr]
     runs-on: ubuntu-latest
     steps:
-    - name: Merge me!
-      uses: ridedott/merge-me-action@v2
-      with:
-          # Depending on branch protection rules, a  manually populated
-          # `GITHUB_TOKEN_WORKAROUND` secret with permissions to push to
-          # a protected branch must be used. This secret can have an arbitrary
-          # name, as an example, this repository uses `DOTTBOTT_TOKEN`.
-          #
-          # When using a custom token, it is recommended to leave the following
-          # comment for other developers to be aware of the reasoning behind it:
-          #
-          # This must be used as GitHub Actions token does not support pushing
-          # to protected branches.
-        GITHUB_TOKEN: ${{ secrets.WORKFLOW_TOKEN }}
-    timeout-minutes: 5
+      - name: Automated PR merge success
+        if: ${{ needs.merge-pr.outputs.workflow-status != 'success' }}
+        run: |
+          echo Deployment phase failed
+          exit 1
+
+  if_error_or_failure:
+    runs-on: ubuntu-latest
+    if: >-
+      github.event.state == 'error' ||
+      github.event.state == 'failure'
+    steps:
+      - name: Automated PR merge success
+        if: ${{ needs.merge-pr.outputs.workflow-status != 'success' }}
+        run: |
+          echo Deployment phase failed
+          exit 1
+
+#  if_error_or_failure:
+#    runs-on: ubuntu-latest
+#    if: >-
+#      github.event.state == 'error' ||
+#      github.event.state == 'failure'
+#    steps:
+#      - env:
+#          DESCRIPTION: ${{ github.event.description }}
+#        run: |
+#          echo The status is error or failed: $DESCRIPTION
+#          echo Workflow failed
+#          exit 1
+      - env:
+          DESCRIPTION: ${{ github.event.description }}
+        run: |
+          echo The status is error or failed: $DESCRIPTION
+          echo Workflow failed
+          exit 1

@@ -1,33 +1,46 @@
 name: Merge code after successful testing
 
 on:
-  workflow_run:
-    types:
-      - completed
-    workflows:
-      # List all required workflow names here.
-      - 'Test develop code and create PR to staging'
+  workflow_call:
+    inputs:
+      target-environment:
+        required: true
+        type: string
+    outputs:
+      workflow-status:
+        value: ${{ jobs.merge-me.outputs.job-status }}
+      workflow-status: "The workflow's status at the end of the execution"
+      value: ${{ jobs.merge-me.outputs.job-status }}
+    secrets:
+      github-token:
+        required: true
 
 jobs:
   merge-me:
-    name: Merge develop branch into staging
+    name: Merge develop into staging
+    id: merge-branch
+    strategy:
+      fail-fast: true
     runs-on: ubuntu-latest
+    outputs:
+      job-status: ${{ steps.save-status.outputs.job-status }}
+    environment: ${{ inputs.target-environment }}
     steps:
-      - # It is often a desired behavior to merge only when a workflow execution
-        # succeeds. This can be changed as needed.
-        if: ${{ github.event.workflow_run.conclusion == 'success' }}
-        name: Merge me!
+      - if: ${{ github.event.workflow_call.conclusion == 'success' }}
+        name: Post-testing automated PR merge
+        id: merge-action
         uses: ridedott/merge-me-action@v2
         with:
-          # Depending on branch protection rules, a manually populated
-          # `GITHUB_TOKEN_WORKAROUND` secret with permissions to push to
-          # a protected branch must be used. This secret can have an arbitrary
-          # name, as an example, this repository uses `DOTTBOTT_TOKEN`.
-          #
-          # When using a custom token, it is recommended to leave the following
-          # comment for other developers to be aware of the reasoning behind it:
-          #
-          # This must be used as GitHub Actions token does not support pushing
-          # to protected branches.
-          # GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          GITHUB_TOKEN: ${{ secrets.WORKFLOW_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.github-token }}
+      - id: save-status
+        run: echo "job-status=${{ steps.merge-action.conclusion }}" >> $GITHUB_OUTPUT
+      - if: github.event.workflow_call.conclusion == 'failure' || github.event.workflow_call.conclusion == 'error'
+        name: Won't merge; build-and-test workflow failed
+        run: exit 1
+    timeout-minutes: 5
+      - if: >-
+          ${{ github.event.workflow_call.conclusion != 'failure' }} ||
+          ${{ github.event.workflow_call.conclusion != 'error' }}
+        name: Won't merge, Main workflow failed
+        run: exit 1
+    timeout-minutes: 5

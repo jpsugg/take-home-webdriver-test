@@ -1,10 +1,10 @@
 package theinternetwebsite.ui.testcases;
 
-import theinternetwebsite.ui.UITest;
-import theinternetwebsite.ui.pageobjects.ContextMenuPage;
 import org.testng.Assert;
 import org.testng.SkipException;
 import org.testng.annotations.Test;
+import theinternetwebsite.ui.UITest;
+import theinternetwebsite.ui.pageobjects.ContextMenuPage;
 
 public class ContextMenuTest extends UITest {
 

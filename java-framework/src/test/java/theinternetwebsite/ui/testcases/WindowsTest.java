@@ -1,9 +1,9 @@
 package theinternetwebsite.ui.testcases;
 
-import theinternetwebsite.ui.UITest;
-import theinternetwebsite.ui.pageobjects.WindowsPage;
 import org.testng.Assert;
 import org.testng.annotations.Test;
+import theinternetwebsite.ui.UITest;
+import theinternetwebsite.ui.pageobjects.WindowsPage;
 
 public class WindowsTest extends UITest {
 
@@ -17,5 +17,4 @@ public class WindowsTest extends UITest {
         // Validate expected message in new tab
         Assert.assertTrue(windowsPage.validateNewTab(), "Couldn't validate the new message and/or the new tab");
     }
-
 }

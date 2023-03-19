@@ -1,9 +1,9 @@
 package theinternetwebsite.ui.testcases;
 
-import theinternetwebsite.ui.UITest;
-import theinternetwebsite.ui.pageobjects.DynamicControlsPage;
 import org.testng.Assert;
 import org.testng.annotations.Test;
+import theinternetwebsite.ui.UITest;
+import theinternetwebsite.ui.pageobjects.DynamicControlsPage;
 
 public class DynamicControlsTest extends UITest {
 
