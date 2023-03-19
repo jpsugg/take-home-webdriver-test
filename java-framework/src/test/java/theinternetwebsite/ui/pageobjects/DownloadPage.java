@@ -1,7 +1,6 @@
 package theinternetwebsite.ui.pageobjects;
 
 import static theinternetwebsite.ui.UITest.*;
-
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import theinternetwebsite.ui.UITest;
