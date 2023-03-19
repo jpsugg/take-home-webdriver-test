@@ -9,8 +9,18 @@ on:
     - .github/workflows/
 
 jobs:
+  load-docker-cache:
+    name: Set up the docker layers cache
+    uses: satackey/action-docker-layer-caching@v0.0.11
+    continue-on-error: true
+    with:
+      key: services-docker-cache-{hash}
+      restore-keys: |
+        foo-docker-cache-
+
   build-and-test-project:
     name: Build and test phase
+    needs: load-docker-cache
     strategy:
       max-parallel: 1
       fail-fast: true
@@ -19,6 +29,17 @@ jobs:
       target-environment: staging
       source-branch: develop
     secrets: inherit
+
+  build-and-test-project-validation:
+    name: Validate build and test success
+    needs: build-and-test-project
+    runs-on: ubuntu-latest
+    steps:
+      - name: Build and test success
+        if: ${{ needs.build-and-test-project.outputs.workflow-status != 'success' }}
+        run: |
+          echo Build and test phase failed
+          exit 1
   
   create-pr:
     strategy:
@@ -51,6 +72,7 @@ jobs:
     strategy:
       max-parallel: 1
       fail-fast: true
+    needs: create-pr
     needs: [create-pr]
     if: needs.create-pr.result == 'success'
     uses: jpsugg/the-internet-tests/.github/workflows/merge-develop-into-staging.yaml@develop
@@ -58,6 +80,12 @@ jobs:
       target-environment: staging
     secrets:
       github-token: ${{ secrets.GITHUB_TOKEN }}
+    outputs:
+      workflow-status
+
+  merge-pr-validation:
+    name: Validate deploy success
+    needs: merge-pr
 
   merge-pr-validation:
     name: Validate deploy success
@@ -76,6 +104,24 @@ jobs:
       github.event.state == 'error' ||
       github.event.state == 'failure'
     steps:
+      - name: Automated PR merge success
+        if: ${{ needs.merge-pr.outputs.workflow-status != 'success' }}
+        run: |
+          echo Deployment phase failed
+          exit 1
+
+#  if_error_or_failure:
+#    runs-on: ubuntu-latest
+#    if: >-
+#      github.event.state == 'error' ||
+#      github.event.state == 'failure'
+#    steps:
+#      - env:
+#          DESCRIPTION: ${{ github.event.description }}
+#        run: |
+#          echo The status is error or failed: $DESCRIPTION
+#          echo Workflow failed
+#          exit 1
       - env:
           DESCRIPTION: ${{ github.event.description }}
         run: |
