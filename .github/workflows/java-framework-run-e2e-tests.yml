@@ -131,7 +131,7 @@ jobs:
         id: maven-home
         env:
           awk: "awk -F': ' '{print $2}'"
-          MAVEN_PATH:
+#          MAVEN_PATH:
         run: |
           MAVEN_PATH=$(mvn --version | grep usr | ${{ env.awk }}) >> $GITHUB_ENV
           echo $MAVEN_PATH
