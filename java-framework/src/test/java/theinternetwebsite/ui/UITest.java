@@ -41,8 +41,9 @@ public class UITest {
     public UITest() { }
     @Parameters({"browser", "browserVersion", "headlessBrowser", "baseUrl", "baseUrlSG", "seleniumGridUrl", "useSeleniumGrid"})
     @BeforeTest
-        public void setUp(@Optional(DEFAULT_BROWSER) String browser, @Optional("") String browserVersion, @Optional(DEFAULT_BROWSER_HEADLESS) String headless, @Optional("") String baseUrl, @Optional("") String baseUrlSG, @Optional("") String remoteUrl, @Optional("") @NotNull String useSeleniumGrid) {
+    public void setUp( String browser, String browserVersion, String headless, String baseUrl, String baseUrlSG, String remoteUrl, @NotNull String useSeleniumGrid) {
         if (useSeleniumGrid.equals("true")) { this.setBaseUrl(baseUrlSG); } else { this.setBaseUrl(baseUrl); }
+
         browser = browser.toLowerCase();
         this.setCurrentBrowser(browser);
 
@@ -74,7 +75,7 @@ public class UITest {
 
         // Local session - Set experimental options
         //if (!useSeleniumGrid.equals("true")) {
-            chromeExpOptions.put("download.default_directory", downloadsFolder);
+        chromeExpOptions.put("download.default_directory", downloadsFolder);
         //}
         chromeExpOptions.put("download.prompt_for_download", false);
         chromeExpOptions.put("profile.default_content_settings.popups", 0); //
@@ -103,8 +104,9 @@ public class UITest {
         capabilities.setCapability("se:timeZone", "US/Pacific");
         capabilities.setCapability("se:screenResolution", "1920x1080");
 
-        WebDriverManager.chromedriver().browserVersionDetectionCommand(" ");
-        WebDriverManager.chromedriver().forceDownload();
+        WebDriverManager.chromedriver().cachePath("~/.m2/repository/webdriver");
+        //WebDriverManager.chromedriver().browserVersionDetectionCommand(" ");
+        WebDriverManager.chromedriver().driverVersion("100.0");
         // Use headless only on local runs. When using selenium grid, download fails in Chrome because of a bug.
         if (headless.equals("true") && useSeleniumGrid.equals("false")) {
             chromeOptions.addArguments("--headless", "--window-size=1920,1200", "--no-sandbox"); }
@@ -115,7 +117,7 @@ public class UITest {
             WebDriverManager.chromedriver().dockerNetwork("theinternet");
 
             try {
-                this.driver = (RemoteWebDriver) WebDriverManager.chromedriver().remoteAddress(new URL(remoteUrl)).capabilities(chromeOptions).create();
+                this.driver = (RemoteWebDriver) WebDriverManager.chromedriver().remoteAddress(new URL(remoteUrl)).capabilities(capabilities).create();
             } catch (MalformedURLException e) {
                 throw new RuntimeException(e);
             }
