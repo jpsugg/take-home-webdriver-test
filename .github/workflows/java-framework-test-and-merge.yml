@@ -3,32 +3,33 @@ name: Test develop code and create PR to staging
 on:
   push:
     branches:
-    - develop
+      - develop
     paths:
-    - java-framework/**
-    - .github/workflows/
+      - java-framework/**
+      - .github/workflows/**
 
 jobs:
   load-docker-cache:
+    runs-on: ubuntu-latest
     name: Set up the docker layers cache
-    uses: satackey/action-docker-layer-caching@v0.0.11
-    continue-on-error: true
-    with:
-      key: services-docker-cache-{hash}
-      restore-keys: |
-        foo-docker-cache-
+    steps:
+      - name: Cache Docker layers
+        uses: satackey/action-docker-layer-caching@v0.0.11
+        continue-on-error: true
+        with:
+          key: services-docker-cache-{hash}
+          restore-keys: |
+            foo-docker-cache-
 
   build-and-test-project:
     name: Build and test phase
     needs: load-docker-cache
-    strategy:
-      max-parallel: 1
-      fail-fast: true
     uses: jpsugg/the-internet-tests/.github/workflows/java-framework-run-e2e-tests.yml@develop
     with:
       target-environment: staging
       source-branch: develop
-    secrets: inherit
+    secrets:
+      inherit
 
   build-and-test-project-validation:
     name: Validate build and test success
@@ -42,12 +43,9 @@ jobs:
           exit 1
   
   create-pr:
-    strategy:
-      max-parallel: 1
-      fail-fast: true
-    needs: build-and-test-project
-    if: needs.build-and-test-project.result == 'success'
     name: Create Pull Request
+    needs: build-and-test-project
+    if: needs.build-and-test-project.outputs.workflow-status == 'success'
     runs-on: ubuntu-latest
     steps:
       - name: pull-request-action
@@ -62,34 +60,24 @@ jobs:
         run: echo "PR created successfully"
         if: ${{ success() }}
       - if: ${{ env.WORKFLOW_CONCLUSION == 'failure' }}
-        name:
+        name: Failed to create PR
         run: |
           echo Failed to create the PR
           exit 1
 
   merge-pr:
     name: Deploy to staging
-    strategy:
-      max-parallel: 1
-      fail-fast: true
     needs: create-pr
-    needs: [create-pr]
-    if: needs.create-pr.result == 'success'
+    if: needs.create-pr.outputs.workflow-status == 'success'
     uses: jpsugg/the-internet-tests/.github/workflows/merge-develop-into-staging.yaml@develop
     with:
       target-environment: staging
     secrets:
       github-token: ${{ secrets.GITHUB_TOKEN }}
-    outputs:
-      workflow-status
 
   merge-pr-validation:
     name: Validate deploy success
     needs: merge-pr
-
-  merge-pr-validation:
-    name: Validate deploy success
-    needs: [merge-pr]
     runs-on: ubuntu-latest
     steps:
       - name: Automated PR merge success
@@ -104,25 +92,8 @@ jobs:
       github.event.state == 'error' ||
       github.event.state == 'failure'
     steps:
-      - name: Automated PR merge success
-        if: ${{ needs.merge-pr.outputs.workflow-status != 'success' }}
-        run: |
-          echo Deployment phase failed
-          exit 1
-
-#  if_error_or_failure:
-#    runs-on: ubuntu-latest
-#    if: >-
-#      github.event.state == 'error' ||
-#      github.event.state == 'failure'
-#    steps:
-#      - env:
-#          DESCRIPTION: ${{ github.event.description }}
-#        run: |
-#          echo The status is error or failed: $DESCRIPTION
-#          echo Workflow failed
-#          exit 1
-      - env:
+      - name: Log error or failure
+        env:
           DESCRIPTION: ${{ github.event.description }}
         run: |
           echo The status is error or failed: $DESCRIPTION
