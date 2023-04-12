@@ -33,6 +33,7 @@ on:
           - "110"
   push:
     branches:
+      - develop
       - staging
       - master
     paths: java-framework/**
