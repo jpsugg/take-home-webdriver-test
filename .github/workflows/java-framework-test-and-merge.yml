@@ -28,6 +28,8 @@ jobs:
     with:
       environment: develop
       branch: develop
+    secrets:
+      github-token: ${{ secrets.GITHUB_TOKEN }}
 
   build-and-test-project-validation:
     name: Validate build and test success
