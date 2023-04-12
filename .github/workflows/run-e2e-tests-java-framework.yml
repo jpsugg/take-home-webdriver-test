@@ -118,9 +118,11 @@ jobs:
       - name: Runner IP address
         run: echo "Host IP address ${{steps.testRunnerAddress.outputs.ip}}"
       - name: Checkout repo code
+        env:
+          BRANCH: ${{ github.events.inputs.environment }} || ${{ github.event.base_ref }}
         uses: actions/checkout@v3
         with:
-          ref: ${{ github.events.inputs.environment }} || ${{ github.event.base_ref }}
+          ref: ${{ env.BRANCH }}
           fetch-depth: 0
       - name: Set up JDK 17
         uses: actions/setup-java@v3
@@ -128,20 +130,25 @@ jobs:
           java-version: '17'
           distribution: 'corretto'
       - name: Clean
-        run: mvn clean -P ${{ github.events.inputs.environment }} || ${{ github.event.base_ref }} -f pom.xml --batch-mode --update-snapshots
+        env:
+          BRANCH: ${{ github.events.inputs.environment }} || ${{ github.event.base_ref }}
+        run: mvn clean -P ${{ env.BRANCH }} -f pom.xml --batch-mode --update-snapshots
         working-directory: ${{env.working-directory}}
       - name: Build
-        run: mvn compile -P ${{ github.events.inputs.environment }} || ${{ github.event.base_ref }} -f pom.xml --batch-mode --update-snapshots
+        env:
+          BRANCH: ${{ github.events.inputs.environment }} || ${{ github.event.base_ref }}
+        run: mvn compile -P ${{ env.BRANCH }} -f pom.xml --batch-mode --update-snapshots
         working-directory: ${{env.working-directory}}
       - name: Run the test suite
         env:
+          BRANCH: ${{ github.events.inputs.environment }} || ${{ github.event.base_ref }}
           browserVersion: ${{ env.browser-version }}
           headlessBrowser: false
           testRunnerAppAddress: "http://172.17.0.1:7080"
           webAppAddress: "http://172.17.0.1:7080"
           seleniumGridAddress: "http://172.17.0.1:4444/wd/hub"
         run: >-
-          mvn test -P ${{ github.events.inputs.environment }} || ${{ github.event.base_ref }} -f pom.xml
+          mvn test -P ${{ env.BRANCH }} -f pom.xml
           --batch-mode --update-snapshots -Dorg.slf4j.simpleLogger.defaultLogLevel=${{ env.LOG_LEVEL }}
         working-directory: ${{ env.working-directory }}
       - uses: actions/upload-artifact@v3
