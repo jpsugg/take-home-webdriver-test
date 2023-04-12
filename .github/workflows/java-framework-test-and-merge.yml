@@ -26,7 +26,7 @@ jobs:
     needs: load-docker-cache
     uses: jpsugg/the-internet-tests/.github/workflows/run-e2e-tests-java-framework.yml@develop
     with:
-      environment: staging
+      environment: develop
       branch: develop
     secrets:
       inherit
