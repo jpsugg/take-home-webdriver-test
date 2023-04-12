@@ -25,12 +25,19 @@ on:
       chromeVersion:
         description: 'Chrome Version'
         required: true
-#        default: '106.0.5249.119'
         default: '110'
         type: choice
         options:
           - "latest"
           - "110"
+  workflow_call:
+    inputs:
+      target-environment:
+        required: true
+        type: string
+    secrets:
+      github-token:
+        required: true
   push:
     branches:
       - develop
