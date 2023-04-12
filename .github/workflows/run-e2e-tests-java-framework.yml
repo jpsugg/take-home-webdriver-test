@@ -6,20 +6,19 @@ env:
   ENVIRONMENT: staging
   suiteXmlFile: regression.xml
   browser: remote-chrome
-#  browser-version: '106.0.5249.119'
   browser-version: '110'
   headlessBrowser: false
   useSeleniumGrid: true
   testsThreadCount: 10
   working-directory: ./java-framework
   report-directory: ./java-framework/target/surefire-reports
-  
+
 on:
   workflow_dispatch:
     inputs:
       environment:
         description: 'Environment to run tests against'
-        type: environment
+        type: choice
         required: true
         default: staging
         options:
@@ -58,7 +57,7 @@ jobs:
     concurrency:
       group: ${{ github.workflow }}-${{ github.ref }}
       cancel-in-progress: true
-      
+
     services:
       website:
         image: gprestes/the-internet:latest
@@ -110,48 +109,51 @@ jobs:
           SE_NODE_MAX_SESSIONS: 4
           SE_NODE_SESSION_TIMEOUT: 500
           SE_START_XVFB: true
-          
+
     steps:
       - name: Get test-runner IP
-        run: message=$(curl https://api.ipify.org) && message=$(echo $message | tr '\n' ' ') && message=$(echo $message | xargs) && echo "ip=$message" >> $GITHUB_OUTPUT
-        id: testRunnerAddress
+        run: echo "ip=$(curl -s https://api.ipify.org)" >> $GITHUB_ENV
       - name: Runner IP address
-        run: echo "Host IP address ${{steps.testRunnerAddress.outputs.ip}}"
+        run: echo "Host IP address ${{ env.ip }}"
       - name: Checkout repo code
-        env:
-          BRANCH: ${{ github.events.inputs.environment }} || ${{ github.event.base_ref }}
-        uses: actions/checkout@v3
+        uses: actions/checkout@v2
         with:
-          ref: ${{ env.BRANCH }}
+          ref: ${{ github.event.inputs.branch || github.ref }}
+          fetch-depth: 0
+      - name: Set up JDK 
+    steps:
+      - name: Get test-runner IP
+        run: echo "ip=$(curl -s https://api.ipify.org)" >> $GITHUB_ENV
+      - name: Runner IP address
+        run: echo "Host IP address ${{ env.ip }}"
+      - name: Checkout repo code
+        uses: actions/checkout@v2
+        with:
+          ref: ${{ github.event.inputs.branch || github.ref }}
           fetch-depth: 0
       - name: Set up JDK 17
-        uses: actions/setup-java@v3
+        uses: actions/setup-java@v2
         with:
           java-version: '17'
-          distribution: 'corretto'
+          distribution: 'temurin'
       - name: Clean
-        env:
-          BRANCH: ${{ github.events.inputs.environment }} || ${{ github.event.base_ref }}
-        run: mvn clean -P ${{ env.BRANCH }} -f pom.xml --batch-mode --update-snapshots
+        run: mvn clean -f pom.xml --batch-mode --update-snapshots
         working-directory: ${{env.working-directory}}
       - name: Build
-        env:
-          BRANCH: ${{ github.events.inputs.environment }} || ${{ github.event.base_ref }}
-        run: mvn compile -P ${{ env.BRANCH }} -f pom.xml --batch-mode --update-snapshots
+        run: mvn compile -f pom.xml --batch-mode --update-snapshots
         working-directory: ${{env.working-directory}}
       - name: Run the test suite
+        run: >-
+          mvn test -f pom.xml
+          --batch-mode --update-snapshots -Dorg.slf4j.simpleLogger.defaultLogLevel=${{ env.LOG_LEVEL }}
+        working-directory: ${{ env.working-directory }}
         env:
-          BRANCH: ${{ github.events.inputs.environment }} || ${{ github.event.base_ref }}
           browserVersion: ${{ env.browser-version }}
           headlessBrowser: false
           testRunnerAppAddress: "http://172.17.0.1:7080"
           webAppAddress: "http://172.17.0.1:7080"
           seleniumGridAddress: "http://172.17.0.1:4444/wd/hub"
-        run: >-
-          mvn test -P ${{ env.BRANCH }} -f pom.xml
-          --batch-mode --update-snapshots -Dorg.slf4j.simpleLogger.defaultLogLevel=${{ env.LOG_LEVEL }}
-        working-directory: ${{ env.working-directory }}
-      - uses: actions/upload-artifact@v3
+      - uses: actions/upload-artifact@v2
         if: always()
         with:
           name: Test run report
