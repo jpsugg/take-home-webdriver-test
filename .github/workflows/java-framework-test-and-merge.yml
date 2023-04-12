@@ -28,8 +28,6 @@ jobs:
     with:
       environment: develop
       branch: develop
-    secrets:
-      inherit
 
   build-and-test-project-validation:
     name: Validate build and test success
@@ -41,7 +39,7 @@ jobs:
         run: |
           echo Build and test phase failed
           exit 1
-  
+
   create-pr:
     name: Create Pull Request
     needs: build-and-test-project
@@ -72,8 +70,6 @@ jobs:
     uses: jpsugg/the-internet-tests/.github/workflows/merge-develop-into-staging.yaml@develop
     with:
       target-environment: staging
-    secrets:
-      github-token: ${{ secrets.GITHUB_TOKEN }}
 
   merge-pr-validation:
     name: Validate deploy success
@@ -84,18 +80,4 @@ jobs:
         if: ${{ needs.merge-pr.outputs.workflow-status != 'success' }}
         run: |
           echo Deployment phase failed
-          exit 1
-
-  if_error_or_failure:
-    runs-on: ubuntu-latest
-    if: >-
-      github.event.state == 'error' ||
-      github.event.state == 'failure'
-    steps:
-      - name: Log error or failure
-        env:
-          DESCRIPTION: ${{ github.event.description }}
-        run: |
-          echo The status is error or failed: $DESCRIPTION
-          echo Workflow failed
           exit 1
