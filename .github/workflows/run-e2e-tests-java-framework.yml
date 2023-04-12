@@ -6,7 +6,8 @@ env:
   ENVIRONMENT: staging
   suiteXmlFile: regression.xml
   browser: remote-chrome
-  browser-version: '106.0.5249.119'
+#  browser-version: '106.0.5249.119'
+  browser-version: '110'
   headlessBrowser: false
   useSeleniumGrid: true
   testsThreadCount: 10
@@ -24,11 +25,12 @@ on:
       chromeVersion:
         description: 'Chrome Version'
         required: true
-        default: '106.0.5249.119'
+#        default: '106.0.5249.119'
+        default: '110'
         type: choice
         options:
           - "latest"
-          - "106.0.5249.119"
+          - "110"
   push:
     branches:
       - staging
@@ -108,7 +110,7 @@ jobs:
       - name: Set up JDK 19
         uses: actions/setup-java@v3
         with:
-          java-version: '19'
+          java-version: '17'
           distribution: 'corretto'
       - name: Clean
         run: mvn clean -P Staging -f pom.xml --batch-mode --update-snapshots
@@ -132,9 +134,6 @@ jobs:
         with:
           name: Test run report
           path: ${{ env.report-directory }}
-      - name: Install
-        run: mvn install -P Staging -f pom.xml -DskipTests --batch-mode --update-snapshots
-        working-directory: ${{env.working-directory}}
       - name: Display structure of uploaded files
         run: ls -R
         working-directory: ${{env.report-directory}}
