@@ -18,7 +18,7 @@ on:
     inputs:
       environment:
         description: 'Environment to run tests against'
-        type: choice
+        type: environment
         required: true
         default: staging
         options:
