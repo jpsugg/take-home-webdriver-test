@@ -120,17 +120,6 @@ jobs:
         with:
           ref: ${{ github.event.inputs.branch || github.ref }}
           fetch-depth: 0
-      - name: Set up JDK 
-    steps:
-      - name: Get test-runner IP
-        run: echo "ip=$(curl -s https://api.ipify.org)" >> $GITHUB_ENV
-      - name: Runner IP address
-        run: echo "Host IP address ${{ env.ip }}"
-      - name: Checkout repo code
-        uses: actions/checkout@v2
-        with:
-          ref: ${{ github.event.inputs.branch || github.ref }}
-          fetch-depth: 0
       - name: Set up JDK 17
         uses: actions/setup-java@v2
         with:
