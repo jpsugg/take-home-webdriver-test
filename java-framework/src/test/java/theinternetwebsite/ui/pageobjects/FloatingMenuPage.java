@@ -3,7 +3,6 @@ package theinternetwebsite.ui.pageobjects;
 import org.jetbrains.annotations.NotNull;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.TimeoutException;
-import org.openqa.selenium.WebDriver;
 import theinternetwebsite.ui.UITest;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;

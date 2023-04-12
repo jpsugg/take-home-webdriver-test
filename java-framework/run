@@ -26,8 +26,8 @@ BROWSER="chrome"
 BROWSER_VERSION="106.0.5249.119"
 REMOTE_CHROME_NODE_IMAGE_VERSION="4.5.2-20221021"
 # BROWSER_VERSION for local use
-#BROWSER=$(printf "chrome")
-#BROWSER_VERSION=""
+# BROWSER=$(printf "chrome")
+# BROWSER_VERSION=""
 HEADLESS_BROWSER="true"
 
 ##############
