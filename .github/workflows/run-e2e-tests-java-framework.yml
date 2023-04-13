@@ -131,7 +131,7 @@ jobs:
           restore-keys: ${{ runner.os }}-m2
           
       - name: Prepare Xvfb
-        run: sudo apt-get install xvfb && Xvfb :99 -ac && export DISPLAY=:99
+        run: export DISPLAY=:99 && Xvfb :99 -ac &
 
       - name: Build and run tests
         run: mvn clean install -DsuiteXmlFile=${{ env.suiteXmlFile }} -Djava.awt.headless=${{ env.headlessBrowser }} -Dvideo.source=X11
