@@ -13,8 +13,8 @@ jobs:
     runs-on: ubuntu-latest
     name: Set up the docker layers cache
     steps:
-      - name: Cache Docker layers
-        uses: satackey/action-docker-layer-caching@v0.0.11
+      - name: Docker Layer Caching2
+        uses: jpribyl/action-docker-layer-caching@v0.1.1
         continue-on-error: true
         with:
           key: services-docker-cache-{hash}
@@ -34,7 +34,7 @@ jobs:
   create-pr:
     name: Create Pull Request
     needs: build-and-test-project
-    if: needs.build-and-test-project.outputs.workflow-status == 'success'
+    if: ${{ needs.build-and-test-project.outputs.workflow-status == 'success' }}
     runs-on: ubuntu-latest
     steps:
       - name: pull-request-action
