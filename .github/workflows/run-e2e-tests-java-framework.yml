@@ -96,11 +96,11 @@ jobs:
                 - 4443:4443
                 - 4444:4444
               environment:
-                SE_VNC_NO_PASSWORD: 1
-                SE_SESSION_RETRY_INTERVAL: 1
-                SE_START_XVFB: true
-                SE_SCREEN_WIDTH: 1920
-                SE_SCREEN_HEIGHT: 1080
+                SE_VNC_NO_PASSWORD: '1'
+                SE_SESSION_RETRY_INTERVAL: '1'
+                SE_START_XVFB: 'true'
+                SE_SCREEN_WIDTH: '1920'
+                SE_SCREEN_HEIGHT: '1080'
             chrome-node-video:
               image: selenium/video:latest
               volumes:
@@ -110,13 +110,13 @@ jobs:
                 - xvfb-lock:/tmp/.X1-lock
               environment:
                 SE_EVENT_BUS_HOST: selenium-hub
-                SE_EVENT_BUS_PUBLISH_PORT: 4442
-                SE_EVENT_BUS_SUBSCRIBE_PORT: 4443
-                SE_SESSION_RETRY_INTERVAL: 1
-                SE_NODE_MAX_INSTANCES: 20
-                SE_NODE_MAX_SESSIONS: 1
-                SE_NODE_SESSION_TIMEOUT: 500
-                SE_START_XVFB: true
+                SE_EVENT_BUS_PUBLISH_PORT: '4442'
+                SE_EVENT_BUS_SUBSCRIBE_PORT: '4443'
+                SE_SESSION_RETRY_INTERVAL: '1'
+                SE_NODE_MAX_INSTANCES: '20'
+                SE_NODE_MAX_SESSIONS: '1'
+                SE_NODE_SESSION_TIMEOUT: '500'
+                SE_START_XVFB: 'true'
                 DISPLAY_CONTAINER_NAME: chrome-node
                 FILE_NAME: chrome_video.mp4
             chrome-node:
@@ -127,13 +127,13 @@ jobs:
                 - xvfb-lock:/tmp/.X1-lock
               environment:
                 SE_EVENT_BUS_HOST: selenium-hub
-                SE_EVENT_BUS_PUBLISH_PORT: 4442
-                SE_EVENT_BUS_SUBSCRIBE_PORT: 4443
-                SE_SESSION_RETRY_INTERVAL: 1
-                SE_NODE_MAX_INSTANCES: 20
-                SE_NODE_MAX_SESSIONS: 4
-                SE_NODE_SESSION_TIMEOUT: 500
-                SE_START_XVFB: true
+                SE_EVENT_BUS_PUBLISH_PORT: '4442'
+                SE_EVENT_BUS_SUBSCRIBE_PORT: '4443'
+                SE_SESSION_RETRY_INTERVAL: '1'
+                SE_NODE_MAX_INSTANCES: '20'
+                SE_NODE_MAX_SESSIONS: '4'
+                SE_NODE_SESSION_TIMEOUT: '500'
+                SE_START_XVFB: 'true'
               ports:
                 - "5900:5900"
           volumes:
