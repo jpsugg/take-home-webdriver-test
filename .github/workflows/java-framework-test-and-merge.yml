@@ -28,7 +28,8 @@ jobs:
             --file docker-compose.yml \
             --target development \
             --tag my-image:latest \
-            --mount type=cache,src=/tmp/.build-cache,target=/var/cache/docker \
+            --cache-from type=local,src=/tmp/.build-cache \
+            --cache-to type=local,dest=/tmp/.build-cache \
             .
       - name: Docker Layer Caching - Push
         uses: docker/build-push-action@v2
@@ -41,6 +42,7 @@ jobs:
           registry: docker.pkg.github.com
           repository: ${{ github.repository }}/java-framework
           tag: ${{ github.sha }}
+
 
   build-and-test-project:
     name: Build and test project
