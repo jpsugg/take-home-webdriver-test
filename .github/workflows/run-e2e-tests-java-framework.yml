@@ -54,49 +54,6 @@ jobs:
     concurrency:
       group: ${{ github.workflow }}-${{ github.ref }}
       cancel-in-progress: true
-    services:
-      website:
-        image: gprestes/the-internet:latest
-        ports:
-          - 7080:5000
-      selenium-hub:
-        image: selenium/hub:latest
-        ports:
-          - 4442:4442
-          - 4443:4443
-          - 4444:4444
-        environment:
-          SE_VNC_NO_PASSWORD: '1'
-          SE_SESSION_RETRY_INTERVAL: '1'
-          SE_SCREEN_WIDTH: '1920'
-          SE_SCREEN_HEIGHT: '1080'
-      chrome-node-video:
-        image: selenium/video:latest
-        volumes:
-          - /home/runner/work/the-internet-tests/java-framework/target:/home/seluser/Downloads
-          - /home/runner/work/the-internet-tests/java-framework/target/surefire-reports:/videos
-        environment:
-          SE_EVENT_BUS_HOST: selenium-hub
-          SE_EVENT_BUS_PUBLISH_PORT: '4442'
-          SE_EVENT_BUS_SUBSCRIBE_PORT: '4443'
-          SE_SESSION_RETRY_INTERVAL: '1'
-          SE_NODE_MAX_INSTANCES: '20'
-          SE_NODE_MAX_SESSIONS: '1'
-          SE_NODE_SESSION_TIMEOUT: '500'
-          DISPLAY_CONTAINER_NAME: chrome-node
-          FILE_NAME: chrome_video.mp4
-      chrome-node:
-        image: selenium/node-chrome:latest
-        volumes:
-          - /home/runner/work/the-internet-tests/java-framework/target:/home/seluser/Downloads
-        environment:
-          SE_EVENT_BUS_HOST: selenium-hub
-          SE_EVENT_BUS_PUBLISH_PORT: '4442'
-          SE_EVENT_BUS_SUBSCRIBE_PORT: '4443'
-          SE_SESSION_RETRY_INTERVAL: '1'
-          SE_NODE_MAX_INSTANCES: '20'
-          SE_NODE_MAX_SESSIONS: '4'
-          SE_NODE_SESSION_TIMEOUT: '500'
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
@@ -118,18 +75,14 @@ jobs:
           key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
           restore-keys: ${{ runner.os }}-m2
 
-      - name: Setup xvfb
-        uses: cypress-io/github-action@v2
+      - name: Setup xvfb to run headless test
+        uses: coactions/setup-xvfb@v1
         with:
-          start: ""
-          runTests: false
-          xvfb_args: "-screen 0 1280x800x24"
-
-      - name: Build and run tests
-        run: mvn clean install -DsuiteXmlFile=${{ env.suiteXmlFile }} -Djava.awt.headless=${{ env.headlessBrowser }}
-        env:
-          BROWSER: ${{ env.browser }}
-        working-directory: ${{ env.working-directory }}
+          run: |
+            mvn clean install -DsuiteXmlFile=${{ env.suiteXmlFile }} -Djava.awt.headless=${{ env.headlessBrowser }}
+            env:
+              BROWSER: ${{ env.browser }}
+            working-directory: ${{ env.working-directory }}
 
       - name: Archive test results
         if: always()
