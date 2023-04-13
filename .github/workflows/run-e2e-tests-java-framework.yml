@@ -75,10 +75,11 @@ jobs:
           key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
           restore-keys: ${{ runner.os }}-m2
 
-      - name: Setup xvfb to run headless test
+      - name: Build and test
         uses: coactions/setup-xvfb@v1
         with:
           run: |
+            cd ${{ env.working-directory }}
             mvn clean install -DsuiteXmlFile=${{ env.suiteXmlFile }} -Djava.awt.headless=${{ env.headlessBrowser }}
             env:
               BROWSER: ${{ env.browser }}
