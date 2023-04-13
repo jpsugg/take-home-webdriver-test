@@ -38,16 +38,16 @@ jobs:
         run: |
           echo "PR created successfully"
           echo "::set-output name=workflow-status::success"
-        id: pr_status
+        id: pr_success
       - if: ${{ steps.pr.outputs.result != 'Created PR' }}
         name: Failed to create PR
         run: |
           echo Failed to create the PR
           echo "::set-output name=workflow-status::failure"
-        id: pr_status
+        id: pr_failure
 
     outputs:
-      workflow-status: ${{ steps.pr_status.outputs.workflow-status }}
+      workflow-status: ${{ steps.pr_success.outputs.workflow-status || steps.pr_failure.outputs.workflow-status }}
 
   merge-pr:
     name: Deploy to staging
