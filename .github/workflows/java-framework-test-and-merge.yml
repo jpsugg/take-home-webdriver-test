@@ -24,12 +24,12 @@ jobs:
   build-and-test-project:
     name: Build and test phase
     needs: load-docker-cache
-    uses: jpsugg/the-internet-tests/.github/workflows/java-framework-run-e2e-tests.yml@develop
+    uses: jpsugg/the-internet-tests/.github/workflows/run-e2e-tests-java-framework.yml@develop
     with:
-      target-environment: staging
-      source-branch: develop
+      environment: develop
+      branch: develop
     secrets:
-      inherit
+      github-token: ${{ secrets.GITHUB_TOKEN }}
 
   build-and-test-project-validation:
     name: Validate build and test success
