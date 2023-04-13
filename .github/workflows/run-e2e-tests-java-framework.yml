@@ -111,14 +111,14 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@main
+        uses: actions/checkout@v2
         with:
           ref: ${{ inputs.branch }}
           fetch-depth: 0
           token: ${{ secrets.github-token }}
 
       - name: Set up JDK 17
-        uses: actions/setup-java@main
+        uses: actions/setup-java@v2
         with:
           java-version: '17'
           distribution: 'adopt'
@@ -154,11 +154,12 @@ jobs:
           path: ${{ env.report-directory }}
 
       - name: Set job status
-        if: ${{ success() }}
-        run: echo "workflow-status=success" >> $GITHUB_ENV
-      - name: Set job status
-        if: ${{ failure() }}
-        run: echo "workflow-status=failure" >> $GITHUB_ENV
+        run: |
+          if [[ "${{ job.status }}" == "success" ]]; then
+            echo "workflow-status=success" >> $GITHUB_ENV
+          else
+            echo "workflow-status=failure" >> $GITHUB_ENV
+          fi
 
     outputs:
       workflow-status: ${{ env.workflow-status }}
