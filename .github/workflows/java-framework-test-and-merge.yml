@@ -24,23 +24,25 @@ jobs:
   build-and-test-project:
     name: Build and test project
     needs: load-docker-cache
-    id: e2e-tests
     uses: jpsugg/the-internet-tests/.github/workflows/run-e2e-tests-java-framework.yml@develop
     with:
       environment: develop
       branch: develop
     secrets:
       github-token: ${{ secrets.GITHUB_TOKEN }}
+
+    outputs:
+      workflow-status: ${{ jobs.build-and-test.outputs.workflow-status }}
   
   create-pr:
     name: Create Pull Request
     needs: build-and-test-project
-    if: ${{ needs.e2e-tests.outputs.workflow-status == 'success' }}
+    if: ${{ needs.build-and-test-project.outputs.workflow-status == 'success' }}
     runs-on: ubuntu-latest
     steps:
       - name: pull-request-action
-        id: pr
         uses: vsoch/pull-request-action@master
+        id: pr
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           BRANCH_PREFIX: ""
