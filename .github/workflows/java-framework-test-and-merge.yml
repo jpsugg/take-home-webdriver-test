@@ -19,12 +19,6 @@ jobs:
           path: ~/.docker
           key: ${{ runner.os }}-docker-${{ hashFiles('**/.docker/**') }}
           restore-keys: ${{ runner.os }}-docker-
-      - name: Docker Layer Caching - Compose
-        uses: docker/compose@v2
-        with:
-          file: docker-compose.yml
-          command: config
-        continue-on-error: true
       - name: Docker Layer Caching - Build
         uses: docker/build-push-action@v2
         with:
@@ -34,7 +28,6 @@ jobs:
           cache-from: type=local,src=/tmp/.buildx-cache
           cache-to: type=local,dest=/tmp/.buildx-cache
           target: development
-        continue-on-error: true
       - name: Docker Layer Caching - Push
         uses: docker/build-push-action@v2
         with:
@@ -46,8 +39,6 @@ jobs:
           registry: docker.pkg.github.com
           repository: ${{ github.repository }}/java-framework
           tag: ${{ github.sha }}
-        continue-on-error: true
-
 
   build-and-test-project:
     name: Build and test project
@@ -58,7 +49,7 @@ jobs:
       branch: develop
     secrets:
       github-token: ${{ secrets.GITHUB_TOKEN }}
-  
+
   create-pr:
     name: Create Pull Request
     needs: build-and-test-project
@@ -102,7 +93,7 @@ jobs:
 
   merge-pr-validation:
     name: Validate deploy success
-    needs: [create-pr, merge-pr]
+    needs: [ create-pr, merge-pr ]
     if: needs.create-pr.outputs.workflow-status == 'success'
     runs-on: ubuntu-latest
     steps:
