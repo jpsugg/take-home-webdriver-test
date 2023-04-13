@@ -13,13 +13,41 @@ jobs:
     runs-on: ubuntu-latest
     name: Set up the docker layers cache
     steps:
-      - name: Docker Layer Caching2
-        uses: jpribyl/action-docker-layer-caching@v0.1.1
-        continue-on-error: true
+      - name: Docker Layer Caching
+        uses: actions/cache@v2
         with:
-          key: services-docker-cache-{hash}
-          restore-keys: |
-            foo-docker-cache-
+          path: ~/.docker
+          key: ${{ runner.os }}-docker-${{ hashFiles('**/.docker/**') }}
+          restore-keys: ${{ runner.os }}-docker-
+      - name: Docker Layer Caching - Compose
+        uses: docker/compose@v2
+        with:
+          file: docker-compose.yml
+          command: config
+        continue-on-error: true
+      - name: Docker Layer Caching - Build
+        uses: docker/build-push-action@v2
+        with:
+          context: .
+          push: false
+          file: docker-compose.yml
+          cache-from: type=local,src=/tmp/.buildx-cache
+          cache-to: type=local,dest=/tmp/.buildx-cache
+          target: development
+        continue-on-error: true
+      - name: Docker Layer Caching - Push
+        uses: docker/build-push-action@v2
+        with:
+          context: .
+          file: docker-compose.yml
+          cache-from: type=local,src=/tmp/.buildx-cache
+          target: development
+          push: true
+          registry: docker.pkg.github.com
+          repository: ${{ github.repository }}/java-framework
+          tag: ${{ github.sha }}
+        continue-on-error: true
+
 
   build-and-test-project:
     name: Build and test project
@@ -30,9 +58,6 @@ jobs:
       branch: develop
     secrets:
       github-token: ${{ secrets.GITHUB_TOKEN }}
-
-    outputs:
-      workflow-status: ${{ jobs.build-and-test.outputs.workflow-status }}
   
   create-pr:
     name: Create Pull Request

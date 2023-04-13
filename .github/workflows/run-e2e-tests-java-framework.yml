@@ -56,7 +56,6 @@ jobs:
     concurrency:
       group: ${{ github.workflow }}-${{ github.ref }}
       cancel-in-progress: true
-
     services:
       website:
         image: gprestes/the-internet:latest
@@ -108,6 +107,16 @@ jobs:
           SE_NODE_MAX_SESSIONS: 4
           SE_NODE_SESSION_TIMEOUT: 500
           SE_START_XVFB: true
+        ports:
+          - "5900:5900"
+        volumes:
+          - "xvfb:/tmp/.X11-unix"
+          - "xvfb-lock:/tmp/.X1-lock"
+  xvfb:
+    driver: true
+
+  xvfb-lock:
+    driver: true
 
     steps:
       - name: Checkout repository
@@ -150,7 +159,7 @@ jobs:
         if: always()
         uses: actions/upload-artifact@v3
         with:
-          name: test-results
+          name: test  -results
           path: ${{ env.report-directory }}
 
       - name: Set job status
