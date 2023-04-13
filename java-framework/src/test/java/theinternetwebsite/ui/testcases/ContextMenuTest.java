@@ -8,9 +8,7 @@ import theinternetwebsite.ui.pageobjects.ContextMenuPage;
 
 public class ContextMenuTest extends UITest {
 
-    public ContextMenuTest() {
-        System.setProperty("java.awt.headless", "false");
-    }
+    public ContextMenuTest() { }
 
     @Test(description="Expected alert popup opens on right click over box")
     public void triggerPopupOnContextClick() {
