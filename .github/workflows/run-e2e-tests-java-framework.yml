@@ -111,7 +111,7 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v2
+        uses: actions/checkout@main
         with:
           ref: ${{ inputs.branch }}
           fetch-depth: 0
@@ -131,7 +131,7 @@ jobs:
           restore-keys: ${{ runner.os }}-m2
 
       - name: Build and run tests
-        run: mvn clean install -DsuiteXmlFile=${{ env.suiteXmlFile }} -Djava.awt.headless=false -Dvideo.source=X11
+        run: export DISPLAY=:1 && mvn clean install -DsuiteXmlFile=${{ env.suiteXmlFile }} -Djava.awt.headless=${{ env.headlessBrowser }} -Dvideo.source=X11
         env:
           HUB_HOST: selenium-hub
           WEBSITE_HOST: website
@@ -145,7 +145,7 @@ jobs:
 
       - name: Archive test results
         if: always()
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@main
         with:
           name: test-results
           path: ${{ env.report-directory }}
