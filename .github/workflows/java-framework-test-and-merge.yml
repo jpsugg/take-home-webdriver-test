@@ -13,34 +13,13 @@ jobs:
     runs-on: ubuntu-latest
     name: Set up the docker layers cache
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
-      - name: Docker Layer Caching
-        uses: actions/cache@v2
+      - name: Docker Layer Caching2
+        uses: jpribyl/action-docker-layer-caching@v0.1.1
+        continue-on-error: true
         with:
-          path: ~/.docker
-          key: ${{ runner.os }}-docker-${{ hashFiles('**/.docker/**') }}
-          restore-keys: ${{ runner.os }}-docker-
-      - name: Docker Layer Caching - Build
-        run: |
-          docker build \
-            --build-arg CACHEBUST=$(date +%s) \
-            --file docker-compose.yml \
-            --target development \
-            --tag my-image:latest \
-            -v /tmp/.build-cache:/var/cache/docker \
-            .
-      - name: Docker Layer Caching - Push
-        uses: docker/build-push-action@v2
-        with:
-          context: .
-          file: docker-compose.yml
-          cache-from: type=local,src=/tmp/.build-cache
-          target: development
-          push: true
-          registry: docker.pkg.github.com
-          repository: ${{ github.repository }}/java-framework
-          tag: ${{ github.sha }}
+          key: services-docker-cache-{hash}
+          restore-keys: |
+            foo-docker-cache-
 
   build-and-test-project:
     name: Build and test project
