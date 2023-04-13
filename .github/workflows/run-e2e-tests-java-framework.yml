@@ -129,6 +129,9 @@ jobs:
           path: ~/.m2
           key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
           restore-keys: ${{ runner.os }}-m2
+          
+      - name: Prepare Xvfb
+        run: apt-get install xvfb && Xvfb :99 -ac & && export DISPLAY=:99
 
       - name: Build and run tests
         run: mvn clean install -DsuiteXmlFile=${{ env.suiteXmlFile }} -Djava.awt.headless=${{ env.headlessBrowser }} -Dvideo.source=X11
