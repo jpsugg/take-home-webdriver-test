@@ -95,7 +95,7 @@ jobs:
           SE_EVENT_BUS_SUBSCRIBE_PORT: '4443'
           SE_SESSION_RETRY_INTERVAL: '1'
           SE_NODE_MAX_INSTANCES: '20'
-          SE_NODE_MAX_SESSIONS: '4
+          SE_NODE_MAX_SESSIONS: '4'
           SE_NODE_SESSION_TIMEOUT: '500'
     steps:
       - name: Checkout repository
