@@ -123,7 +123,7 @@ jobs:
           java-version: '17'
           distribution: 'adopt'
 
-      - name: Cache Maven packages
+      - name: Cached Maven packages
         uses: actions/cache@v2
         with:
           path: ~/.m2
@@ -131,7 +131,7 @@ jobs:
           restore-keys: ${{ runner.os }}-m2
 
       - name: Build and run tests
-        run: mvn clean install -P staging -DsuiteXmlFile=${{ env.suiteXmlFile }} -Djava.awt.headless=${{ env.headlessBrowser }} -Dvideo.source=X11
+        run: mvn clean install -DsuiteXmlFile=${{ env.suiteXmlFile }} -Djava.awt.headless=${{ env.headlessBrowser }} -Dvideo.source=X11
         env:
           HUB_HOST: selenium-hub
           WEBSITE_HOST: website
