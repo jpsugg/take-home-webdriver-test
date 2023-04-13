@@ -115,11 +115,11 @@ jobs:
           - "xvfb:/tmp/.X11-unix"
           - "xvfb-lock:/tmp/.X1-lock"
 
-        xvfb:
-          driver: true
-
-        xvfb-lock:
-          driver: true
+    volumes:
+      xvfb:
+        driver: true
+      xvfb-lock:
+        driver: true
 
     steps:
       - name: Checkout repository
