@@ -9,41 +9,9 @@ on:
       - .github/workflows/**
 
 jobs:
-  load-docker-cache:
-    runs-on: ubuntu-latest
-    name: Set up the docker layers cache
-    steps:
-      - name: Docker Layer Caching
-        uses: actions/cache@v2
-        with:
-          path: ~/.docker
-          key: ${{ runner.os }}-docker-${{ hashFiles('**/.docker/**') }}
-          restore-keys: ${{ runner.os }}-docker-
-      - name: Docker Layer Caching - Build
-        uses: docker/build-push-action@v2
-        with:
-          context: .
-          push: false
-          file: docker-compose.yml
-          cache-from: type=local,src=/tmp/.buildx-cache
-          cache-to: type=local,dest=/tmp/.buildx-cache
-          target: development
-      - name: Docker Layer Caching - Push
-        uses: docker/build-push-action@v2
-        with:
-          context: .
-          file: docker-compose.yml
-          cache-from: type=local,src=/tmp/.buildx-cache
-          target: development
-          push: true
-          registry: docker.pkg.github.com
-          repository: ${{ github.repository }}/java-framework
-          tag: ${{ github.sha }}
-
   build-and-test-project:
     name: Build and test project
-    needs: load-docker-cache
-    uses: jpsugg/the-internet-tests/.github/workflows/run-e2e-tests-java-framework.yml@develop
+    uses: ./.github/workflows/run-e2e-tests-java-framework.yml
     with:
       environment: develop
       branch: develop
@@ -85,7 +53,7 @@ jobs:
     name: Deploy to staging
     needs: create-pr
     if: needs.create-pr.outputs.workflow-status == 'success'
-    uses: jpsugg/the-internet-tests/.github/workflows/merge-develop-into-staging.yaml@develop
+    uses: ./.github/workflows/merge-develop-into-staging.yaml
     with:
       target-environment: staging
     secrets:
