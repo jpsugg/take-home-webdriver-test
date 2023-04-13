@@ -13,6 +13,10 @@ jobs:
     runs-on: ubuntu-latest
     name: Set up the docker layers cache
     steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - name: Set up Docker
+        uses: docker/setup-docker@v2
       - name: Docker Layer Caching
         uses: actions/cache@v2
         with:
@@ -20,20 +24,21 @@ jobs:
           key: ${{ runner.os }}-docker-${{ hashFiles('**/.docker/**') }}
           restore-keys: ${{ runner.os }}-docker-
       - name: Docker Layer Caching - Build
-        uses: docker/build-push-action@v2
-        with:
-          context: .
-          push: false
-          file: docker-compose.yml
-          cache-from: type=local,src=/tmp/.buildx-cache
-          cache-to: type=local,dest=/tmp/.buildx-cache
-          target: development
+        run: |
+          docker build \
+            --cache-from type=local,src=/tmp/.build-cache \
+            --cache-to type=local,dest=/tmp/.build-cache \
+            --build-arg CACHEBUST=$(date +%s) \
+            --file docker-compose.yml \
+            --target development \
+            --tag my-image:latest \
+            .
       - name: Docker Layer Caching - Push
         uses: docker/build-push-action@v2
         with:
           context: .
           file: docker-compose.yml
-          cache-from: type=local,src=/tmp/.buildx-cache
+          cache-from: type=local,src=/tmp/.build-cache
           target: development
           push: true
           registry: docker.pkg.github.com
@@ -42,6 +47,7 @@ jobs:
 
   build-and-test-project:
     name: Build and test project
+    needs: load-docker-cache
     uses: ./.github/workflows/run-e2e-tests-java-framework.yml
     with:
       environment: develop
