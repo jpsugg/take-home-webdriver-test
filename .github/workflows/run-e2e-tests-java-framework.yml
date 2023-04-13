@@ -131,10 +131,10 @@ jobs:
           restore-keys: ${{ runner.os }}-m2
           
       - name: Prepare Xvfb
-        run: export DISPLAY=:99 && Xvfb :99 -ac &
+        run: Xvfb :99 -ac &
 
       - name: Build and run tests
-        run: mvn clean install -DsuiteXmlFile=${{ env.suiteXmlFile }} -Djava.awt.headless=${{ env.headlessBrowser }} -Dvideo.source=X11
+        run: export DISPLAY=:99 && mvn clean install -DsuiteXmlFile=${{ env.suiteXmlFile }} -Djava.awt.headless=${{ env.headlessBrowser }}
         env:
           HUB_HOST: selenium-hub
           WEBSITE_HOST: website
