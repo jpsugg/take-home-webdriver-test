@@ -148,7 +148,7 @@ jobs:
 
       - name: Archive test results
         if: always()
-        uses: actions/upload-artifact@3
+        uses: actions/upload-artifact@v3
         with:
           name: test-results
           path: ${{ env.report-directory }}
