@@ -48,6 +48,12 @@ on:
       - master
     paths: java-framework/**
 
+  volumes:
+    xvfb:
+      driver: true
+    xvfb-lock:
+      driver: true
+
 jobs:
   build-and-test:
     runs-on: ubuntu-latest
@@ -114,12 +120,6 @@ jobs:
         volumes:
           - "xvfb:/tmp/.X11-unix"
           - "xvfb-lock:/tmp/.X1-lock"
-
-    volumes:
-      xvfb:
-        driver: true
-      xvfb-lock:
-        driver: true
 
     steps:
       - name: Checkout repository
