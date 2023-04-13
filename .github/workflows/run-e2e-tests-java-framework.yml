@@ -154,11 +154,12 @@ jobs:
           path: ${{ env.report-directory }}
 
       - name: Set job status
+        id: set_status
         run: |
           if [[ "${{ job.status }}" == "success" ]]; then
-            echo "workflow-status=success" >> $GITHUB_ENV
+            echo "::set-output name=workflow-status::success"
           else
-            echo "workflow-status=failure" >> $GITHUB_ENV
+            echo "::set-output name=workflow-status::failure"
           fi
 
     outputs:

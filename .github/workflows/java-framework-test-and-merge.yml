@@ -22,8 +22,9 @@ jobs:
             foo-docker-cache-
 
   build-and-test-project:
-    name: Build and test phase
+    name: Build and test project
     needs: load-docker-cache
+    id: e2e-tests
     uses: jpsugg/the-internet-tests/.github/workflows/run-e2e-tests-java-framework.yml@develop
     with:
       environment: develop
@@ -34,10 +35,11 @@ jobs:
   create-pr:
     name: Create Pull Request
     needs: build-and-test-project
-    if: ${{ needs.build-and-test-project.outputs.workflow-status == 'success' }}
+    if: ${{ needs.e2e-tests.outputs.workflow-status == 'success' }}
     runs-on: ubuntu-latest
     steps:
       - name: pull-request-action
+        id: pr
         uses: vsoch/pull-request-action@master
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -46,13 +48,20 @@ jobs:
           PULL_REQUEST_FROM_BRANCH: "develop"
           PULL_REQUEST_TITLE: "Post-testing automated PR"
       - name: Finish PR creation
-        run: echo "PR created successfully"
-        if: ${{ success() }}
-      - if: ${{ env.WORKFLOW_CONCLUSION == 'failure' }}
+        if: ${{ steps.pr.outputs.result == 'Created PR' }}
+        run: |
+          echo "PR created successfully"
+          echo "::set-output name=workflow-status::success"
+        id: pr_status
+      - if: ${{ steps.pr.outputs.result != 'Created PR' }}
         name: Failed to create PR
         run: |
           echo Failed to create the PR
-          exit 1
+          echo "::set-output name=workflow-status::failure"
+        id: pr_status
+
+    outputs:
+      workflow-status: ${{ steps.pr_status.outputs.workflow-status }}
 
   merge-pr:
     name: Deploy to staging
