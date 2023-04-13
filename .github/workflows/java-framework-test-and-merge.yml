@@ -28,8 +28,7 @@ jobs:
             --file docker-compose.yml \
             --target development \
             --tag my-image:latest \
-            --cache-from type=local,src=/tmp/.build-cache \
-            --cache-dir /tmp/.build-cache \
+            --mount type=cache,src=/tmp/.build-cache,target=/var/cache/docker \
             .
       - name: Docker Layer Caching - Push
         uses: docker/build-push-action@v2
