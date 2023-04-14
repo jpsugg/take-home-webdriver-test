@@ -36,6 +36,8 @@ jobs:
     needs: build-and-test-project
     if: ${{ needs.build-and-test-project.outputs.workflow-status == 'success' }}
     runs-on: ubuntu-latest
+    outputs:
+      workflow-status: ${{ steps.pr_success.outputs.workflow-status || steps.pr_failure.outputs.workflow-status }}
     steps:
       - name: pull-request-action
         uses: vsoch/pull-request-action@master
@@ -50,17 +52,14 @@ jobs:
         if: ${{ steps.pr.outputs.result == 'Created PR' }}
         run: |
           echo "PR created successfully"
-          echo "::set-output name=workflow-status::success"
+          echo "workflow-status=success" >> $GITHUB_OUTPUT
         id: pr_success
       - if: ${{ steps.pr.outputs.result != 'Created PR' }}
         name: Failed to create PR
         run: |
           echo Failed to create the PR
-          echo "::set-output name=workflow-status::failure"
+          echo "workflow-status=failure" >> $GITHUB_OUTPUT
         id: pr_failure
-
-    outputs:
-      workflow-status: ${{ steps.pr_success.outputs.workflow-status || steps.pr_failure.outputs.workflow-status }}
 
   merge-pr:
     name: Deploy to staging
@@ -85,7 +84,8 @@ jobs:
           pr_number=$(gh pr list --base staging --search "author:github-actions[bot]" --json number -q ".data[0].number")
           pr_info=$(gh pr view $pr_number --json state)
           pr_merged=$(echo "$pr_info" | jq -r '.state.merged')
-          echo "::set-output name=merged::${pr_merged}"
+#          echo "::set-output name=merged::${pr_merged}"
+          echo "merged=${pr_merged}" >> $GITHUB_OUTPUT
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Automated PR merge success
