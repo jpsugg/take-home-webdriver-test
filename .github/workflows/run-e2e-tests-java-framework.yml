@@ -145,9 +145,9 @@ jobs:
         id: set_status
         run: |
           if [[ "${{ job.status }}" == "success" ]]; then
-            echo "::set-output name=workflow-status::success"
+            echo "workflow-status=success" >> $GITHUB_OUTPUT
           else
-            echo "::set-output name=workflow-status::failure"
+            echo "workflow-status=failure" >> $GITHUB_OUTPUT
           fi
     outputs:
       workflow-status: ${{ steps.set_status.outputs.workflow-status }}
