@@ -13,8 +13,8 @@ jobs:
     runs-on: ubuntu-latest
     name: Set up the docker layers cache
     steps:
-      - name: Cache Docker layers
-        uses: satackey/action-docker-layer-caching@v0.0.11
+      - name: Docker Layer Caching2
+        uses: jpribyl/action-docker-layer-caching@v0.1.1
         continue-on-error: true
         with:
           key: services-docker-cache-{hash}
@@ -22,34 +22,26 @@ jobs:
             foo-docker-cache-
 
   build-and-test-project:
-    name: Build and test phase
+    name: Build and test project
     needs: load-docker-cache
-    uses: jpsugg/the-internet-tests/.github/workflows/java-framework-run-e2e-tests.yml@develop
+    uses: ./.github/workflows/run-e2e-tests-java-framework.yml
     with:
-      target-environment: staging
-      source-branch: develop
+      environment: develop
+      branch: develop
     secrets:
-      inherit
+      github-token: ${{ secrets.GITHUB_TOKEN }}
 
-  build-and-test-project-validation:
-    name: Validate build and test success
-    needs: build-and-test-project
-    runs-on: ubuntu-latest
-    steps:
-      - name: Build and test success
-        if: ${{ needs.build-and-test-project.outputs.workflow-status != 'success' }}
-        run: |
-          echo Build and test phase failed
-          exit 1
-  
   create-pr:
     name: Create Pull Request
     needs: build-and-test-project
-    if: needs.build-and-test-project.outputs.workflow-status == 'success'
+    if: ${{ needs.build-and-test-project.outputs.workflow-status == 'success' }}
     runs-on: ubuntu-latest
+    outputs:
+      workflow-status: ${{ steps.pr_success.outputs.workflow-status || steps.pr_failure.outputs.workflow-status }}
     steps:
       - name: pull-request-action
         uses: vsoch/pull-request-action@master
+        id: pr
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           BRANCH_PREFIX: ""
@@ -57,19 +49,23 @@ jobs:
           PULL_REQUEST_FROM_BRANCH: "develop"
           PULL_REQUEST_TITLE: "Post-testing automated PR"
       - name: Finish PR creation
-        run: echo "PR created successfully"
-        if: ${{ success() }}
-      - if: ${{ env.WORKFLOW_CONCLUSION == 'failure' }}
+        if: ${{ steps.pr.outputs.result == 'Created PR' }}
+        run: |
+          echo "PR created successfully"
+          echo "workflow-status=success" >> $GITHUB_OUTPUT
+        id: pr_success
+      - if: ${{ steps.pr.outputs.result != 'Created PR' }}
         name: Failed to create PR
         run: |
           echo Failed to create the PR
-          exit 1
+          echo "workflow-status=failure" >> $GITHUB_OUTPUT
+        id: pr_failure
 
   merge-pr:
     name: Deploy to staging
     needs: create-pr
-    if: needs.create-pr.outputs.workflow-status == 'success'
-    uses: jpsugg/the-internet-tests/.github/workflows/merge-develop-into-staging.yaml@develop
+    if: ${{ needs.create-pr.outputs.workflow-status == 'success' }}
+    uses: ./.github/workflows/merge-develop-into-staging.yaml
     with:
       target-environment: staging
     secrets:
@@ -77,11 +73,22 @@ jobs:
 
   merge-pr-validation:
     name: Validate deploy success
-    needs: merge-pr
+    needs: [ create-pr, merge-pr ]
+    if: ${{ needs.merge-pr.outputs.workflow-status == 'success' }}
     runs-on: ubuntu-latest
     steps:
+      - name: Check if merged
+        id: check_merge_status
+        run: |
+          echo "Checking if the PR was merged successfully..."
+          pr_number=$(gh pr list --base staging --search "author:github-actions[bot]" --json number -q ".data[0].number")
+          pr_info=$(gh pr view $pr_number --json state)
+          pr_merged=$(echo "$pr_info" | jq -r '.state.merged')
+          echo "merged=${pr_merged}" >> $GITHUB_OUTPUT
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Automated PR merge success
-        if: ${{ needs.merge-pr.outputs.workflow-status != 'success' }}
+        if: ${{ steps.check_merge_status.outputs.merged != 'true' }}
         run: |
           echo Deployment phase failed
           exit 1

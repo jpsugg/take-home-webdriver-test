@@ -60,7 +60,7 @@
     </dependencies>
     <profiles>
         <profile>
-            <id>Staging</id>
+            <id>staging</id>
             <build>
                 <defaultGoal>install</defaultGoal>
                 <testResources>
