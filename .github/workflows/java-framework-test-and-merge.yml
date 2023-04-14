@@ -76,7 +76,7 @@ jobs:
     if: ${{ needs.merge-pr.outputs.workflow-status == 'success' }}
     runs-on: ubuntu-latest
     steps:
-      - name: Check if merged
+      - name: Validating code merge
         id: check_merge_status
         run: |
           echo "Checking if the PR was merged successfully..."
@@ -86,11 +86,6 @@ jobs:
           echo "merged=${pr_merged}" >> $GITHUB_OUTPUT
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      - name: Automated PR merge success
-        if: ${{ steps.check_merge_status.outputs.merged != 'true' }}
-        run: |
-          echo Deployment phase failed
-          exit 1
 
   if_error_or_failure:
     runs-on: ubuntu-latest

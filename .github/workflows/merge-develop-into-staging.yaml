@@ -26,7 +26,7 @@ jobs:
     steps:
       - name: Post-testing automated PR merge
         id: merge-action
-        uses: ridedott/merge-me-action@v2
+        uses: ridedott/merge-me-action@v2.10.44
         with:
           GITHUB_TOKEN: ${{ secrets.github-token }}
       - name: Set job status
@@ -34,7 +34,6 @@ jobs:
         run: |
           if [[ "${{ steps.merge-action.outcome }}" == "success" ]]; then
             echo "workflow-status=success" >> $GITHUB_OUTPUT
-            echo "PR Merged"
           else
             echo "workflow-status=failure" >> $GITHUB_OUTPUT
             echo "Won't merge, merge action failed"
