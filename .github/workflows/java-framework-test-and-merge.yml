@@ -74,7 +74,7 @@ jobs:
   merge-pr-validation:
     name: Validate deploy success
     needs: [ create-pr, merge-pr ]
-    if: ${{ needs.create-pr.outputs.workflow-status == 'success' }}
+    if: ${{ needs.merge-pr.outputs.workflow-status == 'success' }}
     runs-on: ubuntu-latest
     steps:
       - name: Check if merged
@@ -84,7 +84,6 @@ jobs:
           pr_number=$(gh pr list --base staging --search "author:github-actions[bot]" --json number -q ".data[0].number")
           pr_info=$(gh pr view $pr_number --json state)
           pr_merged=$(echo "$pr_info" | jq -r '.state.merged')
-#          echo "::set-output name=merged::${pr_merged}"
           echo "merged=${pr_merged}" >> $GITHUB_OUTPUT
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
