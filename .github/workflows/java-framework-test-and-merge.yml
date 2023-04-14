@@ -37,7 +37,7 @@ jobs:
     if: ${{ needs.build-and-test-project.outputs.workflow-status == 'success' }}
     runs-on: ubuntu-latest
     outputs:
-      workflow-status: ${{ steps.pr_success.outputs.workflow-status || steps.pr_failure.outputs.workflow-status }}
+      workflow-status: ${{ steps.set_status.outputs.workflow-status || steps.set_status.outputs.workflow-status }}
     steps:
       - name: pull-request-action
         uses: vsoch/pull-request-action@master
@@ -52,7 +52,7 @@ jobs:
       - name: Set job status
         id: set_status
         run: |
-          if [[ ${{ steps.pr.outputs.pull_request_number }} ]]; then
+          if [[ ${{ steps.pr.env.PULL_REQUEST_STATE == "open" || env.PULL_REQUEST_STATE == "open"}} ]]; then
             echo "PR created successfully"
             echo "workflow-status=success" >> $GITHUB_OUTPUT
           else
