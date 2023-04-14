@@ -48,18 +48,17 @@ jobs:
           PULL_REQUEST_BRANCH: "staging"
           PULL_REQUEST_FROM_BRANCH: "develop"
           PULL_REQUEST_TITLE: "Post-testing automated PR"
-      - name: Finish PR creation
-        if: ${{ steps.pr.outputs.pull_request_number }}
+
+      - name: Set job status
+        id: set_status
         run: |
-          echo "PR created successfully"
-          echo "workflow-status=success" >> $GITHUB_OUTPUT
-        id: pr_success
-      - if: ${{ !steps.pr.outputs.pull_request_number }}
-        name: Failed to create PR
-        run: |
-          echo Failed to create the PR
-          echo "workflow-status=failure" >> $GITHUB_OUTPUT
-        id: pr_failure
+          if [[ ${{ steps.pr.outputs.pull_request_number }} ]]; then
+            echo "PR created successfully"
+            echo "workflow-status=success" >> $GITHUB_OUTPUT
+          else
+            echo "Failed creating PR"
+            echo "workflow-status=failure" >> $GITHUB_OUTPUT
+          fi
 
   merge-pr:
     name: Deploy to staging
