@@ -75,11 +75,11 @@ jobs:
           key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
           restore-keys: ${{ runner.os }}-m2
 
-      - name: Build and test
-        uses: coactions/setup-xvfb@v1
-        with:
-          run: mvn clean install -DsuiteXmlFile=${{ env.suiteXmlFile }} -Djava.awt.headless=${{ env.headlessBrowser }}
-          working-directory: ${{ env.working-directory }}
+      - name: Build and run tests
+        run: mvn clean install -DsuiteXmlFile=${{ env.suiteXmlFile }} -Djava.awt.headless=${{ env.headlessBrowser }}
+        env:
+          BROWSER: ${{ env.browser }}
+        working-directory: ${{ env.working-directory }}
 
       - name: Archive test results
         if: always()
