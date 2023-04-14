@@ -1,4 +1,4 @@
-name: Merge code after successful testing
+name: Merge develop to staging after tests pass
 
 on:
   workflow_call:

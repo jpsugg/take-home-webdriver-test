@@ -1,4 +1,4 @@
-name: Test develop code and create PR to staging
+name: Dev code test & PR to staging
 
 on:
   push:
@@ -40,7 +40,7 @@ jobs:
       workflow-status: ${{ steps.set_status.outputs.workflow-status || steps.set_status.outputs.workflow-status }}
     steps:
       - name: pull-request-action
-        uses: vsoch/pull-request-action@master
+        uses: vsoch/pull-request-action@1.0.24
         id: pr
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
