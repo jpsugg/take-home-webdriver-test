@@ -49,12 +49,12 @@ jobs:
           PULL_REQUEST_FROM_BRANCH: "develop"
           PULL_REQUEST_TITLE: "Post-testing automated PR"
       - name: Finish PR creation
-        if: ${{ steps.pr.outputs.result == 'Created PR' }}
+        if: ${{ steps.pr.outputs.pull_request_number }}
         run: |
           echo "PR created successfully"
           echo "workflow-status=success" >> $GITHUB_OUTPUT
         id: pr_success
-      - if: ${{ steps.pr.outputs.result != 'Created PR' }}
+      - if: ${{ !steps.pr.outputs.pull_request_number }}
         name: Failed to create PR
         run: |
           echo Failed to create the PR
