@@ -51,6 +51,9 @@ on:
 jobs:
   build-and-test:
     runs-on: ubuntu-latest
+    outputs:
+      workflow-status: ${{ steps.set_status.outputs.workflow-status }}
+
     concurrency:
       group: ${{ github.workflow }}-${{ github.ref }}
       cancel-in-progress: true
@@ -149,5 +152,3 @@ jobs:
           else
             echo "workflow-status=failure" >> $GITHUB_OUTPUT
           fi
-    outputs:
-      workflow-status: ${{ steps.set_status.outputs.workflow-status }}
