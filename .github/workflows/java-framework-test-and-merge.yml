@@ -34,7 +34,7 @@ jobs:
   create-pr:
     name: Create Pull Request
     needs: build-and-test-project
-#    if: ${{ needs.build-and-test-project.outputs.workflow-status == 'success' }}
+    if: ${{ github.event.build-and-test-project.conclusion == 'success' }}
     runs-on: ubuntu-latest
     steps:
       - name: pull-request-action
