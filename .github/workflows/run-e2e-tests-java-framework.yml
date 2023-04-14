@@ -38,6 +38,10 @@ on:
       branch:  # Source branch
         required: true
         type: string
+    outputs:
+      workflow-status:
+        description: The final status of this workflow
+        value: ${{ jobs.build-and-test.outputs.workflow-status }}
     secrets:
       github-token:
         required: true
