@@ -1,4 +1,4 @@
-name: Test develop code and create PR to staging
+name: Dev code test & PR to staging
 
 on:
   push:
@@ -40,7 +40,7 @@ jobs:
       workflow-status: ${{ steps.set_status.outputs.workflow-status || steps.set_status.outputs.workflow-status }}
     steps:
       - name: pull-request-action
-        uses: vsoch/pull-request-action@master
+        uses: vsoch/pull-request-action@1.0.24
         id: pr
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -73,24 +73,35 @@ jobs:
   merge-pr-validation:
     name: Validate deploy success
     needs: [ create-pr, merge-pr ]
-    if: ${{ needs.merge-pr.outputs.workflow-status == 'success' }}
+#    if: ${{ needs.merge-pr.outputs.workflow-status == 'success' }}
     runs-on: ubuntu-latest
     steps:
-      - name: Check if merged
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+#          ref: 'staging'
+
+      - name: Install jq
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y jq
+
+      - name: Check if PR was merged into staging
         id: check_merge_status
         run: |
           echo "Checking if the PR was merged successfully..."
-          pr_number=$(gh pr list --base staging --search "author:github-actions[bot]" --json number -q ".data[0].number")
-          pr_info=$(gh pr view $pr_number --json state)
-          pr_merged=$(echo "$pr_info" | jq -r '.state.merged')
-          echo "merged=${pr_merged}" >> $GITHUB_OUTPUT
+          pr_number=$(curl -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" https://api.github.com/repos/${{ github.repository }}/pulls?state=closed\&base=staging | jq '.[0].number')
+          pr_merged=$(curl -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" https://api.github.com/repos/${{ github.repository }}/pulls/$pr_number/merge | jq -r '.merged')
+          if [ "$pr_merged" == "true" ]; then
+          echo "The PR #$pr_number was merged successfully into the staging branch."
+          else
+          echo "The PR #$pr_number was NOT merged into the staging branch."
+          exit 1
+          fi
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      - name: Automated PR merge success
-        if: ${{ steps.check_merge_status.outputs.merged != 'true' }}
-        run: |
-          echo Deployment phase failed
-          exit 1
 
   if_error_or_failure:
     runs-on: ubuntu-latest

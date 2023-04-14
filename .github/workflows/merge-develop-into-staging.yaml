@@ -1,4 +1,4 @@
-name: Merge code after successful testing
+name: Merge develop to staging after tests pass
 
 on:
   workflow_call:
@@ -21,22 +21,22 @@ jobs:
       fail-fast: true
     runs-on: ubuntu-latest
     outputs:
-      job-status: ${{ steps.save-status.outputs.job-status }}
+      workflow-status: ${{ steps.set_status.outputs.workflow-status }}
     environment: ${{ inputs.target-environment }}
     steps:
-      - if: ${{ github.event.workflow_call.conclusion == 'success' }}
-        name: Post-testing automated PR merge
+      - name: Post-testing automated PR merge
         id: merge-action
-        uses: ridedott/merge-me-action@v2
+        uses: ridedott/merge-me-action@v2.10.44
         with:
           GITHUB_TOKEN: ${{ secrets.github-token }}
-      - if: ${{ github.event.workflow_call.conclusion == 'success' }}
-        id: save-status
-        run: echo "job-status=${{ steps.merge-action.conclusion }}" >> $GITHUB_OUTPUT
-      - if: ${{ github.event.workflow_call.conclusion == 'failure' || github.event.workflow_call.conclusion == 'error' }}
-        name: "Won't merge; build-and-test workflow failed"
-        run: exit 1
-      - if: ${{ github.event.workflow_call.conclusion != 'success' }}
-        name: "Won't merge, Main workflow failed"
-        run: exit 1
+      - name: Set job status
+        id: set_status
+        run: |
+          if [[ "${{ steps.merge-action.outcome }}" == "success" ]]; then
+            echo "workflow-status=success" >> $GITHUB_OUTPUT
+          else
+            echo "workflow-status=failure" >> $GITHUB_OUTPUT
+            echo "Won't merge, merge action failed"
+            exit 1
+          fi
     timeout-minutes: 5
