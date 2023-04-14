@@ -73,7 +73,7 @@ jobs:
   merge-pr-validation:
     name: Validate deploy success
     needs: [ create-pr, merge-pr ]
-    if: ${{ needs.merge-pr.outputs.workflow-status == 'success' }}
+#    if: ${{ needs.merge-pr.outputs.workflow-status == 'success' }}
     runs-on: ubuntu-latest
     steps:
       - name: Validating code merge
