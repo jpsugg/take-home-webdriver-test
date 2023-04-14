@@ -79,10 +79,10 @@ jobs:
         uses: coactions/setup-xvfb@v1
         with:
           run: |
-            cd ${{ env.working-directory }} && mvn clean install -DsuiteXmlFile=${{ env.suiteXmlFile }} -Djava.awt.headless=${{ env.headlessBrowser }}
-            env:
-              BROWSER: ${{ env.browser }}
-            working-directory: ${{ env.working-directory }}
+            mvn clean install -DsuiteXmlFile=${{ env.suiteXmlFile }} -Djava.awt.headless=${{ env.headlessBrowser }}
+          env:
+            BROWSER: ${{ env.browser }}
+          working-directory: ${{ env.working-directory }}
 
       - name: Archive test results
         if: always()
