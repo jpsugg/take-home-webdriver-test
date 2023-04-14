@@ -78,8 +78,7 @@ jobs:
       - name: Build and test
         uses: coactions/setup-xvfb@v1
         with:
-          run: |
-            mvn clean install -DsuiteXmlFile=${{ env.suiteXmlFile }} -Djava.awt.headless=${{ env.headlessBrowser }}
+          run: mvn clean install -DsuiteXmlFile=${{ env.suiteXmlFile }} -Djava.awt.headless=${{ env.headlessBrowser }}
           env:
             BROWSER: ${{ env.browser }}
           working-directory: ${{ env.working-directory }}
