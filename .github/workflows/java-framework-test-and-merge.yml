@@ -77,10 +77,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Repository
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
         with:
           fetch-depth: 0
           token: ${{ secrets.GITHUB_TOKEN }}
+#          ref: 'staging'
 
       - name: Check if PR was merged into staging
         id: check_merge_status
@@ -89,7 +90,12 @@ jobs:
           pr_number=$(gh pr list --base staging --search "author:github-actions[bot]" --json number -q ".data[0].number")
           pr_info=$(gh pr view $pr_number --json state)
           pr_merged=$(echo "$pr_info" | jq -r '.state.merged')
-          echo "merged=${pr_merged}" >> $GITHUB_OUTPUT
+          if [ "$pr_merged" == "true" ]; then
+          echo "The PR #$pr_number was merged successfully into the staging branch."
+          else
+          echo "The PR #$pr_number was NOT merged into the staging branch."
+          exit 1
+          fi
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
