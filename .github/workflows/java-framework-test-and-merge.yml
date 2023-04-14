@@ -83,13 +83,17 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
 #          ref: 'staging'
 
+      - name: Install jq
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y jq
+
       - name: Check if PR was merged into staging
         id: check_merge_status
         run: |
           echo "Checking if the PR was merged successfully..."
-          pr_number=$(gh pr list --base staging --search "author:github-actions[bot]" --json number -q ".data[0].number")
-          pr_info=$(gh pr view $pr_number --json state)
-          pr_merged=$(echo "$pr_info" | jq -r '.state.merged')
+          pr_number=$(curl -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" https://api.github.com/repos/${{ github.repository }}/pulls?state=closed\&base=staging | jq '.[0].number')
+          pr_merged=$(curl -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" https://api.github.com/repos/${{ github.repository }}/pulls/$pr_number/merge | jq -r '.merged')
           if [ "$pr_merged" == "true" ]; then
           echo "The PR #$pr_number was merged successfully into the staging branch."
           else
