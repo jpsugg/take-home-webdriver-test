@@ -52,7 +52,7 @@ jobs:
       - name: Set job status
         id: set_status
         run: |
-          if [[ ${{ steps.pr.env.PULL_REQUEST_STATE }} == "open" || ${{ env.PULL_REQUEST_STATE }} == "open" ]]; then
+          if [[ ${{ steps.pr.outcome }} == "success" ]]; then
             echo "PR created successfully"
             echo "workflow-status=success" >> $GITHUB_OUTPUT
           else
