@@ -1,4 +1,4 @@
-name: E2E java-framework UI tests
+name: java-framework E2E tests
 
 env:
   LOG_LEVEL: debug

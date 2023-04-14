@@ -76,7 +76,13 @@ jobs:
 #    if: ${{ needs.merge-pr.outputs.workflow-status == 'success' }}
     runs-on: ubuntu-latest
     steps:
-      - name: Validating code merge
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Check if PR was merged into staging
         id: check_merge_status
         run: |
           echo "Checking if the PR was merged successfully..."
