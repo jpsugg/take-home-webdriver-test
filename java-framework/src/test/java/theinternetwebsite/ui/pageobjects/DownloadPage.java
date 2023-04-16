@@ -1,6 +1,8 @@
 package theinternetwebsite.ui.pageobjects;
 
 import static theinternetwebsite.ui.UITest.*;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 import theinternetwebsite.ui.UITest;
 import org.jetbrains.annotations.NotNull;
 import org.openqa.selenium.WebElement;
@@ -15,6 +17,7 @@ import java.nio.channels.FileChannel;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.time.Duration;
 
 public class DownloadPage {
 
@@ -48,14 +51,22 @@ public class DownloadPage {
         long bytes=-1, newBytes=0;
 
         // Case: There's no reference file to compare the file against to
-        if (!pathToReferenceFile.toAbsolutePath().toFile().exists()) { return false; }
+        if (!pathToReferenceFile.toAbsolutePath().toFile().exists()) {
+            System.out.println("Error: Reference file does not exist.");
+            return false;
+        }
 
         // Case: The file to be downloaded or a .crdownload from it already exist in the download folder - delete it
         try { Files.deleteIfExists(expectedFile.toPath()); Files.deleteIfExists(expectedTmpFile.toPath()); }
-        catch (IOException e) { System.out.println(e); }
+        catch (IOException e) { System.out.println("Error: IOException while deleting existing files: " + e); }
 
         // Start downloading
-        downloadLink.click();
+        WebDriverWait wait = new WebDriverWait(this.caller.getDriver(), Duration.ofSeconds(10));
+        wait.until(ExpectedConditions.elementToBeClickable(downloadLink));
+
+        // Trick for download to start on headless mode too
+        this.caller.downloadFileHeadless(downloadHref, expectedFile.toString());
+        //downloadLink.click();
 
         // Give it some buffer time...
         try { Thread.sleep(5000); } catch (InterruptedException e) { System.out.println(e); }
@@ -65,17 +76,18 @@ public class DownloadPage {
             try { newBytes = Files.size(tempDownloadedFilePath); } catch (IOException e) { System.out.println(e); }
             bytes = newBytes;
             // Check again in 1 sec...
-            try { Thread.sleep(1000); } catch (InterruptedException e) { System.out.println(e); }
+            try { Thread.sleep(1000); } catch (InterruptedException e) { System.out.println("Error: InterruptedException while waiting for the download to complete: " + e); }
         }
 
         // Case: The file arrived
         if (expectedFile.exists()) {
             try {
                 return compareByMemoryMappedFiles(expectedDownloadedFilePath.toAbsolutePath(), pathToReferenceFile.toAbsolutePath());
-            } catch (IOException e) { System.out.println(e); }
+            } catch (IOException e) { System.out.println("Error: IOException while comparing files: " + e); }
         }
 
         // None of the above - download failed
+        System.out.println("Error: Download failed. File does not exist.");
         return false;
     }
 

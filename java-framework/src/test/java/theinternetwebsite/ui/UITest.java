@@ -19,6 +19,12 @@ import org.openqa.selenium.remote.LocalFileDetector;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.support.ui.ExpectedConditions;
+import java.io.BufferedInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
+import java.net.URLConnection;
 
 import static io.github.bonigarcia.wdm.WebDriverManager.chromedriver;
 import static org.openqa.selenium.support.ui.ExpectedConditions.visibilityOf;
@@ -33,11 +39,11 @@ public class UITest {
     private static final String pageFooterXpath = "//*[@id='page-footer']";
 
     public UITest() { }
-
     @Parameters({"browser", "browserVersion", "headlessBrowser", "baseUrl", "baseUrlSG", "seleniumGridUrl", "useSeleniumGrid"})
     @BeforeTest
-        public void setUp(@Optional(DEFAULT_BROWSER) String browser, @Optional("") String browserVersion, @Optional(DEFAULT_BROWSER_HEADLESS) String headless, @Optional("") String baseUrl, @Optional("") String baseUrlSG, @Optional("") String remoteUrl, @Optional("") @NotNull String useSeleniumGrid) {
+    public void setUp( String browser, String browserVersion, String headless, String baseUrl, String baseUrlSG, String remoteUrl, @NotNull String useSeleniumGrid) {
         if (useSeleniumGrid.equals("true")) { this.setBaseUrl(baseUrlSG); } else { this.setBaseUrl(baseUrl); }
+
         browser = browser.toLowerCase();
         this.setCurrentBrowser(browser);
 
@@ -68,9 +74,9 @@ public class UITest {
         Map<String, Object> chromeExpOptions = new HashMap<>();
 
         // Local session - Set experimental options
-        if (!useSeleniumGrid.equals("true")) {
-            chromeExpOptions.put("download.default_directory", downloadsFolder);
-        }
+        //if (!useSeleniumGrid.equals("true")) {
+        chromeExpOptions.put("download.default_directory", downloadsFolder);
+        //}
         chromeExpOptions.put("download.prompt_for_download", false);
         chromeExpOptions.put("profile.default_content_settings.popups", 0); //
 
@@ -79,6 +85,7 @@ public class UITest {
         // Common + hacky options
         chromeOptions.addArguments("download.prompt_for_download", "false");
         chromeOptions.addArguments("safebrowsing.enabled", "false");
+        chromeOptions.addArguments("--remote-allow-origins=*");
         chromeOptions.addArguments("--ignore-certificate-errors");
         chromeOptions.addArguments("--disable-gpu");
         chromeOptions.addArguments("--disable-web-security");
@@ -97,8 +104,9 @@ public class UITest {
         capabilities.setCapability("se:timeZone", "US/Pacific");
         capabilities.setCapability("se:screenResolution", "1920x1080");
 
-        WebDriverManager.chromedriver().browserVersionDetectionCommand(" ");
-        WebDriverManager.chromedriver().forceDownload();
+        WebDriverManager.chromedriver().cachePath("~/.m2/repository/webdriver");
+        //WebDriverManager.chromedriver().browserVersionDetectionCommand(" ");
+        WebDriverManager.chromedriver().driverVersion("100.0");
         // Use headless only on local runs. When using selenium grid, download fails in Chrome because of a bug.
         if (headless.equals("true") && useSeleniumGrid.equals("false")) {
             chromeOptions.addArguments("--headless", "--window-size=1920,1200", "--no-sandbox"); }
@@ -109,7 +117,7 @@ public class UITest {
             WebDriverManager.chromedriver().dockerNetwork("theinternet");
 
             try {
-                this.driver = (RemoteWebDriver) WebDriverManager.chromedriver().remoteAddress(new URL(remoteUrl)).capabilities(chromeOptions).create();
+                this.driver = (RemoteWebDriver) WebDriverManager.chromedriver().remoteAddress(new URL(remoteUrl)).capabilities(capabilities).create();
             } catch (MalformedURLException e) {
                 throw new RuntimeException(e);
             }
@@ -225,5 +233,25 @@ public class UITest {
 
     public void setCurrentBrowser(String currentBrowser) {
         this.currentBrowser = currentBrowser;
+    }
+
+    public void downloadFileHeadless(String fileUrl, String localFilePath) {
+        try {
+            URL url = new URL(fileUrl);
+            URLConnection connection = url.openConnection();
+            InputStream inputStream = new BufferedInputStream(connection.getInputStream());
+            FileOutputStream outputStream = new FileOutputStream(localFilePath);
+
+            byte[] buffer = new byte[1024];
+            int bytesRead;
+            while ((bytesRead = inputStream.read(buffer, 0, 1024)) != -1) {
+                outputStream.write(buffer, 0, bytesRead);
+            }
+
+            outputStream.close();
+            inputStream.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }
