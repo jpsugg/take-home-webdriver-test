@@ -1,4 +1,4 @@
-![Test and Merge](https://github.com/jsugg/the-internet-tests/.github/workflows/java-framework-test-and-merge.yml/badge.svg)
+[![Dev code test & PR to staging](https://github.com/jsugg/the-internet-tests/actions/workflows/java-framework-test-and-merge.yml/badge.svg)](https://github.com/jsugg/the-internet-tests/actions/workflows/java-framework-test-and-merge.yml)
 
 # The-Internet app testing
 
