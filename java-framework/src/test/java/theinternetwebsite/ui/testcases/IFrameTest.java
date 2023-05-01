@@ -13,7 +13,7 @@ public class IFrameTest extends UITest {
     @Test(description = "Switches between contexts and performs operations")
     public void testContextSwitching() {
         IFramePage iFramePage = new IFramePage(this);
-        String textBucket = "Test in progress...Your content goes here.", aux;
+        String textBucket = "Test in progress...Your content goes here.Your content goes here.", aux;
 
         // Validate page loaded
         Assert.assertTrue(iFramePage.isPageOpen(), "Page not open");

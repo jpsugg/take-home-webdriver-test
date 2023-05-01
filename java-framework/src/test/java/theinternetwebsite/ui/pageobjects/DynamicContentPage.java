@@ -15,11 +15,11 @@ public class DynamicContentPage {
 
     @FindBy(how = How.XPATH, using = "//h3[normalize-space()='Dynamic Content']")
     public WebElement pageTitle;
-    @FindBy(how = How.XPATH, using = "//*[@href and text()= 'click here']")
+    @FindBy(how = How.CSS, using = "[href][text()='click here']")
     public WebElement clickHereLink;
-    @FindBy(how = How.XPATH, using = "//*[@class='large-10 columns']")
+    @FindBy(how = How.CSS, using = ".large-10.columns")
     public WebElement dynamicText;
-    @FindBy(how = How.XPATH, using = "//*[@class='large-2 columns']")
+    @FindBy(how = How.CSS, using = ".large-2.columns")
     public WebElement dynamicImages;
     private final UITest caller;
     private final String pageUrl;

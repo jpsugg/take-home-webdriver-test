@@ -14,7 +14,7 @@ SG_ACTION=''
 ##############
 # Options
 DEFAULT_LOG_LEVEL="INFO"
-TEST_SUITE_XML_FILE="regression.xml"
+TEST_SUITE_XML_FILE="src/test/resources/regression.xml"
 WD_REMOTE="false"
 TEST_RUNNER_ADDR="http://192.168.65.2:7080"
 SELENIUM_GRID_ADDRESS="http://0.0.0.0:4444/wd/hub"
