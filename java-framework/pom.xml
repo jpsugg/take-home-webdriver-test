@@ -47,7 +47,7 @@
         <dependency>
             <groupId>org.seleniumhq.selenium</groupId>
             <artifactId>selenium-chrome-driver</artifactId>
-            <version>4.8.1</version>
+            <version>4.8.3</version>
         </dependency>
         <dependency>
             <groupId>org.seleniumhq.selenium</groupId>
@@ -106,7 +106,7 @@
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-surefire-plugin</artifactId>
-                        <version>3.0.0-M7</version>
+                        <version>3.0.0</version>
                         <executions>
                             <execution>
                                 <phase>test</phase>
@@ -155,7 +155,7 @@
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-surefire-plugin</artifactId>
-                        <version>3.0.0-M7</version>
+                        <version>3.0.0</version>
                         <executions>
                             <execution>
                                 <phase>test</phase>
@@ -207,7 +207,7 @@
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-surefire-plugin</artifactId>
-                        <version>3.0.0-M7</version>
+                        <version>3.0.0</version>
                         <executions>
                             <execution>
                                 <phase>test</phase>
@@ -256,7 +256,7 @@
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-surefire-plugin</artifactId>
-                        <version>3.0.0-M7</version>
+                        <version>3.0.0</version>
                         <executions>
                             <execution>
                                 <phase>test</phase>
@@ -289,7 +289,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-report-plugin</artifactId>
-                <version>3.0.0-M7</version>
+                <version>3.0.0</version>
             </plugin>
         </plugins>
     </reporting>
