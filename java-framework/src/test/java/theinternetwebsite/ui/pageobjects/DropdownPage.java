@@ -1,18 +1,19 @@
+// DropdownPage.java
 package theinternetwebsite.ui.pageobjects;
 
 import theinternetwebsite.ui.UITest;
+import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
-import org.openqa.selenium.support.How;
 import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.Select;
 import java.util.ArrayList;
 import java.util.List;
 
 public class DropdownPage {
-    @FindBy(how = How.XPATH, using = "//h3[normalize-space()='Dropdown List']")
+    @FindBy(css = "h3")
     public WebElement pageTitle;
-    @FindBy(how = How.XPATH, using = "//select")
+    @FindBy(tagName = "select")
     public WebElement dropdown;
     private final UITest caller;
     private final Select dropdwn;
@@ -22,11 +23,15 @@ public class DropdownPage {
     public DropdownPage(UITest caller) {
         this.caller = caller;
         this.pageUrl = this.caller.getBaseUrl() + "/dropdown";
-        this.caller.getDriver().get(this.pageUrl);
-        PageFactory.initElements(this.caller.getDriver(), this);
-        this.caller.pageFactoryInitWait(pageTitle);
-        this.dropdwn = new Select(this.dropdown);
-        this.dropdownOptions = this.dropdwn.getOptions();
+        try {
+            this.caller.getDriver().get(this.pageUrl);
+            PageFactory.initElements(this.caller.getDriver(), this);
+            this.caller.pageFactoryInitWait(pageTitle);
+            this.dropdwn = new Select(this.dropdown);
+            this.dropdownOptions = this.dropdwn.getOptions();
+        } catch (NoSuchElementException e) {
+            throw new RuntimeException("Could not initialize the DropdownPage: " + e.getMessage());
+        }
     }
 
     public Boolean isPageOpen() { return this.caller.isPageOpen(this.pageUrl, this.pageTitle); }

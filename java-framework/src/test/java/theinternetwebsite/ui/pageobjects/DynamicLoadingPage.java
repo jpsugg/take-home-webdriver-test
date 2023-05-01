@@ -1,6 +1,7 @@
 package theinternetwebsite.ui.pageobjects;
 
 import theinternetwebsite.ui.UITest;
+import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.How;
@@ -28,7 +29,13 @@ public class DynamicLoadingPage {
         this.caller.pageFactoryInitWait(pageTitle);
     }
 
-    public Boolean isPageOpen() { return this.caller.isPageOpen(this.pageUrl, this.pageTitle); }
+    public Boolean isPageOpen() {
+        try {
+            return this.caller.isPageOpen(this.pageUrl, this.pageTitle);
+        } catch (NoSuchElementException e) {
+            return false;
+        }
+    }
 
     public void startMessageRequest() {
         WebDriverWait wait = new WebDriverWait(caller.getDriver(), Duration.ofSeconds(30));
