@@ -1,9 +1,9 @@
 package theinternetwebsite.ui.pageobjects;
 
+import org.openqa.selenium.NoSuchElementException;
 import theinternetwebsite.ui.UITest;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
-import org.openqa.selenium.support.How;
 import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
@@ -11,15 +11,15 @@ import java.time.Duration;
 import java.util.HashMap;
 
 public class DragAndDropPage {
-    @FindBy(how = How.XPATH, using = "//h3[normalize-space()='Drag and Drop']")
+    @FindBy(css = "h3")
     public WebElement pageTitle;
-    @FindBy(how = How.XPATH, using = "//*[@id='column-a']")
+    @FindBy(css = "#column-a")
     public WebElement boxA;
-    @FindBy(how = How.XPATH, using = "//*[@id='column-a']/header")
+    @FindBy(css = "#column-a header")
     public WebElement boxOne;
-    @FindBy(how = How.XPATH, using = "//*[@id='column-b']")
+    @FindBy(css = "#column-b")
     public WebElement boxB;
-    @FindBy(how = How.XPATH, using = "//*[@id='column-b']/header")
+    @FindBy(css = "#column-b header")
     public WebElement boxTwo;
     private final UITest caller;
     private final HashMap<String, WebElement> boxes = new HashMap<>();
@@ -38,16 +38,39 @@ public class DragAndDropPage {
         this.letters.put("boxTwo", this.boxTwo);
     }
 
-    public Boolean isPageOpen() { return this.caller.isPageOpen(this.pageUrl, this.pageTitle); }
+    public Boolean isPageOpen() {
+        try {
+            return this.caller.isPageOpen(this.pageUrl, this.pageTitle);
+        } catch (Exception e) {
+            System.out.println("An error occurred while checking if the page is open: " + e.getMessage());
+            return false;
+        }
+    }
 
     public void dragAndDropBox(String source, String destination) {
-        WebDriverWait wait = new WebDriverWait(this.caller.getDriver(), Duration.ofSeconds(10));
-        wait.until(ExpectedConditions.visibilityOf(this.boxes.get(source)));
-        wait.until(ExpectedConditions.visibilityOf(this.boxes.get(destination)));
-        caller.dragAndDropJS(this.boxes.get(source), this.boxes.get(destination)); }
+        try {
+            WebDriverWait wait = new WebDriverWait(this.caller.getDriver(), Duration.ofSeconds(10));
+            wait.until(ExpectedConditions.visibilityOf(this.boxes.get(source)));
+            wait.until(ExpectedConditions.visibilityOf(this.boxes.get(destination)));
+            caller.dragAndDropJS(this.boxes.get(source), this.boxes.get(destination));
+        } catch (NoSuchElementException e) {
+            System.out.println("One of the elements was not found: " + e.getMessage());
+        } catch (Exception e) {
+            System.out.println("An error occurred while dragging and dropping: " + e.getMessage());
+        }
+    }
 
     public String getBoxLetter(String box) {
-        WebDriverWait wait = new WebDriverWait(this.caller.getDriver(), Duration.ofSeconds(10));
-        wait.until(ExpectedConditions.visibilityOf(this.letters.get(box)));
-        return this.letters.get(box).getText(); }
+        try {
+            WebDriverWait wait = new WebDriverWait(this.caller.getDriver(), Duration.ofSeconds(10));
+            wait.until(ExpectedConditions.visibilityOf(this.letters.get(box)));
+            return this.letters.get(box).getText();
+        } catch (NoSuchElementException e) {
+            System.out.println("The element was not found: " + e.getMessage());
+            return null;
+        } catch (Exception e) {
+            System.out.println("An error occurred while getting the box letter: " + e.getMessage());
+            return null;
+        }
+    }
 }

@@ -1,25 +1,36 @@
 package theinternetwebsite.ui.testcases;
 
 import org.testng.Assert;
+import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 import theinternetwebsite.ui.UITest;
 import theinternetwebsite.ui.pageobjects.DragAndDropPage;
 
 public class DragAndDropTest extends UITest {
 
+    private DragAndDropPage dragAndDropPage;
+    final private String boxOneLetter = "A";
+    final private String boxTwoLetter = "B";
+
     public DragAndDropTest() { }
+
+    @BeforeMethod
+    public void setup() {
+        try {
+            dragAndDropPage = new DragAndDropPage(this);
+            // Validate page loaded
+            Assert.assertTrue(dragAndDropPage.isPageOpen(), "Page not open");
+
+            // Validate initial settings
+            Assert.assertEquals(dragAndDropPage.getBoxLetter("boxOne"), boxOneLetter);
+            Assert.assertEquals(dragAndDropPage.getBoxLetter("boxTwo"), boxTwoLetter);
+        } catch (Exception e) {
+            Assert.fail("An error occurred during setup: " + e.getMessage());
+        }
+    }
 
     @Test(description="Drags box A over box B")
     public void dragLeftToRight() {
-        String boxOneLetter = "A", boxTwoLetter = "B";
-        DragAndDropPage dragAndDropPage = new DragAndDropPage(this);
-
-        // Validate page loaded
-        Assert.assertTrue(dragAndDropPage.isPageOpen(), "Page not open");
-
-        // Validate initial settings
-        Assert.assertEquals(dragAndDropPage.getBoxLetter("boxOne"), boxOneLetter);
-        Assert.assertEquals(dragAndDropPage.getBoxLetter("boxTwo"), boxTwoLetter);
 
         // Drag left box over right box
         dragAndDropPage.dragAndDropBox("boxA", "boxB");
@@ -31,16 +42,6 @@ public class DragAndDropTest extends UITest {
 
     @Test(description="Drags box B over box A")
     public void dragRightToLeft() {
-        String boxOneLetter = "A";
-        String boxTwoLetter = "B";
-        DragAndDropPage dragAndDropPage = new DragAndDropPage(this);
-
-        // Validate page loaded
-        Assert.assertTrue(dragAndDropPage.isPageOpen(), "Page not open");
-
-        // Validate initial settings
-        Assert.assertEquals(dragAndDropPage.getBoxLetter("boxOne"), boxOneLetter);
-        Assert.assertEquals(dragAndDropPage.getBoxLetter("boxTwo"), boxTwoLetter);
 
         // Drag left box over right box
         dragAndDropPage.dragAndDropBox("boxB", "boxA");
@@ -52,16 +53,6 @@ public class DragAndDropTest extends UITest {
 
     @Test(description="Drags box A over box B, then box B over box A")
     public void dragBothWays() {
-        String boxOneLetter = "A";
-        String boxTwoLetter = "B";
-        DragAndDropPage dragAndDropPage = new DragAndDropPage(this);
-
-        // Validate page loaded
-        Assert.assertTrue(dragAndDropPage.isPageOpen(), "Page not open");
-
-        // Validate initial settings
-        Assert.assertEquals(dragAndDropPage.getBoxLetter("boxOne"), boxOneLetter);
-        Assert.assertEquals(dragAndDropPage.getBoxLetter("boxTwo"), boxTwoLetter);
 
         // Drag left box over right box
         dragAndDropPage.dragAndDropBox("boxA", "boxB");

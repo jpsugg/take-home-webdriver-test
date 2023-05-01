@@ -3,15 +3,22 @@ package theinternetwebsite.ui.testcases;
 import theinternetwebsite.ui.UITest;
 import theinternetwebsite.ui.pageobjects.DynamicLoadingPage;
 import org.testng.Assert;
+import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 public class DynamicLoadingTest extends UITest {
 
+    private DynamicLoadingPage dynamicLoadingPage;
+
     public DynamicLoadingTest() { }
+
+    @BeforeMethod
+    public void setUp() {
+        dynamicLoadingPage = new DynamicLoadingPage(this);
+    }
 
     @Test(description="Start button loads a message")
     public void loadMessage() {
-        DynamicLoadingPage dynamicLoadingPage = new DynamicLoadingPage(this);
         String expectedMessage = "Hello World!";
         String actualMessage;
 
