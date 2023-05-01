@@ -1,27 +1,32 @@
+// DynamicContentTest.java
 package theinternetwebsite.ui.testcases;
 
 import java.util.Map;
 import java.util.HashMap;
 import org.testng.Assert;
+import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 import theinternetwebsite.ui.UITest;
 import theinternetwebsite.ui.pageobjects.DynamicContentPage;
 import com.google.common.collect.MapDifference;
 import com.google.common.collect.Maps;
 
-
 public class DynamicContentTest extends UITest {
 
+    private DynamicContentPage dynamicContentPage;
+
     public DynamicContentTest() { }
+
+    @BeforeMethod
+    public void setup() {
+        dynamicContentPage = new DynamicContentPage(this);
+        Assert.assertTrue(dynamicContentPage.isPageOpen(), "Page not open");
+    }
 
     @Test(description="Loads new texts and images on each page refresh")
     public void loadNewContent() {
         HashMap<String, String> content, newContent;
-        DynamicContentPage dynamicContentPage = new DynamicContentPage(this);
         int testAttempts = 5;
-
-        // Validate page loaded
-        Assert.assertTrue(dynamicContentPage.isPageOpen(), "Page not open");
 
         // Validate content change
         while (testAttempts > 0) {
@@ -39,12 +44,8 @@ public class DynamicContentTest extends UITest {
     @Test(description="Loads partially new content (text and images) on each page refresh")
     public void loadPartiallyNewContent() {
         HashMap<String, String> content, newContent;
-        DynamicContentPage dynamicContentPage = new DynamicContentPage(this);
         int attempts = 10;
         boolean difference;
-
-        // Validate page loaded
-        Assert.assertTrue(dynamicContentPage.isPageOpen(), "Page not open");
 
         // Validate content change
         while (attempts > 0) {

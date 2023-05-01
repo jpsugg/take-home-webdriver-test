@@ -1,28 +1,32 @@
 package theinternetwebsite.ui.testcases;
 
 import org.testng.Assert;
+import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 import theinternetwebsite.ui.UITest;
 import theinternetwebsite.ui.pageobjects.FloatingMenuPage;
 
 public class FloatingMenuTest extends UITest {
 
-    public FloatingMenuTest() { }
+    private FloatingMenuPage floatingMenuPage;
+
+    @BeforeMethod
+    public void setUp() {
+        this.floatingMenuPage = new FloatingMenuPage(this);
+    }
 
     @Test(description = "Scrolls down the page and the menu is still there")
     public void scrollTest() {
-        FloatingMenuPage floatingMenuPage = new FloatingMenuPage(this);
-
         // Validate page loaded
-        Assert.assertTrue(floatingMenuPage.isPageOpen(), "Page not open");
+        Assert.assertTrue(this.floatingMenuPage.isPageOpen(), "Page not open");
 
         // Move
-        String initialPosition = floatingMenuPage.getMenuPosition();
-        floatingMenuPage.scrollToBottom();
-        String finalPosition = floatingMenuPage.getMenuPosition();
+        String initialPosition = this.floatingMenuPage.getMenuPosition();
+        this.floatingMenuPage.scrollToBottom();
+        String finalPosition = this.floatingMenuPage.getMenuPosition();
 
         // Validate menu behaviour
-        Assert.assertTrue(floatingMenuPage.validateMenuVisibility(), "Menu is not visible");
+        Assert.assertTrue(this.floatingMenuPage.validateMenuVisibility(), "Menu is not visible");
         Assert.assertNotEquals(initialPosition, finalPosition, "Menu position didn't change");
     }
 }
